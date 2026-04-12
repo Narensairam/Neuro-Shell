@@ -1,0 +1,6 @@
+kb_id,title,summary,resolution,category
+KB0001,VPN not connecting,How to resolve: vpn not connecting,Restart VPN client and check internet,Network
+KB0002,Outlook not opening,How to resolve: outlook not opening,Restart Outlook and clear cache,Software
+KB0003,Password reset required,How to resolve: password reset required,Use self-service password reset portal,Access
+KB0004,WiFi not working,How to resolve: wifi not working,Reconnect to network or restart router,Network
+KB0005,Printer not printing,How to resolve: printer not printing,Restart printer spooler service,Hardware

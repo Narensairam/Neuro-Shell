@@ -1,0 +1,5 @@
+kb_id,title,description,resolution
+INFRA_KB001,High CPU usage detected,CPU usage is consistently high and may cause performance degradation or service instability.,Scale up/out resources or restart the top CPU-consuming service after validation.
+INFRA_KB002,High memory usage detected,Memory usage is high; possible leak or insufficient capacity.,Restart the leaking process/service and investigate memory leaks; scale memory if needed.
+INFRA_KB003,High network latency detected,Network latency is above normal and may impact dependent services.,"Check network path (DNS, routing, firewall) and upstream dependencies; fail over if possible."
+INFRA_KB004,High error count detected,Application/service error rate is elevated.,Inspect logs and recent deployments; consider rollback or targeted restart.

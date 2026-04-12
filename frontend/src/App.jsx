@@ -3,6 +3,7 @@ import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { Ticker } from './components/Ticker';
 import { AgenticAssistant } from './components/AgenticAssistant';
+import { CrisisOrchestrator } from './components/CrisisOrchestrator';
 
 // Domain Views
 import { CommandCenterView } from './components/CommandCenterView';
@@ -25,6 +26,7 @@ import { ChangeAdoptionView } from './components/ChangeAdoptionView';
 import { ROIDashboardView } from './components/ROIDashboardView';
 import { ComplianceMatrixView } from './components/ComplianceMatrixView';
 import { FireDetectionView } from './components/FireDetectionView';
+import { AgentTopologyView } from './components/AgentTopologyView';
 
 function App() {
   const [currentView, setCurrentView] = useState('command');
@@ -35,6 +37,7 @@ function App() {
       case 'command': return <CommandCenterView setCurrentView={setCurrentView} />;
       case 'digitaltwin': return <DigitalTwinView setCurrentView={setCurrentView} />;
       case 'firedetection': return <FireDetectionView setCurrentView={setCurrentView} />;
+      case 'topology': return <AgentTopologyView />;
       case 'manufacturing': return <ManufacturingView setCurrentView={setCurrentView} />;
       case 'supplychain': return <SupplyChainView setCurrentView={setCurrentView} />;
       case 'commercial': return <CommercialView setCurrentView={setCurrentView} />;
@@ -51,7 +54,6 @@ function App() {
       case 'governance': return <GovernanceView setCurrentView={setCurrentView} />;
       case 'change': return <ChangeAdoptionView setCurrentView={setCurrentView} />;
       case 'roi': return <ROIDashboardView setCurrentView={setCurrentView} />;
-      case 'compliance': return <ComplianceMatrixView setCurrentView={setCurrentView} />;
 
       default: return <CommandCenterView setCurrentView={setCurrentView} />;
     }
@@ -73,6 +75,7 @@ function App() {
 
       <Ticker />
       <AgenticAssistant setCurrentView={setCurrentView} />
+      <CrisisOrchestrator setCurrentView={setCurrentView} />
     </div>
   );
 }

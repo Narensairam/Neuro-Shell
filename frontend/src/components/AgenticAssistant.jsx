@@ -2,34 +2,35 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, X, Send, ChevronDown, Loader2, CornerDownLeft,
-    Terminal, CheckCircle2, AlertCircle, Navigation, BarChart3
+    Terminal, CheckCircle2, AlertCircle, Navigation, BarChart3,
+    Mic, MicOff, Volume2, VolumeX
 } from 'lucide-react';
 import { cn } from './Sidebar';
 
 // OpenRouter configuration
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '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';
 const MODEL = 'deepseek/deepseek-chat';
 
 // All navigable views in the Neuro Shell ERP
 const VIEWS = {
-    command: 'Control Tower',
+    command: 'Strategic Steering Hub',
     digitaltwin: 'Asset Digital Twin',
-    manufacturing: 'Manufacturing & Ops',
-    supplychain: 'Supply Chain',
-    commercial: 'Commercial / Trading',
-    finance: 'Finance & Accounting',
-    hr: 'HR & Safety',
-    itops: 'IT / Cyber',
+    manufacturing: 'Industrial Ops & Refining',
+    supplychain: 'Global Logistics & Marine',
+    commercial: 'Energy Trading & Risk',
+    finance: 'Group Finance & Strategy',
+    hr: 'Workforce & HSE Safety',
+    itops: 'System Ops & Cyber',
     erp: 'ERP Master (S/4HANA)',
     models: 'Model Registry',
     alerts: 'Alert Center',
     techdebt: 'Tech Debt Reduction',
     coe: 'Centre of Excellence',
-    governance: 'AI Governance',
+    governance: 'Governance and Compliance',
     change: 'Change & Adoption',
     roi: 'ROI Dashboard',
-    compliance: 'Compliance Matrix',
     firedetection: 'Fire Detection',
+    topology: 'Agentic Neural Topology',
 };
 
 // Tool definitions for OpenRouter function calling
@@ -89,6 +90,41 @@ const TOOLS = [
             description: 'Get the overall platform health, wave progress, and key performance snapshot of the Neuro Shell ERP system.',
             parameters: { type: 'object', properties: {} }
         }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'create_itsm_ticket',
+            description: 'Autonomously dispatch a critical service incident ticket to tracking systems via the IT/Ops ITSM engine. Use this when the user asks to create a ticket, log an issue, report a failure, or dispatch maintenance.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    emp_id: { type: 'string', description: 'Employee ID if specified (e.g. SHELL-1001).' },
+                    short_description: { type: 'string', description: 'One-line summary of the incident.' },
+                    description: { type: 'string', description: 'Rich context regarding the failure.' },
+                    category: { type: 'string', description: 'System category (e.g., OT / Industrial Controls, Infrastructure & Cloud, Cyber Security).' },
+                    impact: { type: 'string', description: 'Impact level e.g. "1 - Global", "2 - Division", "3 - Local"' },
+                    urgency: { type: 'string', description: 'Urgency e.g. "1 - High", "2 - Medium", "3 - Low"' }
+                },
+                required: ['short_description', 'description']
+            }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'fetch_unified_intelligence',
+            description: 'Fetch the entire Unified Data Fabric graph. Use this for complex, cross-domain questions where you need to see how Manufacturing, HR, IT, and Finance are interconnected.',
+            parameters: { type: 'object', properties: {} }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'query_neural_topology',
+            description: 'Get details about the distributed AI agent architecture, their roles, technical ports, and communication edges. Use this to explain how the system is wired.',
+            parameters: { type: 'object', properties: {} }
+        }
     }
 ];
 
@@ -103,18 +139,19 @@ const DOMAIN_API_MAP = {
     fire: 'http://localhost:5001/api/fire/alerts',
 };
 
-const SYSTEM_PROMPT = `You are APEX, an elite agentic AI embedded inside Neuro Shell — Shell plc's Enterprise AI Operating System. You have full access to all ERP domains, can navigate the interface, fetch live data, and assist in operations.
+const SYSTEM_PROMPT = `You are APEX, an elite agentic AI embedded inside Neuro Shell — Shell plc's Enterprise AI Operating System. You have full access to a Unified Data Fabric (interconnected JSON graph) and a Distributed Agent Topology (Knowledge Graph).
 
 Your capabilities:
-- Navigate to any module (Control Tower, Manufacturing, Supply Chain, Finance, HR, IT/Cyber, and more)
-- Fetch live operational data and KPIs from all domains
-- Retrieve active alerts and critical events
-- Provide strategic intelligence and operational guidance
-- Answer questions about any aspect of the ERP system
+- Navigate to any module (Control Tower, Manufacturing, Topology, etc.)
+- fetch_unified_intelligence: Access the master Enterprise Brain.
+- query_neural_topology: Access the Agentic Knowledge Graph. Understand how you, Guardian Eye, and others relate.
+- Cross-Domain Reasoning: Correlate safety hazards with workforce demand or IT deflection logic.
+- Autonomously CREATE an ITSM Ticket.
 
-Available modules: ${Object.entries(VIEWS).map(([id, name]) => `${name} (id: ${id})`).join(', ')}
+CONVERSATIONAL DIRECTIVE: 
+You are a Voice-First Copilot. Be concise and confident. Use fluid English for voice synthesis. 
+Always explain the "Neural Reasoning" behind your answers (e.g., "I've queried the Guardian Eye agent and it confirms the hazard, which is why I've prompted the Workforce agent to reschedule").`;
 
-Be concise, professional, and action-oriented. When users ask to navigate somewhere, always use the navigate_to_view tool. When users ask about data, always fetch it first before answering. Always confirm what action you took.`;
 
 export function AgenticAssistant({ setCurrentView }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -130,11 +167,62 @@ export function AgenticAssistant({ setCurrentView }) {
     const [toolAction, setToolAction] = useState(null); // Current tool action feedback
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
-    const chatHistoryRef = useRef([]); // Maintains API-compatible history
+    const [isListening, setIsListening] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
+
+    const recognitionRef = useRef(null);
 
     const scrollBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => { scrollBottom(); }, [messages, isThinking]);
     useEffect(() => { if (isOpen) setTimeout(() => inputRef.current?.focus(), 200); }, [isOpen]);
+    useEffect(() => { return () => window.speechSynthesis?.cancel(); }, []);
+
+    // Speech Output
+    const speakText = useCallback((text) => {
+        if (isMuted || !('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        // Remove markdown artifacts for cleaner speech
+        const cleanText = String(text || '').replace(/[*#_`~]/g, '');
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.rate = 1.05;
+        const voices = window.speechSynthesis.getVoices();
+        const bestVoice = voices.find(v => v.lang.includes('en-US') && (v.name.includes('Google') || v.name.includes('Microsoft'))) || voices[0];
+        if (bestVoice) utterance.voice = bestVoice;
+        window.speechSynthesis.speak(utterance);
+    }, [isMuted]);
+
+    // Speech Input
+    const toggleListen = () => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert('Voice Input not supported in this browser.');
+            return;
+        }
+        if (isListening) {
+            recognitionRef.current?.stop();
+            setIsListening(false);
+            return;
+        }
+
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRec();
+        recognitionRef.current = recognition;
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        
+        recognition.onstart = () => setIsListening(true);
+        recognition.onresult = (e) => {
+            const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+            setInput(transcript);
+        };
+        recognition.onend = () => {
+            setIsListening(false);
+            // Optionally we could trigger handleSend() automatically here
+        };
+        recognition.onerror = () => setIsListening(false);
+
+        setInput('');
+        recognition.start();
+    };
 
     // Execute a tool call and return result string
     const executeTool = useCallback(async (toolName, args) => {
@@ -157,6 +245,49 @@ export function AgenticAssistant({ setCurrentView }) {
                     return JSON.stringify({ success: false, error: e.message, domain: args.domain });
                 }
             }
+            case 'create_itsm_ticket': {
+                try {
+                    const ticketPayload = {
+                        ticket_id: `INC${Math.floor(100000 + Math.random() * 900000)}`,
+                        emp_id: args.emp_id || '',
+                        short_description: args.short_description || 'AI Reported Incident',
+                        description: args.description || 'Auto-generated incident ticket from Agentic Copilot.',
+                        category: args.category || 'Infrastructure & Cloud',
+                        subcategory1: 'AI Action',
+                        impact: args.impact || '2 - Division',
+                        urgency: args.urgency || '2 - Medium',
+                        priority: '3 - Moderate',
+                        severity: 'Medium',
+                        assignment_group: 'IT-AIOPS-L3',
+                        assigned_to: 'Auto-Dispatch',
+                        channel: 'Agentic Copilot',
+                        requested_by: 'Agentic Copilot',
+                        location: 'Agentic Request',
+                        shift_timings: 'N/A'
+                    };
+
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 sec timeout
+
+                    const res = await fetch('http://localhost:5004/api/tickets', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(ticketPayload),
+                        signal: controller.signal
+                    });
+
+                    if (!res.ok) {
+                        clearTimeout(timeoutId);
+                        const errBody = await res.text();
+                        return JSON.stringify({ success: false, error: `ITSM backend rejected payload HTTP ${res.status}: ${errBody}` });
+                    }
+                    const data = await res.json();
+                    clearTimeout(timeoutId);
+                    return JSON.stringify({ success: true, action: 'ticket_created', ticket_details: data });
+                } catch (e) {
+                    return JSON.stringify({ success: false, error: e.message });
+                }
+            }
             case 'get_active_alerts': {
                 try {
                     const res = await fetch('http://localhost:5001/api/fire/alerts');
@@ -175,21 +306,27 @@ export function AgenticAssistant({ setCurrentView }) {
                 }
             }
             case 'get_platform_status': {
-                return JSON.stringify({
-                    success: true,
-                    platform: 'Neuro Shell ERP',
-                    health_score: '87%',
-                    level: 'Level 4 - Optimal',
-                    current_wave: 'Wave 1 — Foundation (62% complete)',
-                    ai_models_in_production: 47,
-                    target_models: 200,
-                    domains_live: ['Supply Chain', 'IT/Cyber'],
-                    domains_active: ['Manufacturing', 'Finance', 'HR & Safety'],
-                    domains_building: ['Commercial / Trading'],
-                    critical_alerts: 3,
-                    unplanned_downtime_reduction: '22%',
-                    it_budget_freed: '$84M',
-                });
+                const res = await fetch('http://localhost:5000/api/dashboard');
+                if (res.ok) return JSON.stringify(await res.json());
+                return JSON.stringify({ error: 'Core offline' });
+            }
+            case 'fetch_unified_intelligence': {
+                try {
+                    const res = await fetch('http://localhost:5000/api/unified');
+                    const data = await res.json();
+                    return JSON.stringify(data);
+                } catch (e) {
+                    return JSON.stringify({ error: 'Could not reach Unified Data Fabric.' });
+                }
+            }
+            case 'query_neural_topology': {
+                try {
+                    const res = await fetch('http://localhost:5000/api/kg/agents');
+                    const data = await res.json();
+                    return JSON.stringify(data);
+                } catch (e) {
+                    return JSON.stringify({ error: 'Agent Knowledge Graph offline.' });
+                }
             }
             default:
                 return JSON.stringify({ error: `Unknown tool: ${toolName}` });
@@ -220,6 +357,9 @@ export function AgenticAssistant({ setCurrentView }) {
             while (continueLoop && iterations < MAX_ITER) {
                 iterations++;
 
+                const openRouterController = new AbortController();
+                const orTimeout = setTimeout(() => openRouterController.abort(), 12000); // 12 second limit for LLM
+
                 const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                     method: 'POST',
                     headers: {
@@ -237,15 +377,19 @@ export function AgenticAssistant({ setCurrentView }) {
                         tools: TOOLS,
                         tool_choice: 'auto',
                         temperature: 0.3,
-                    })
+                    }),
+                    signal: openRouterController.signal
                 });
 
                 if (!response.ok) {
+                    clearTimeout(orTimeout);
                     const errText = await response.text();
                     throw new Error(`OpenRouter error ${response.status}: ${errText}`);
                 }
 
                 const completion = await response.json();
+                clearTimeout(orTimeout);
+                
                 const assistantMsg = completion.choices?.[0]?.message;
 
                 if (!assistantMsg) throw new Error('No message in response');
@@ -303,8 +447,22 @@ export function AgenticAssistant({ setCurrentView }) {
                         content,
                         type: 'text'
                     }]);
+
+                    // Vocalize autonomous response
+                    speakText(content);
                 }
             }
+
+            if (iterations >= MAX_ITER && continueLoop) {
+                const limitMsg = "I've hit my maximum sequence steps. What exactly do you need help with?";
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: limitMsg,
+                    type: 'error'
+                }]);
+                speakText(limitMsg);
+            }
+
         } catch (err) {
             console.error('APEX error:', err);
             setMessages(prev => [...prev, {
@@ -461,6 +619,23 @@ export function AgenticAssistant({ setCurrentView }) {
 
                         {/* Input Area */}
                         <div className="p-3 bg-white border-t border-gray-100 shrink-0">
+                            <div className="flex items-center gap-1.5 mb-2 px-1">
+                                <button
+                                    onClick={() => setIsMuted(!isMuted)}
+                                    className={`p-1.5 rounded-md hover:bg-gray-100 transition-colors ${isMuted ? 'text-red-500' : 'text-gray-500'}`}
+                                    title={isMuted ? "Unmute Copilot" : "Mute Copilot Voice"}
+                                >
+                                    {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                                </button>
+                                <button
+                                    onClick={toggleListen}
+                                    className={`p-1.5 rounded-md transition-all flex items-center gap-1 min-w-[70px] ${isListening ? 'bg-red-50 text-red-600 animate-pulse outline outline-1 outline-red-200' : 'hover:bg-gray-100 text-gray-500'}`}
+                                    title={"Dictate Command"}
+                                >
+                                    {isListening ? <Mic className="w-4 h-4 text-red-600" /> : <MicOff className="w-4 h-4" />}
+                                    <span className="text-[9px] font-bold uppercase tracking-wider">{isListening ? 'Listening' : 'Voice'}</span>
+                                </button>
+                            </div>
                             <div className="relative flex items-end gap-2">
                                 <textarea
                                     ref={inputRef}
@@ -468,9 +643,9 @@ export function AgenticAssistant({ setCurrentView }) {
                                     onChange={e => setInput(e.target.value)}
                                     onKeyDown={handleKeyDown}
                                     disabled={isThinking}
-                                    placeholder="Ask APEX to navigate, fetch data, or help with operations..."
+                                    placeholder={isListening ? "Listening natively..." : "Ask APEX to navigate, fetch data, or log tickets..."}
                                     rows={1}
-                                    className="flex-1 bg-gray-100 border-none rounded-xl px-4 py-2.5 text-[13.5px] focus:ring-2 focus:ring-shell-yellow/40 focus:bg-white transition-colors outline-none resize-none leading-relaxed disabled:opacity-50"
+                                    className={`flex-1 bg-gray-100 border-none rounded-xl px-4 py-2.5 text-[13.5px] focus:ring-2 focus:ring-shell-yellow/40 focus:bg-white transition-colors outline-none resize-none leading-relaxed disabled:opacity-50 ${isListening ? 'bg-red-50 focus:bg-red-50 text-red-900 placeholder:text-red-300' : ''}`}
                                     style={{ minHeight: '42px', maxHeight: '120px', overflowY: 'auto' }}
                                 />
                                 <button
@@ -482,7 +657,9 @@ export function AgenticAssistant({ setCurrentView }) {
                                 </button>
                             </div>
                             <div className="flex items-center justify-between mt-1.5 px-1">
-                                <span className="text-[9.5px] text-gray-400 font-mono">APEX · Agentic Mode · OpenRouter</span>
+                                <span className="text-[9.5px] text-gray-400 font-mono flex items-center gap-1">
+                                    APEX · <Mic className="w-2.5 h-2.5 inline" /> Native Voice Stack
+                                </span>
                                 <div className="flex items-center gap-1 text-[9.5px] text-gray-400 font-mono">
                                     <CornerDownLeft className="w-2.5 h-2.5" />
                                     <span>Enter to send</span>

@@ -1,11 +1,66 @@
 import { useEffect, useState } from 'react';
-import { Factory, Ship, TrendingUp, CircleDollarSign, HardHat, ShieldCheck, Flame, Bell, Info, AlertCircle, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Factory, Ship, TrendingUp, CircleDollarSign, HardHat, ShieldCheck, Flame, Bell, Info, AlertCircle, AlertTriangle, CheckCircle2, ChevronRight, BarChart3, Globe2, Activity, Zap, Cpu } from 'lucide-react';
 
-export function CommandCenterView() {
+export function CommandCenterView({ setCurrentView }) {
     const [fireAlert, setFireAlert] = useState(null);
     const [isNewAlert, setIsNewAlert] = useState(false);
+    
+    // FALLBACK DATA to ensure the Control Tower is never empty
+    const [stats, setStats] = useState({ 
+        revenue_annual: 282500, 
+        unplanned_downtime_reduction: 22, 
+        innovation_budget_freed: 84.5 
+    });
+    const [heatmap, setHeatmap] = useState([
+        { id: "refining", label: "CDU Refining", health: 96, load: 82 },
+        { id: "trading", label: "Arbitrage", health: 88, load: 94 },
+        { id: "logistics", label: "LNG Logistics", health: 92, load: 75 },
+        { id: "safety", label: "HSE Monitoring", health: 98, load: 40 },
+        { id: "finance", label: "Group Close", health: 75, load: 90 },
+        { id: "cyber", label: "Threat Scan", health: 95, load: 65 },
+        { id: "hr", label: "Reskilling", health: 85, load: 30 },
+        { id: "contracts", label: "AI Contracts", health: 90, load: 50 }
+    ]);
+    const [agents, setAgents] = useState([
+        { id: "APEX", name: "APEX Master Brain", status: "Online", type: "Orchestrator", port: 5000, capabilities: [1,2,3] },
+        { id: "GUARDIAN_EYE", name: "Guardian Eye", status: "Online", type: "Safety Agent", port: 5001, capabilities: [1,2,3] },
+        { id: "COMMERCIAL_SAGE", name: "Commercial Sage", status: "Online", type: "Trading Agent", port: 5005, capabilities: [1,2,3] },
+        { id: "WORKFORCE_ML", name: "Workforce Predictor", status: "Online", type: "HR Agent", port: 5003, capabilities: [1,2] },
+        { id: "ITSM_DISPATCH", name: "ITOps Dispatcher", status: "Online", type: "Ops Agent", port: 5004, capabilities: [1,2] }
+    ]);
+    const [agentSummary, setAgentSummary] = useState({ 
+        avg_latency: "142ms", 
+        success_rate: "99.8%" 
+    });
 
     useEffect(() => {
+        const fetchUnified = async () => {
+            try {
+                const res = await fetch('http://localhost:5000/api/unified');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data?.enterprise) {
+                        if (data.enterprise.stats) setStats(data.enterprise.stats);
+                        if (data.enterprise.process_heatmap) setHeatmap(data.enterprise.process_heatmap);
+                        if (data.enterprise.agent_metrics) setAgentSummary(data.enterprise.agent_metrics);
+                    }
+                }
+            } catch (err) { /* Fetch failed, UI remains stable with fallbacks */ }
+        };
+        
+        const fetchAgents = async () => {
+            try {
+                const res = await fetch('http://localhost:5000/api/kg/agents');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data?.nodes) setAgents(data.nodes);
+                }
+            } catch (err) { /* Fetch failed, UI remains stable with fallbacks */ }
+        };
+
+        fetchUnified();
+        fetchAgents();
+
         let t;
         const NEURO_SHELL_ORIGIN = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:5001';
         const fetchFire = async () => {
@@ -30,209 +85,213 @@ export function CommandCenterView() {
             } catch { setFireAlert(null); }
         };
         fetchFire();
-        t = setInterval(fetchFire, 2000);
+        t = setInterval(() => {
+            fetchFire();
+            fetchUnified();
+            fetchAgents();
+        }, 5000);
         return () => clearInterval(t);
     }, []);
 
+    const getHeatmapColor = (health) => {
+        if (health >= 95) return 'bg-green-500';
+        if (health >= 85) return 'bg-shell-yellow';
+        return 'bg-red-500';
+    };
+
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 p-8 pt-4">
+            {/* STANDARD HEADER REVERTED */}
             <div className="flex items-start justify-between mb-6">
                 <div>
-                    <h1 className="text-[25px] font-extrabold leading-tight">Control Tower</h1>
-                    <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mt-1">Shell plc · Enterprise AI Operating System · Real-time Platform Intelligence</div>
+                    <h1 className="text-[28px] font-black tracking-tight uppercase text-shell-darkText leading-none">Control Tower</h1>
+                    <div className="font-mono text-[10px] text-shell-mutedText tracking-[0.2em] uppercase mt-2">Shell plc · Enterprise AI Operating System · Real-time Intelligence Hub</div>
                 </div>
                 <div className="flex gap-2 items-center shrink-0">
-                    <span className="flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full font-mono text-[9.5px] tracking-widest uppercase font-bold">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>Platform Online
+                    <span className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 border border-green-200 rounded-lg font-mono text-[10px] tracking-widest uppercase font-bold shadow-sm">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>System Optimized
                     </span>
                 </div>
             </div>
 
             {/* KPI ROW */}
             <div className="grid grid-cols-4 gap-4 mb-4">
-                <div onClick={() => setCurrentView('models')} className="bg-amber-50/30 border border-amber-200 rounded-lg p-5 relative overflow-hidden group cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all">
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-50"></div>
-                    <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5 group-hover:text-amber-700 transition-colors">AI Models in Production</div>
-                    <div className="text-[31px] font-extrabold text-shell-darkText leading-none">47<span className="text-[15px] text-gray-400 font-normal ml-1">live</span></div>
-                    <div className="font-mono text-[10px] text-green-600 mt-1">↑ +12 this month · Target 200+</div>
-                    {/* Fake Sparkline */}
-                    <div className="flex items-end gap-[2px] h-6 mt-3">
+                <div onClick={() => setCurrentView('models')} className="bg-white border border-gray-100 rounded-xl p-5 relative overflow-hidden group cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all">
+                    <div className="font-mono text-[10px] text-shell-mutedText tracking-widest uppercase mb-1.5">AI Models in Production</div>
+                    <div className="text-[31px] font-black text-shell-darkText leading-none">47<span className="text-[15px] text-gray-400 font-normal ml-1">live</span></div>
+                    <div className="font-mono text-[10px] text-green-600 mt-1 uppercase font-bold">↑ +12 / Wave 1 Deployment</div>
+                    <div className="flex items-end gap-[2px] h-6 mt-3 opacity-30">
                         {[30, 45, 40, 60, 55, 70, 85, 100].map((h, i) => (
-                            <div key={i} className={`flex-1 rounded-t-sm min-h-[2px] transition-all ${i === 7 ? 'bg-green-500' : 'bg-green-200'}`} style={{ height: `${h}%` }}></div>
+                            <div key={i} className={`flex-1 rounded-t-sm min-h-[2px] ${i === 7 ? 'bg-green-500' : 'bg-gray-300'}`} style={{ height: `${h}%` }}></div>
                         ))}
                     </div>
                 </div>
-                <div className="bg-white border border-gray-200 rounded-lg p-5 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-20"></div>
-                    <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Unplanned Downtime Reduction</div>
-                    <div className="text-[31px] font-extrabold text-shell-darkText leading-none">22<span className="text-[15px] text-gray-400 font-normal ml-1">%</span></div>
-                    <div className="font-mono text-[10px] text-green-600 mt-1">↑ Target: 35% · On Track</div>
-                    <div className="flex items-end gap-[2px] h-6 mt-3">
+                <div onClick={() => setCurrentView('manufacturing')}  className="bg-white border border-gray-100 rounded-xl p-5 relative overflow-hidden group cursor-pointer hover:shadow-md transition-all">
+                    <div className="font-mono text-[10px] text-shell-mutedText tracking-widest uppercase mb-1.5">Unplanned Downtime ↓</div>
+                    <div className="text-[31px] font-black text-shell-darkText leading-none">{stats?.unplanned_downtime_reduction || 22}<span className="text-[15px] text-gray-400 font-normal ml-1">%</span></div>
+                    <div className="font-mono text-[10px] text-green-600 mt-1 uppercase font-bold">Target 35% · On Track</div>
+                    <div className="flex items-end gap-[2px] h-6 mt-3 opacity-30">
                         {[20, 30, 42, 38, 55, 62, 70, 85].map((h, i) => (
-                            <div key={i} className={`flex-1 rounded-t-sm min-h-[2px] transition-all ${i === 7 ? 'bg-shell-yellow' : 'bg-amber-100'}`} style={{ height: `${h}%` }}></div>
+                            <div key={i} className={`flex-1 rounded-t-sm min-h-[2px] ${i === 7 ? 'bg-shell-yellow' : 'bg-gray-300'}`} style={{ height: `${h}%` }}></div>
                         ))}
                     </div>
                 </div>
-                <div className="bg-white border border-gray-200 rounded-lg p-5 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-20"></div>
-                    <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">IT Budget Freed for Innovation</div>
-                    <div className="text-[31px] font-extrabold text-shell-darkText leading-none">$84<span className="text-[15px] text-gray-400 font-normal ml-1">M</span></div>
-                    <div className="font-mono text-[10px] text-green-600 mt-1">↑ Target: $200M in 24 months</div>
-                    <div className="flex items-end gap-[2px] h-6 mt-3">
+                <div onClick={() => setCurrentView('finance')} className="bg-white border border-gray-100 rounded-xl p-5 relative overflow-hidden group cursor-pointer hover:shadow-md transition-all">
+                    <div className="font-mono text-[10px] text-shell-mutedText tracking-widest uppercase mb-1.5">Innovation OpEx Gains</div>
+                    <div className="text-[31px] font-black text-shell-darkText leading-none">${stats?.innovation_budget_freed || 84}<span className="text-[15px] text-gray-400 font-normal ml-1">M</span></div>
+                    <div className="font-mono text-[10px] text-green-600 mt-1 uppercase font-bold">↑ +14% / Q1 Performance</div>
+                    <div className="flex items-end gap-[2px] h-6 mt-3 opacity-30">
                         {[15, 25, 35, 40, 52, 58, 70, 82].map((h, i) => (
-                            <div key={i} className={`flex-1 rounded-t-sm min-h-[2px] transition-all ${i === 7 ? 'bg-shell-yellow' : 'bg-amber-100'}`} style={{ height: `${h}%` }}></div>
+                            <div key={i} className={`flex-1 rounded-t-sm min-h-[2px] ${i === 7 ? 'bg-shell-yellow' : 'bg-gray-300'}`} style={{ height: `${h}%` }}></div>
                         ))}
                     </div>
                 </div>
-                <div onClick={() => setCurrentView('alerts')} className={`border rounded-lg p-5 relative overflow-hidden transition-all duration-500 cursor-pointer hover:shadow-md hover:-translate-y-0.5 ${isNewAlert ? 'bg-red-600 border-red-500 shadow-[0_0_20px_rgba(220,38,38,0.5)] animate-pulse' : 'bg-red-50/40 border-red-200 group'}`}>
-                    <div className={`font-mono text-[10px] tracking-widest uppercase mb-1.5 ${isNewAlert ? 'text-white' : 'text-gray-500 group-hover:text-red-700 transition-colors'}`}>Critical Alerts Active</div>
-                    <div className={`text-[31px] font-extrabold leading-none ${isNewAlert ? 'text-white' : 'text-red-600'}`}>{fireAlert ? 4 : 3}<span className={`text-[15px] font-normal ml-1 ${isNewAlert ? 'text-white/70' : 'text-red-400'}`}>open</span></div>
-                    <div className={`font-mono text-[10px] mt-1 flex items-center gap-1 ${isNewAlert ? 'text-white font-bold' : 'text-red-600'}`}>
-                        {fireAlert ? <Flame className="w-3.5 h-3.5 animate-pulse" /> : ''}
-                        {fireAlert ? 'FIRE DETECTED · ' : ''}
-                        <AlertTriangle className="w-3 h-3" /> OT Disconnect · <ShieldCheck className="w-3 h-3" /> AI Gov
-                    </div>
-                    <div className="flex items-end gap-[2px] h-6 mt-3">
-                        {[80, 70, 90, 65, 85, 72, 88, 100].map((h, i) => (
-                            <div key={i} className={`flex-1 rounded-t-sm min-h-[2px] transition-all ${i === 7 ? 'bg-red-500' : 'bg-red-200'}`} style={{ height: `${h}%` }}></div>
-                        ))}
+                <div onClick={() => setCurrentView('alerts')} className={`rounded-xl p-5 relative overflow-hidden transition-all duration-500 cursor-pointer hover:shadow-md ${isNewAlert ? 'bg-red-600 border-red-500 animate-pulse' : 'bg-white border border-red-100'}`}>
+                    <div className={`font-mono text-[10px] tracking-widest uppercase mb-1.5 ${isNewAlert ? 'text-white' : 'text-red-500'}`}>Active Tier 1 Alerts</div>
+                    <div className={`text-[31px] font-black leading-none ${isNewAlert ? 'text-white' : 'text-shell-darkText'}`}>{fireAlert ? 4 : 3}<span className="text-[15px] opacity-40 ml-1">open</span></div>
+                    <div className={`font-mono text-[10px] mt-1 flex items-center gap-1 font-bold ${isNewAlert ? 'text-white' : 'text-red-600'}`}>
+                        {fireAlert ? <Flame size={14} className="animate-bounce" /> : <AlertTriangle size={14} />}
+                        {fireAlert ? 'EMERGENCY FIRE · ' : 'HAZARD DETECTED'}
                     </div>
                 </div>
             </div>
 
-            {/* WAVE TRACKER */}
-            <div className="flex relative mb-4">
+            {/* TRANSFORMATION ROADMAP */}
+            <div className="flex relative mb-4 gap-1">
                 {[
-                    { wave: "Wave 0", title: "Discovery", period: "Months 1–3", pct: 100, active: false, done: true, color: "bg-green-500" },
-                    { wave: "Wave 1", title: "Foundation", period: "Months 4–12", pct: 62, active: true, done: false, color: "bg-shell-yellow" },
-                    { wave: "Wave 2", title: "Scale & Embed", period: "Months 13–24", pct: 0, active: false, done: false, color: "bg-blue-500" },
-                    { wave: "Wave 3", title: "Independence", period: "Months 25–36", pct: 0, active: false, done: false, color: "bg-green-500" }
+                    { wave: "Wave 0", title: "Discovery", period: "M 1-3", pct: 100, color: "bg-green-500" },
+                    { wave: "Wave 1", title: "Foundation", period: "M 4-12", pct: 62, color: "bg-shell-yellow" },
+                    { wave: "Wave 2", title: "Scale/Embed", period: "M 13-24", pct: 0, color: "bg-blue-400" },
+                    { wave: "Wave 3", title: "Independence", period: "M 25-36", pct: 0, color: "bg-gray-200" }
                 ].map((step, idx) => (
-                    <div key={idx} className="flex-1 relative group cursor-pointer hover:-translate-y-0.5 transition-transform">
-                        <div className={`p-4 border-y border-l ${idx === 3 ? 'border-r rounded-r-lg' : ''} ${idx === 0 ? 'rounded-l-lg' : ''} 
-              ${step.active ? 'bg-amber-50/50 border-amber-300' : step.done ? 'bg-green-50/40 border-green-200' : 'bg-white border-gray-200'}`}>
-                            <div className="font-mono text-[9.5px] text-gray-500 tracking-widest uppercase">{step.wave}</div>
-                            <div className="font-extrabold text-[14px] my-1">{step.title}</div>
-                            <div className="font-mono text-[10px] text-gray-400">{step.period}</div>
-                            <div className={`font-extrabold text-[21px] mt-2 ${step.done ? 'text-green-600' : step.active ? 'text-shell-yellow' : 'text-gray-300'}`}>
-                                {step.pct}<span className="text-[13px] text-gray-400 font-normal">%</span>
-                            </div>
-                            <div className="h-0.5 bg-gray-100 rounded-full mt-2 overflow-hidden">
-                                <div className={`h-full ${step.color} rounded-full transition-all duration-1000 w-[${step.pct}%]`} style={{ width: `${step.pct}%` }}></div>
-                            </div>
+                    <div key={idx} className={`flex-1 p-3 border border-gray-100 rounded-lg ${step.pct === 100 ? 'bg-green-50/30' : step.pct > 0 ? 'bg-amber-50/30' : 'bg-white'}`}>
+                        <div className="flex justify-between items-center mb-1">
+                             <span className="font-mono text-[9px] text-shell-mutedText uppercase font-bold tracking-widest">{step.wave}</span>
+                             <span className="font-mono text-[9px] text-gray-400">{step.period}</span>
+                        </div>
+                        <div className="font-black text-[11px] text-shell-darkText uppercase truncate">{step.title}</div>
+                        <div className="h-0.5 bg-gray-100 mt-2 rounded-full overflow-hidden">
+                             <div className={`h-full ${step.color} transition-all duration-1000`} style={{ width: `${step.pct}%` }}></div>
                         </div>
                     </div>
                 ))}
             </div>
 
-            {/* MAIN CONTENT SPLIT */}
-            <div className="grid grid-cols-[1fr_340px] gap-4 mb-4">
-                {/* DOMAIN GRID */}
-                <div className="bg-white border border-gray-200 rounded-lg p-5">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="font-extrabold text-[15px] text-shell-darkText flex items-center gap-2">AI Domain Performance</div>
+            {/* METRICS & HEATMAP SECTION */}
+            <div className="grid grid-cols-[1fr_360px] gap-4 mb-4">
+                {/* AGENT PERFORMANCE METRICS */}
+                <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm overflow-hidden flex flex-col group">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-2">
+                            <Activity className="text-shell-yellow w-5 h-5" />
+                            <h2 className="text-[15px] font-black text-shell-darkText uppercase tracking-tight">Agent Performance Analytics</h2>
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="text-right">
+                                <div className="text-[9px] font-mono text-shell-mutedText uppercase">Avg Latency</div>
+                                <div className="text-[13px] font-black text-green-600">{agentSummary?.avg_latency || '142ms'}</div>
+                            </div>
+                            <div className="text-right border-l border-gray-100 pl-4">
+                                <div className="text-[9px] font-mono text-shell-mutedText uppercase">Success Rate</div>
+                                <div className="text-[13px] font-black text-green-600">{agentSummary?.success_rate || '99.8%'}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-3">
-                        <div onClick={() => setCurrentView('manufacturing')} className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-shell-yellow hover:-translate-y-0.5 hover:shadow-md transition-all bg-gray-50/30 group relative overflow-hidden">
-                            <Factory className="w-6 h-6 mb-2 text-shell-darkText" />
-                            <div className="font-extrabold text-[13.5px] mb-1">Manufacturing</div>
-                            <div className="font-mono text-[9.5px] text-gray-500">50+ refineries · 22% downtime ↓</div>
-                            <div className="absolute top-3 right-3"><span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-mono text-[9px] uppercase font-bold tracking-widest">Active</span></div>
-                            <div className="h-[2px] bg-gray-200 rounded-full mt-3 overflow-hidden"><div className="h-full bg-shell-yellow w-[62%]"></div></div>
-                        </div>
-                        <div onClick={() => setCurrentView('supplychain')} className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-shell-yellow hover:-translate-y-0.5 hover:shadow-md transition-all bg-gray-50/30 group relative overflow-hidden">
-                            <Ship className="w-6 h-6 mb-2 text-shell-darkText" />
-                            <div className="font-extrabold text-[13.5px] mb-1">Supply Chain</div>
-                            <div className="font-mono text-[9.5px] text-gray-500">46K stations · 8% fleet savings</div>
-                            <div className="absolute top-3 right-3"><span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-mono text-[9px] uppercase font-bold tracking-widest">Live</span></div>
-                            <div className="h-[2px] bg-gray-200 rounded-full mt-3 overflow-hidden"><div className="h-full bg-green-500 w-[78%]"></div></div>
-                        </div>
-                        <div onClick={() => setCurrentView('commercial')} className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-shell-yellow hover:-translate-y-0.5 hover:shadow-md transition-all bg-gray-50/30 group relative overflow-hidden">
-                            <TrendingUp className="w-6 h-6 mb-2 text-shell-darkText" />
-                            <div className="font-extrabold text-[13.5px] mb-1">Trading</div>
-                            <div className="font-mono text-[9.5px] text-gray-500">6 commodity classes · AI pricing</div>
-                            <div className="absolute top-3 right-3"><span className="px-2 py-0.5 bg-amber-50 text-amber-500 rounded-full font-mono text-[9px] uppercase font-bold tracking-widest">Building</span></div>
-                            <div className="h-[2px] bg-gray-200 rounded-full mt-3 overflow-hidden"><div className="h-full bg-blue-400 w-[35%]"></div></div>
-                        </div>
-                        <div onClick={() => setCurrentView('finance')} className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-shell-yellow hover:-translate-y-0.5 hover:shadow-md transition-all bg-gray-50/30 group relative overflow-hidden">
-                            <CircleDollarSign className="w-6 h-6 mb-2 text-shell-darkText" />
-                            <div className="font-extrabold text-[13.5px] mb-1">Finance</div>
-                            <div className="font-mono text-[9.5px] text-gray-500">1,000+ entities · 9-day close</div>
-                            <div className="absolute top-3 right-3"><span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-mono text-[9px] uppercase font-bold tracking-widest">Active</span></div>
-                            <div className="h-[2px] bg-gray-200 rounded-full mt-3 overflow-hidden"><div className="h-full bg-shell-yellow w-[48%]"></div></div>
-                        </div>
-                        <div onClick={() => setCurrentView('hr')} className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-shell-yellow hover:-translate-y-0.5 hover:shadow-md transition-all bg-gray-50/30 group relative overflow-hidden">
-                            <HardHat className="w-6 h-6 mb-2 text-shell-darkText" />
-                            <div className="font-extrabold text-[13.5px] mb-1">HR & Safety</div>
-                            <div className="font-mono text-[9.5px] text-gray-500">86K employees · 18% incident ↓</div>
-                            <div className="absolute top-3 right-3"><span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-mono text-[9px] uppercase font-bold tracking-widest">Active</span></div>
-                            <div className="h-[2px] bg-gray-200 rounded-full mt-3 overflow-hidden"><div className="h-full bg-shell-yellow w-[54%]"></div></div>
-                        </div>
-                        <div onClick={() => setCurrentView('itops')} className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-shell-yellow hover:-translate-y-0.5 hover:shadow-md transition-all bg-gray-50/30 group relative overflow-hidden">
-                            <ShieldCheck className="w-6 h-6 mb-2 text-shell-darkText" />
-                            <div className="font-extrabold text-[13.5px] mb-1">IT / Cyber</div>
-                            <div className="font-mono text-[9.5px] text-gray-500">50K tickets/mo · 42% deflected</div>
-                            <div className="absolute top-3 right-3"><span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-mono text-[9px] uppercase font-bold tracking-widest">Live</span></div>
-                            <div className="h-[2px] bg-gray-200 rounded-full mt-3 overflow-hidden"><div className="h-full bg-green-500 w-[85%]"></div></div>
-                        </div>
+
+                    <div className="grid grid-cols-5 gap-3 h-full">
+                        {agents.map(agent => (
+                            <div key={agent.id} className="bg-gray-50/50 border border-gray-100 rounded-xl p-4 flex flex-col justify-between hover:bg-white hover:border-shell-yellow hover:shadow-sm transition-all cursor-pointer">
+                                <div>
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div className={`w-1.5 h-1.5 rounded-full ${agent.status === 'Online' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-red-500'}`}></div>
+                                        <Zap size={12} className="text-gray-300" />
+                                    </div>
+                                    <div className="text-[11px] font-black text-shell-darkText leading-tight">{agent.name}</div>
+                                    <div className="text-[9px] font-mono text-shell-mutedText uppercase mt-1 truncate">{agent.type}</div>
+                                </div>
+                                <div className="mt-4 pt-3 border-t border-gray-100">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-bold text-shell-mutedText">ID: {agent.port || 'Core'}</span>
+                                        <span className="text-[10px] font-bold text-blue-600">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
-                {/* ALERTS FEED */}
-                <div className="bg-white border border-gray-200 rounded-lg p-5">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="font-extrabold text-[15px] text-shell-darkText flex items-center gap-2">Alert Center</div>
-                        <span onClick={() => setCurrentView('alerts')} className="font-mono text-[10px] text-gray-500 tracking-widest uppercase cursor-pointer hover:text-shell-yellow">All →</span>
+                {/* PROCESS HEATMAP */}
+                <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-sm overflow-hidden flex flex-col">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-2">
+                             <div className="w-5 h-5 bg-shell-yellow rounded flex items-center justify-center"><BarChart3 size={12} className="text-gray-900" /></div>
+                             <h2 className="text-[14px] font-black text-white uppercase tracking-tight">Enterprise Process Heatmap</h2>
+                        </div>
+                        <span className="text-[9px] font-mono text-gray-500 uppercase">Real-time Intensity</span>
                     </div>
-                    <div className="flex flex-col gap-2">
-                        {fireAlert && (
-                            <div className={`flex gap-2.5 transition-all duration-300 rounded-md ${isNewAlert ? 'p-3 border-2 border-red-600 bg-red-700 text-white animate-pulse shadow-[0_0_30px_rgba(220,38,38,0.6)]' : 'p-2.5 border-l-4 border-l-red-500 bg-gray-50'}`}>
-                                <Flame className={isNewAlert ? "w-5 h-5 shrink-0" : "w-4 h-4 shrink-0 text-red-600"} />
-                                <div>
-                                    <div className={`text-[12px] leading-snug font-black uppercase tracking-tight ${isNewAlert ? '' : 'text-red-700'}`}>CRITICAL ALERT: FIRE</div>
-                                    <div className={`font-mono text-[9px] uppercase tracking-wider mt-1 ${isNewAlert ? 'text-white/90' : 'text-gray-500'}`}>Node {fireAlert.camera_id} · Evacuation Protocol Active</div>
+
+                    <div className="grid grid-cols-4 gap-2 flex-1">
+                        {heatmap.map(process => (
+                            <div key={process.id} className="group relative">
+                                <div className={`aspect-square rounded-lg flex flex-col items-center justify-center transition-all duration-500 hover:scale-110 cursor-pointer ${getHeatmapColor(process.health)}`}>
+                                     <div className="text-white/20 font-black text-[20px] select-none">{process.health}</div>
+                                </div>
+                                {/* Hover Tooltip */}
+                                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-gray-900 px-3 py-1.5 rounded-md text-[10px] font-black whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl z-20 uppercase tracking-tighter">
+                                    {process.label} · Load {process.load}%
                                 </div>
                             </div>
-                        )}
-                        <div className="flex gap-2.5 p-2.5 rounded-md border-l-4 border-l-red-500 bg-gray-50">
-                            <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                            <div>
-                                <div className="text-[12px] leading-snug"><b className="text-shell-darkText">OT Disconnect:</b> 492K sensor tags offline from EOS AI layer</div>
-                                <div className="font-mono text-[9.5px] text-gray-500 mt-1">Critical · 50+ sites affected</div>
-                            </div>
-                        </div>
-                        <div className="flex gap-2.5 p-2.5 rounded-md border-l-4 border-l-red-500 bg-gray-50">
-                            <ShieldCheck className="w-4 h-4 shrink-0 text-red-600" />
-                            <div>
-                                <div className="text-[12px] leading-snug"><b className="text-shell-darkText">AI Governance:</b> 200+ models without lifecycle management</div>
-                                <div className="font-mono text-[9.5px] text-gray-500 mt-1">Critical · EU AI Act exposure</div>
-                            </div>
-                        </div>
-                        <div className="flex gap-2.5 p-2.5 rounded-md border-l-4 border-l-amber-500 bg-gray-50">
-                            <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500" />
-                            <div>
-                                <div className="text-[12px] leading-snug"><b className="text-shell-darkText">Finance Close:</b> Still at 9 days · target is 5–7 days</div>
-                                <div className="font-mono text-[9.5px] text-gray-500 mt-1">Warning · SOX audit risk</div>
-                            </div>
-                        </div>
-                        <div className="flex gap-2.5 p-2.5 rounded-md border-l-4 border-l-green-500 bg-gray-50">
-                            <CheckCircle2 className="w-4 h-4 shrink-0 text-green-600" />
-                            <div>
-                                <div className="text-[12px] leading-snug"><b className="text-shell-darkText">L1 Ticket Deflection:</b> AI self-service reached 42%</div>
-                                <div className="font-mono text-[9.5px] text-gray-500 mt-1">Good · Target 65% by Month 12</div>
-                            </div>
-                        </div>
-                        <div className="flex gap-2.5 p-2.5 rounded-md border-l-4 border-l-blue-500 bg-gray-50">
-                            <Info className="w-4 h-4 shrink-0 text-blue-500" />
-                            <div>
-                                <div className="text-[12px] leading-snug"><b className="text-shell-darkText">CoE Milestone:</b> Shell AI Director onboarded</div>
-                                <div className="font-mono text-[9.5px] text-gray-500 mt-1">Info · Phase 2 transition started</div>
-                            </div>
-                        </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-6 flex justify-between items-center bg-white/5 p-2 rounded-lg border border-white/10">
+                         <div className="flex gap-2">
+                             <div className="w-2 h-2 rounded-sm bg-green-500"></div>
+                             <div className="w-2 h-2 rounded-sm bg-shell-yellow"></div>
+                             <div className="w-2 h-2 rounded-sm bg-red-500"></div>
+                         </div>
+                         <span className="text-[9px] font-mono text-gray-400 uppercase">Operational Health Index</span>
                     </div>
                 </div>
             </div>
 
+            {/* LOWER ALERT FEED */}
+            <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="font-black text-[14px] text-shell-darkText uppercase tracking-tight flex items-center gap-2"><Bell className="w-4 h-4 text-shell-yellow" /> Neural Incident Feed</h2>
+                    <span onClick={() => setCurrentView('alerts')} className="font-mono text-[9px] text-shell-mutedText uppercase tracking-widest cursor-pointer hover:text-shell-yellow transition-colors underline underline-offset-4 font-bold">Comprehensive Logs →</span>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="flex gap-3 p-3 rounded-lg bg-gray-50 border-l-4 border-l-red-500">
+                        <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                        <div>
+                            <div className="text-[12px] font-bold text-shell-darkText">Industrial OT Disconnect</div>
+                            <div className="text-[10px] text-shell-mutedText uppercase mt-0.5">Critical · 492,000 Tags Offline @ Site Rotterdam</div>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 p-3 rounded-lg bg-gray-50 border-l-4 border-l-shell-yellow">
+                        <TrendingUp className="w-4 h-4 shrink-0 text-shell-yellow" />
+                        <div>
+                            <div className="text-[12px] font-bold text-shell-darkText">Arbitrage Yield Detected</div>
+                            <div className="text-[10px] text-shell-mutedText uppercase mt-0.5">Opportunity · +$2.4M identified across Brent/WTI Spreads</div>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 p-3 rounded-lg bg-gray-50 border-l-4 border-l-green-500">
+                        <CheckCircle2 className="w-4 h-4 shrink-0 text-green-600" />
+                        <div>
+                            <div className="text-[12px] font-bold text-shell-darkText">Finance Hub Optimized</div>
+                            <div className="text-[10px] text-shell-mutedText uppercase mt-0.5">Success · Auto-Reconciliation rate reached 96.8% globally</div>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 p-3 rounded-lg bg-gray-50 border-l-4 border-l-blue-500">
+                        <Info className="w-4 h-4 shrink-0 text-blue-500" />
+                        <div>
+                            <div className="text-[12px] font-bold text-shell-darkText">Agent Mesh Expansion</div>
+                            <div className="text-[10px] text-shell-mutedText uppercase mt-0.5">Info · 5 AI Agents synchronized with Unified Core</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

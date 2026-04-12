@@ -1,0 +1,64 @@
+{
+  "nodes": [
+    {
+      "id": "APEX",
+      "type": "Orchestrator",
+      "name": "APEX Master Brain",
+      "domain": "Enterprise-Wide",
+      "port": 5000,
+      "capabilities": ["Navigation", "Cross-Domain Reasoning", "Service Orchestration"],
+      "status": "Online",
+      "glow": "#dd1d21"
+    },
+    {
+      "id": "GUARDIAN_EYE",
+      "type": "Safety Agent",
+      "name": "Guardian Eye",
+      "domain": "Fire & PPE Safety",
+      "port": 5001,
+      "capabilities": ["Visual Intelligence", "Hazard Detection", "Audio Alerts"],
+      "status": "Online",
+      "glow": "#ef4444"
+    },
+    {
+      "id": "WORKFORCE_ML",
+      "type": "HR Agent",
+      "name": "Workforce Predictor",
+      "domain": "Human Resources",
+      "port": 5003,
+      "capabilities": ["Demand Forecasting", "Shift Optimization", "Safety Reskilling"],
+      "status": "Online",
+      "glow": "#f59e0b"
+    },
+    {
+      "id": "ITSM_DISPATCH",
+      "type": "Ops Agent",
+      "name": "ITOps Dispatcher",
+      "domain": "IT & OT Infrastructure",
+      "port": 5004,
+      "capabilities": ["Ticket Deflection", "Asset Monitoring", "Shadow IT Scanning"],
+      "status": "Online",
+      "glow": "#22c55e"
+    },
+    {
+      "id": "COMMERCIAL_SAGE",
+      "type": "Trading Agent",
+      "name": "Commercial Sage",
+      "domain": "Commercial & Pricing",
+      "port": 5005,
+      "capabilities": ["Arbitrage Detection", "Dynamic Pricing", "Contract Analysis"],
+      "status": "Online",
+      "glow": "#3b82f6"
+    }
+  ],
+  "edges": [
+    { "source": "APEX", "target": "GUARDIAN_EYE", "relation": "ORCHESTRATES", "type": "Control" },
+    { "source": "APEX", "target": "WORKFORCE_ML", "relation": "ORCHESTRATES", "type": "Control" },
+    { "source": "APEX", "target": "ITSM_DISPATCH", "relation": "ORCHESTRATES", "type": "Control" },
+    { "source": "APEX", "target": "COMMERCIAL_SAGE", "relation": "ORCHESTRATES", "type": "Control" },
+    { "source": "GUARDIAN_EYE", "target": "WORKFORCE_ML", "relation": "TRIGGERS_SCENARIO", "type": "Data Flow" },
+    { "source": "GUARDIAN_EYE", "target": "ITSM_DISPATCH", "relation": "LOGS_INCIDENT", "type": "Data Flow" },
+    { "source": "ITSM_DISPATCH", "target": "APEX", "relation": "REPORTS_METRICS", "type": "Telemetry" },
+    { "source": "COMMERCIAL_SAGE", "target": "APEX", "relation": "PRICING_FEEDS", "type": "Telemetry" }
+  ]
+}

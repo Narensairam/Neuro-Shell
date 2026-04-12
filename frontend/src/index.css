@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
 @theme {
+  --color-shell-blue: #003a70;
   --color-shell-red: #dd1d21;
   --color-shell-yellow: #fbce07;
   --color-shell-gray: #f3f4f6;
   --color-shell-darkText: #1f2937;
+  --color-shell-mutedText: #4b5563;
 }
 
 body {

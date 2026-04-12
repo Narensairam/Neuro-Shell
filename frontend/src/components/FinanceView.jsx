@@ -2,25 +2,24 @@ import { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { FileWarning, Banknote, ShieldCheck, RefreshCw, ShoppingCart, CreditCard, Plane, TrendingUp } from 'lucide-react';
 
-const MOCK_FINANCE = {
-    closeCycleDays: 6,
-    autoReconRate: 94.2,
-    anomaliesDetected: 142,
-    reconChart: Array.from({ length: 8 }).map((_, i) => ({ day: `D-${7 - i}`, volume: Math.floor(Math.random() * 5000 + 1000) })),
-    transactionsToReview: [
-        { entity: 'Singapore Hub', reason: 'Unusual transfer volume', value: '$1.2M' },
-        { entity: 'NL Retail', reason: 'Missing tax identifier', value: '$45K' }
-    ]
+const EMPTY_FINANCE = {
+    closeCycleDays: 0,
+    autoReconRate: 0,
+    anomaliesDetected: 0,
+    reconChart: [],
+    transactionsToReview: []
 };
 
 export function FinanceView() {
-    const [data, setData] = useState(MOCK_FINANCE);
+    const [data, setData] = useState(EMPTY_FINANCE);
 
     useEffect(() => {
+        let isMounted = true;
         fetch('http://localhost:5000/api/finance')
             .then(res => res.json())
-            .then(setData)
-            .catch(() => setData(MOCK_FINANCE));
+            .then(d => { if (isMounted) setData(d); })
+            .catch(() => { if (isMounted) setData(EMPTY_FINANCE); });
+        return () => { isMounted = false; };
     }, []);
 
     if (!data) return null;

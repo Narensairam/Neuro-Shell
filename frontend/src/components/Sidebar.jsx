@@ -38,32 +38,23 @@ const groups = [
         ]
     },
     {
-        label: "Domain Modules",
+        label: "Strategic Domains",
         items: [
             { id: "digitaltwin", icon: <Network size={18} />, label: "Asset Digital Twin", badge: "Live", badgeType: "green", roles: ['executive', 'operator'] },
-            { id: "manufacturing", icon: <Factory size={18} />, label: "Manufacturing & Ops", roles: ['executive', 'operator'] },
-            { id: "supplychain", icon: <Ship size={18} />, label: "Supply Chain", roles: ['executive', 'operator'] },
-            { id: "commercial", icon: <TrendingUp size={18} />, label: "Commercial", roles: ['executive', 'operator'] },
-            { id: "finance", icon: <CircleDollarSign size={18} />, label: "Finance", roles: ['executive'] },
-            { id: "hr", icon: <HardHat size={18} />, label: "HR & Safety", roles: ['executive', 'operator'] },
-            { id: "itops", icon: <ShieldCheck size={18} />, label: "IT / Cyber", roles: ['executive', 'itops'] }
-        ]
-    },
-    {
-        label: "Transformation",
-        items: [
-            { id: "erp", icon: <Globe size={18} />, label: "ERP Master (S/4HANA)", roles: ['executive'] },
-            { id: "techdebt", icon: <SquareStack size={18} />, label: "Tech Debt Reduction", roles: ['executive', 'itops', 'datascientist'] },
-            { id: "coe", icon: <Diamond size={18} />, label: "Centre of Excellence", roles: ['executive', 'datascientist'] },
-            { id: "governance", icon: <Scale size={18} />, label: "AI Governance", badge: "Active", badgeType: "green", roles: ['executive', 'datascientist', 'itops'] },
-            { id: "change", icon: <Users size={18} />, label: "Change & Adoption", roles: ['executive'] }
+            { id: "manufacturing", icon: <Factory size={18} />, label: "Industrial Ops & Refining", roles: ['executive', 'operator'] },
+            { id: "supplychain", icon: <Ship size={18} />, label: "Global Logistics & Marine", roles: ['executive', 'operator'] },
+            { id: "commercial", icon: <TrendingUp size={18} />, label: "Energy Trading & Risk", roles: ['executive', 'operator'] },
+            { id: "finance", icon: <CircleDollarSign size={18} />, label: "Group Finance & Strategy", roles: ['executive'] },
+            { id: "hr", icon: <HardHat size={18} />, label: "Workforce & HSE Safety", roles: ['executive', 'operator'] },
+            { id: "itops", icon: <ShieldCheck size={18} />, label: "System Ops & Cyber", roles: ['executive', 'itops'] },
+            { id: "governance", icon: <Scale size={18} />, label: "Governance and Compliance", badge: "Active", badgeType: "green", roles: ['executive', 'datascientist', 'itops'] }
         ]
     },
     {
         label: "Intelligence",
         items: [
-            { id: "roi", icon: <DollarSign size={18} />, label: "ROI Dashboard", roles: ['executive'] },
-            { id: "compliance", icon: <ShieldCheck size={18} />, label: "Compliance Matrix", roles: ['executive', 'itops'] }
+            { id: "topology", icon: <Network size={18} />, label: "Agentic Topology", roles: ['executive', 'itops', 'datascientist'] },
+            { id: "roi", icon: <DollarSign size={18} />, label: "ROI Dashboard", roles: ['executive'] }
         ]
     }
 ];
@@ -153,11 +144,20 @@ export function Sidebar({ currentView, setCurrentView, role }) {
                                 className={cn(
                                     "flex items-center gap-3 px-5 py-2.5 cursor-pointer text-[13.5px] transition-all border-l-2",
                                     currentView === item.id
-                                        ? "bg-amber-50/50 border-shell-yellow text-shell-darkText font-semibold"
+                                        ? item.id === 'commercial' 
+                                            ? "bg-blue-50/50 border-shell-blue text-shell-blue font-semibold"
+                                            : "bg-amber-50/50 border-shell-yellow text-shell-darkText font-semibold"
                                         : "border-transparent text-gray-500 hover:bg-gray-50 hover:text-shell-darkText"
                                 )}
                             >
-                                <div className="w-5 text-center flex-shrink-0 text-gray-400">{item.icon}</div>
+                                <div className={cn(
+                                    "w-5 text-center flex-shrink-0",
+                                    currentView === item.id 
+                                        ? item.id === 'commercial' ? "text-shell-blue" : "text-shell-yellow"
+                                        : "text-gray-400"
+                                )}>
+                                    {item.icon}
+                                </div>
                                 <div>{item.label}</div>
                                 {item.badge && (
                                     <div className={cn(

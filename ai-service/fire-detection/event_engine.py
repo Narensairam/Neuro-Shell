@@ -16,6 +16,17 @@ GLOBAL_STATS = {
 }
 STATE_LOCK = threading.Lock()
 
+import requests
+
+def sync_to_core(domain, data):
+    """Offloads synchronization to a background thread to prevent CV stutter."""
+    def _do_sync():
+        try:
+            requests.post("http://localhost:5000/api/sync", json={"domain": domain, "data": data}, timeout=1)
+        except:
+            pass
+    threading.Thread(target=_do_sync, daemon=True).start()
+
 class EnterpriseEventEngine:
     def __init__(self, camera_id):
         self.camera_id = camera_id
@@ -73,6 +84,12 @@ class EnterpriseEventEngine:
             GLOBAL_ALERTS.insert(0, final_payload)
             if len(GLOBAL_ALERTS) > AppConfig.MAX_ALERTS_HISTORY:
                 GLOBAL_ALERTS.pop()
+            
+            # UNIFIED CORE SYNC
+            sync_to_core("fire_safety", {
+                "activeAlerts": GLOBAL_ALERTS[:5], # Keep it lean
+                "stats": GLOBAL_STATS
+            })
                 
         # Console output for testing
-        print(f"[{final_payload['severity']} | {event_type}] 📢 {payload.get('recommended_action')} Data:{payload}")
+        print(f"[{final_payload['severity']} | {event_type}] 📢 {payload.get('recommended_action')}")

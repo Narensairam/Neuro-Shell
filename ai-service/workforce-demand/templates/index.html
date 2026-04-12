@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shell EOS – Workforce & Safety Intelligence</title>
+    <!-- Google Fonts for Professional Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="eos-layout">
+        
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h2>EOS Control</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-item">Global Command</a></li>
+                    <li><a href="#" class="nav-item">Plant Operations</a></li>
+                    <li><a href="#" class="nav-item active">HR & Safety</a></li>
+                    <li><a href="#" class="nav-item">Supply Chain</a></li>
+                    <li><a href="#" class="nav-item">AI Copilot</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Workforce & Safety Intelligence</h1>
+                <div class="header-tools">
+                    <button id="btn-simulate-fire" class="btn-secondary" style="margin-right: 10px; width: auto; display: inline-block;">Simulate Fire Alert</button>
+                    <button id="btn-simulate-maintenance" class="btn-secondary" style="margin-right: 10px; width: auto; display: inline-block;">Simulate Maintenance</button>
+                    <span class="user-profile">Administrator</span>
+                </div>
+            </header>
+
+            <!-- Live API Banner -->
+            <div id="live-banner" style="margin-bottom: 20px; padding: 16px; border-radius: 6px; font-weight: 600; background-color: var(--color-green-light); color: var(--color-green); border-left: 4px solid var(--color-green);">
+                ✅ System Normal: No active alerts detected.
+            </div>
+
+            <!-- Top KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-title">Workforce Availability</div>
+                    <div class="kpi-value text-green"><span id="kpi-available">Loading...</span> <span class="kpi-subtitle">Available</span></div>
+                    <div class="progress-bar"><div id="bar-available" class="progress-fill fill-green" style="width: 0%;"></div></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Workforce Demand</div>
+                    <div class="kpi-value"><span id="kpi-demand">Loading...</span> <span class="kpi-subtitle">Required</span></div>
+                    <div class="progress-bar"><div id="bar-demand" class="progress-fill fill-blue" style="width: 0%;"></div></div>
+                </div>
+                <div id="kpi-card-gap" class="kpi-card border-red">
+                    <div class="kpi-title">Workforce Gap</div>
+                    <div class="kpi-value text-red"><span id="kpi-gap">Loading...</span> <span class="kpi-subtitle">Shortage</span></div>
+                    <div class="progress-bar"><div id="bar-gap" class="progress-fill fill-red" style="width: 0%;"></div></div>
+                </div>
+                <div id="kpi-card-risk" class="kpi-card border-red">
+                    <div class="kpi-title">Safety Risk Level</div>
+                    <div class="kpi-value text-red"><span id="kpi-risk">Loading...</span> <span class="kpi-indicator indicator-red"></span></div>
+                    <div id="kpi-risk-explanation" class="kpi-subtitle mt-sm">Awaiting data...</div>
+                </div>
+            </div>
+
+            <!-- Content Grid 1: Workforce Planning -->
+            <div class="section-title">Workforce Planning</div>
+            <div class="content-grid-3">
+                <!-- Active Event Panel -->
+                <div class="panel">
+                    <div class="panel-header text-red" id="event-title">
+                        <span class="icon">⚡</span> Event Loading...
+                    </div>
+                    <div class="panel-body">
+                        <ul class="data-list">
+                            <li><span class="label">Severity:</span> <span id="event-severity" class="value font-bold">...</span></li>
+                            <li><span class="label">Required Workers:</span> <span id="event-req" class="value">...</span></li>
+                            <li><span class="label">Available:</span> <span id="event-avail" class="value">...</span></li>
+                            <li><span class="label">Gap:</span> <span id="event-gap" class="value text-red">...</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Skill Requirements Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        Skill Requirements
+                    </div>
+                    <div class="panel-body">
+                        <ul class="data-list" id="skills-list">
+                            <li><span class="label">Loading...</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- AI Recommendation Panel -->
+                <div class="panel highlight-blue">
+                    <div class="panel-header">
+                        AI Recommendation
+                    </div>
+                    <div class="panel-body">
+                        <p class="ai-text" id="ai-recommendation">"Connecting to AI Engine..."</p>
+                        <button class="btn-primary mt-md" id="btn-deploy">Execute Recommendation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid 2: Distribution & Intelligence -->
+            <div class="section-title mt-lg">Workforce Distribution & Intelligence</div>
+            <div class="content-grid-2">
+                <!-- Workforce Distribution -->
+                <div class="panel">
+                    <div class="panel-header">Workforce Distribution</div>
+                    <div class="panel-body">
+                        <div class="bar-chart">
+                            <div class="chart-row"><span class="label">Site A (Refinery)</span><div class="bar-container"><div class="bar bg-blue" style="width: 80%;">40</div></div></div>
+                            <div class="chart-row"><span class="label">Site B (Storage)</span><div class="bar-container"><div class="bar bg-blue" style="width: 40%;">20</div></div></div>
+                            <div class="chart-row"><span class="label">Site C (Offshore)</span><div class="bar-container"><div class="bar bg-blue" style="width: 70%;">35</div></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contractor Intelligence Panel -->
+                <div class="panel">
+                    <div class="panel-header">Top Contractor Recommendation</div>
+                    <div class="panel-body">
+                        <ul class="data-list">
+                            <li><span class="label">Name:</span> <span id="contractor-name" class="value font-bold">...</span></li>
+                            <li><span class="label">Performance Score:</span> <span id="contractor-score" class="value text-green">...</span></li>
+                            <li><span class="label">Availability:</span> <span class="value">High</span></li>
+                            <li><span class="label">Status:</span> <span id="contractor-status" class="value badge-green">...</span></li>
+                        </ul>
+                        <button class="btn-secondary mt-sm" id="btn-contractor">Contact Vendor</button>
+                    </div>
+                </div>
+
+                <!-- Safety Analytics Panel -->
+                <div class="panel">
+                    <div class="panel-header">Safety Analytics</div>
+                    <div class="panel-body">
+                        <div id="risk-box" class="status-box status-high-risk">
+                            <div class="status-title">Risk Level: <span id="analytics-risk">...</span></div>
+                            <p class="status-desc" id="analytics-reason"><strong>Reason:</strong> ...</p>
+                            <p class="status-desc"><strong>Impact:</strong> Increased incident probability</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Holiday / Leave Impact Panel -->
+                <div class="panel">
+                    <div class="panel-header">Confidence Score</div>
+                    <div class="panel-body">
+                        <ul class="data-list">
+                            <li><span class="label">Model:</span> <span class="value">Random Forest Ensemble</span></li>
+                            <li><span class="label">Prediction Confidence:</span> <span id="ai-confidence" class="value text-green font-bold">...</span></li>
+                        </ul>
+                        <div class="ai-suggestion mt-sm">
+                            <span class="ai-label">AI Explainability:</span>
+                            <span id="ai-explanation">...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Right Panel -->
+        <aside class="right-panel">
+            <div class="panel-header">Workforce Alert Center</div>
+            <div class="alerts-container" id="alerts-container">
+                <!-- Alerts will be injected here via JS -->
+            </div>
+        </aside>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -3,26 +3,29 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { AlertCircle, Factory, ShieldAlert, TrendingUp, Settings, Wrench, CheckCircle, HeartPulse } from 'lucide-react';
 import { FireDetectionView } from './FireDetectionView';
 
-const MOCK_MANUFACTURING = {
-    yieldOptimization: 94.5,
-    unplannedDowntimeReduction: 38,
-    activeSites: 52,
-    alerts: [
-        { severity: 'high', message: 'Pressure anomaly detected at Rotterdam CDU-3' },
-        { severity: 'medium', message: 'Catalyst deactivation predicted in 48h (Singapore)' }
-    ],
-    chartData: Array.from({ length: 12 }).map((_, i) => ({ time: `${i}:00`, yield: 80 + Math.random() * 15 }))
+const EMPTY_DATA = {
+    yieldOptimization: 0,
+    unplannedDowntimeReduction: 0,
+    activeSites: 0,
+    alerts: [],
+    chartData: []
 };
 
 export function ManufacturingView({ setCurrentView }) {
-    const [data, setData] = useState(MOCK_MANUFACTURING);
+    const [data, setData] = useState(EMPTY_DATA);
     const [activeTab, setActiveTab] = useState('analytics');
 
     useEffect(() => {
+        let isMounted = true;
         fetch('http://localhost:5000/api/manufacturing')
             .then(res => res.json())
-            .then(setData)
-            .catch(() => setData(MOCK_MANUFACTURING));
+            .then(resData => {
+                if (isMounted) setData(resData);
+            })
+            .catch(() => {
+                if (isMounted) setData(EMPTY_DATA);
+            });
+        return () => { isMounted = false; };
     }, []);
 
 

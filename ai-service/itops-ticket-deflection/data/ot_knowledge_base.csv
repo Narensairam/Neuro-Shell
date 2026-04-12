@@ -1,0 +1,5 @@
+kb_id,title,description,resolution
+OT_KB001,Unauthorized access attack detected on OT device,Unauthorized login/access attempts detected on a PLC/RTU device or OT segment.,"Isolate device, block suspicious source, rotate credentials, and review access logs."
+OT_KB002,Denial of service detected on OT network,Packet rate spike suggests DoS-like activity or broadcast storm affecting OT communications.,Apply rate limiting and network filtering; isolate segment if needed.
+OT_KB003,Command injection detected on OT device,Execute command attempts with high failures suggests command injection or unauthorized control.,"Disable remote execute, isolate device, validate command sources, and review PLC logic changes."
+OT_KB004,Firmware tampering detected on OT device,Firmware change flag indicates possible unauthorized firmware modification.,"Isolate device, rollback/verify firmware integrity, and audit change controls."

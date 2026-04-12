@@ -101,7 +101,9 @@ export function AppLayout() {
 
         {/* Dynamic Content Area */}
         <main className="flex-1 relative bg-slate-950 overflow-hidden flex flex-col">
-          {renderContent()}
+          <div className="flex-1 relative">
+            {renderContent()}
+          </div>
           {/* Node Details Overlay only for Topology view */}
           {(activeTab === 'topology' || activeTab === '3d') && <NodeDetailPanel />}
         </main>

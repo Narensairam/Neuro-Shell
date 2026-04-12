@@ -1,0 +1,141 @@
+{
+  "enterprise": {
+    "name": "Shell plc",
+    "stats": {
+      "revenue_annual": 282500,
+      "unplanned_downtime_reduction": 22,
+      "innovation_budget_freed": 84.5,
+      "global_tag_count": 500000,
+      "production_boe_day": 3400000
+    },
+    "health_index": 98.4,
+    "last_sync": "2026-04-12T23:58:00Z",
+    "process_heatmap": [
+      { "id": "refining", "label": "CDU Refining", "health": 96, "load": 82 },
+      { "id": "trading", "label": "Arbitrage", "health": 88, "load": 94 },
+      { "id": "logistics", "label": "LNG Logistics", "health": 92, "load": 75 },
+      { "id": "safety", "label": "HSE Monitoring", "health": 98, "load": 40 },
+      { "id": "finance", "label": "Group Close", "health": 75, "load": 90 },
+      { "id": "cyber", "label": "Threat Scan", "health": 95, "load": 65 },
+      { "id": "hr", "label": "Reskilling", "health": 85, "load": 30 },
+      { "id": "contracts", "label": "AI Contracts", "health": 90, "load": 50 }
+    ],
+    "agent_metrics": {
+      "avg_latency": "142ms",
+      "success_rate": "99.8%",
+      "active_tokens": "4.2M/day"
+    }
+  },
+  "industrial_ops": {
+    "overall_yield": 94.8,
+    "active_refineries": 52,
+    "refineries": [
+      {
+        "id": "SITE_ROTTERDAM",
+        "name": "Pernis Refinery (Rotterdam)",
+        "status": "Active",
+        "health": 96.2,
+        "throughput": 404000,
+        "anomalies": ["CDU-3 Pressure variance stable"],
+        "lng_trains": [
+          { "id": "TRAIN_1", "status": "Optimized", "utilization": 98.2 },
+          { "id": "TRAIN_2", "status": "Maintenance", "utilization": 0.0 }
+        ]
+      },
+      {
+        "id": "SITE_SINGAPORE",
+        "name": "Bukom Island Hub (Singapore)",
+        "status": "Active",
+        "health": 88.5,
+        "throughput": 500000,
+        "anomalies": ["Catalyst deactivation monitoring active"]
+      }
+    ],
+    "safety_alerts": [
+      { "id": "SAFE_001", "site_id": "SITE_ROTTERDAM", "severity": "high", "message": "PPE Compliance variance in Zone 4" }
+    ]
+  },
+  "global_logistics": {
+    "route_efficiency": 92.4,
+    "inventory": [
+      { "item": "Brent Crude", "quantity": 12500, "location": "FLOATING_STORAGE_01" },
+      { "item": "Standard LNG", "quantity": 4500, "location": "SITE_ROTTERDAM" }
+    ],
+    "fleet": {
+      "active_tankers": 42,
+      "avg_fuel_savings_pct": 12.5
+    }
+  },
+  "energy_trading_risk": {
+    "pricing_optimization_lift": 4.2,
+    "arbitrage_opportunities": [
+      { "pair": "Brent/WTI", "spread": 2.45, "status": "Executing" },
+      { "pair": "EU Carbon Credits", "price": 88.42, "trend": "Bullish" }
+    ],
+    "churn_prediction_risk": "Low"
+  },
+  "group_finance": {
+    "close_cycle_days": 6,
+    "auto_recon_rate": 96.8,
+    "transfer_pricing_compliance": "Verified",
+    "cash_flow_volatility_buffer": 12.4
+  },
+  "workforce_hse": {
+    "recordable_incident_reduction": 32,
+    "reskilling_index": 78,
+    "certified_practitioners": 142,
+    "personnel": [
+      { "id": "EMP_001", "name": "Julian Dash", "role": "L3 Senior Engineer", "site_id": "SITE_ROTTERDAM", "skills": ["CDU Optimization", "Safety Systems"] }
+    ]
+  },
+  "system_ops_cyber": {
+    "incident_deflection_rate": 68,
+    "threat_neutralization_count": 14250,
+    "iec_62443_compliance": "98%",
+    "active_tickets": [
+      { "id": "OT-7742", "subject": "DCS Gateway Latency", "site_id": "SITE_ROTTERDAM", "status": "Investigating", "priority": "High" }
+    ]
+  },
+  "fire_safety": {
+    "active_alerts": [],
+    "history": []
+  },
+  "governance_compliance": {
+    "enterprise_score": 97.2,
+    "critical_risks": 1,
+    "active_audits": 14,
+    "domains": {
+      "neural_ai": {
+        "status": "Healthy",
+        "score": 96.4,
+        "regulations": ["EU AI Act", "NIST", "Ethics Board"],
+        "metrics": { "registered_models": 147, "bias_alerts": 2 }
+      },
+      "industrial_qhse": {
+        "status": "Safe",
+        "score": 98.2,
+        "regulations": ["HSE PPE", "ISO 50001", "EU ETS"],
+        "metrics": { "sites_compliant": 51, "emissions_offsets": "92%" }
+      },
+      "trade_financial": {
+        "status": "Review",
+        "score": 94.5,
+        "regulations": ["SOX 404", "Sanctions", "REMIT"],
+        "metrics": { "sanctions_cleared": "100%", "trading_anomalies": 3 }
+      },
+      "system_cyber": {
+        "status": "Secure",
+        "score": 99.1,
+        "regulations": ["ISO 27001", "IEC 62443", "GDPR"],
+        "metrics": { "patches_verified": "100%", "access_reviews": 420 }
+      }
+    },
+    "audit_trail": [
+       { "id": "A-7741", "time": "14:32", "domain": "Neural AI", "action": "Model retrained — Compressor Failure Predictor", "regulation": "EU AI Act Art.9", "status": "Success" },
+       { "id": "A-7740", "time": "13:15", "domain": "Trade & Finance", "action": "Sanctions screening auto-refresh", "regulation": "OFAC / REMIT", "status": "Success" },
+       { "id": "A-7739", "time": "12:45", "domain": "Industrial", "action": "PPE Violation detection — Pernis Zone 4", "regulation": "HSE Protocol", "status": "Alert" },
+       { "id": "A-7738", "time": "11:20", "domain": "Cyber", "action": "Patch MS-2026-08 deployment verified", "regulation": "ISO 27001", "status": "Success" },
+       { "id": "A-7737", "time": "09:12", "domain": "Finance", "action": "Quarterly SOX accessibility review", "regulation": "SOX 404", "status": "Partial" }
+    ]
+  }
+}

@@ -13,6 +13,7 @@ import {
     ExternalLink,
     X
 } from 'lucide-react';
+import { crisisEventBus } from '../context/CrisisEventBus';
 
 const FIRE_UI_ORIGIN = import.meta.env.VITE_FIRE_DETECTION_URL || 'http://localhost:5002';
 const NEURO_SHELL_ORIGIN = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:5001';
@@ -28,6 +29,18 @@ export function FireDetectionView() {
     const [time, setTime] = useState('');
     const [retryKey, setRetryKey] = useState(0);
     const fireAlertTimeout = useRef(null);
+    const orchestratorTriggered = useRef(false);
+
+    // Crisis Orchestrator Bridge
+    useEffect(() => {
+        if (fireAlert && !orchestratorTriggered.current) {
+            orchestratorTriggered.current = true;
+            // Delay slightly to allow the UI to show before jumping
+            setTimeout(() => {
+                 crisisEventBus.dispatch('CRISIS_FIRE_DETECTED', fireAlert);
+            }, 3000);
+        }
+    }, [fireAlert]);
 
     // Clock
     useEffect(() => {
@@ -93,7 +106,7 @@ export function FireDetectionView() {
         <div className="flex-1 w-full h-full bg-slate-50 text-shell-darkText font-sans overflow-hidden flex flex-col select-none relative animate-in fade-in duration-300">
             {/* Global Fire Alert Overlay */}
             {fireAlert && (
-                <div className="absolute top-6 right-6 z-[50] animate-bounce">
+                <div className="absolute top-6 right-6 z-[50] animate-pulse">
                     <div className="bg-red-600 shadow-[0_0_40px_rgba(220,38,38,0.6)] border-2 border-red-400 rounded-lg p-5 flex items-start gap-4 min-w-[360px]">
                         <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-inner">
                             <Flame className="w-8 h-8 text-red-600" />
@@ -115,9 +128,13 @@ export function FireDetectionView() {
                             <div className="text-red-100 font-mono text-xs uppercase tracking-widest mb-2">
                                 Node: {fireAlert.camera_id} // CONFIDENCE: {fireAlert.confidence}%
                             </div>
-                            <div className="text-white font-bold text-sm bg-red-800/50 px-2 py-1 rounded inline-block">
-                                AUTOMATED RESPONSE DISPATCHED
-                            </div>
+                            <button 
+                                onClick={() => crisisEventBus.dispatch('CRISIS_FIRE_DETECTED', fireAlert)}
+                                className="text-white font-bold text-[10px] bg-red-800 hover:bg-black px-3 py-1.5 rounded inline-flex items-center gap-2 transition-colors uppercase tracking-widest shadow-md border border-red-500/50"
+                            >
+                                <Cpu className="w-3.5 h-3.5 text-red-500" />
+                                Initiate Agentic Swarm Workflow
+                            </button>
                         </div>
                     </div>
                 </div>

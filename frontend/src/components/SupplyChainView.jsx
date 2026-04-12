@@ -1,26 +1,46 @@
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Ship, Clock, AlertTriangle, Package, Truck, ClipboardList, Globe, TrendingUp, Map, BarChart2 } from 'lucide-react';
+import { Ship, Clock, AlertTriangle, Package, Truck, ClipboardList, Globe, TrendingUp, Map, BarChart2, Cpu } from 'lucide-react';
 import { RouteOptimizationView } from './RouteOptimizationView';
+import { crisisEventBus } from '../context/CrisisEventBus';
 
-const MOCK_SC = {
-    optimalRoutesAdopted: 88.5,
-    inventoryChart: Array.from({ length: 14 }).map((_, i) => ({ day: `D${i + 1}`, level: Math.floor(400 + Math.random() * 200) })),
-    logisticsAlerts: [
-        { type: 'Weather', message: 'LNG tanker route adjusted for typhoon risk in SE Asia', severity: 'High' },
-        { type: 'Port', message: 'Port of Rotterdam experiencing 4h berth delay.', severity: 'Medium' }
-    ]
+const EMPTY_SC = {
+    optimalRoutesAdopted: 0,
+    inventoryChart: [],
+    logisticsAlerts: []
 };
 
 export function SupplyChainView() {
-    const [data, setData] = useState(MOCK_SC);
+    const [data, setData] = useState(EMPTY_SC);
     const [activeTab, setActiveTab] = useState('overview');
 
     useEffect(() => {
+        let isMounted = true;
         fetch('http://localhost:5000/api/supplychain')
             .then(res => res.json())
-            .then(setData)
-            .catch(() => setData(MOCK_SC));
+            .then(d => { 
+                if (isMounted) {
+                    // Injecting Crisis logic on top of live data
+                    if (crisisEventBus.getLast('CRISIS_WORKFORCE_DEPLOYED')) {
+                        return {
+                            ...d,
+                            logisticsAlerts: [
+                                { 
+                                    type: 'Infrastructure Damage', 
+                                    message: 'Fire Incident has severed primary route access to Zone D logistics node. 48hr delay expected.', 
+                                    severity: 'High',
+                                    isCrisis: true
+                                },
+                                ...d.logisticsAlerts
+                            ]
+                        };
+                    }
+                    setData(d); 
+                }
+            })
+            .catch(() => { if (isMounted) setData(EMPTY_SC); });
+
+        return () => { isMounted = false; };
     }, []);
 
     if (!data) return null;
@@ -118,9 +138,18 @@ export function SupplyChainView() {
                                         <div className="p-2 bg-white rounded-md border border-gray-200 h-fit">
                                             {a.type === 'Weather' ? <Clock className="w-4 h-4 text-blue-500" /> : <AlertTriangle className="w-4 h-4 text-amber-500" />}
                                         </div>
-                                        <div>
+                                        <div className="flex-1">
                                             <div className={`text-[11px] font-bold uppercase tracking-tight mb-0.5 ${a.severity === 'High' ? 'text-red-700' : 'text-amber-700'}`}>{a.type} Event</div>
                                             <div className={`text-[10px] leading-relaxed ${a.severity === 'High' ? 'text-red-600' : 'text-amber-600'}`}>{a.message}</div>
+                                            {a.isCrisis && (
+                                                <button 
+                                                    onClick={() => crisisEventBus.dispatch('CRISIS_SUPPLY_DELAYED', true)}
+                                                    className="mt-3 text-white font-bold text-[9px] bg-red-800 hover:bg-black px-3 py-1.5 rounded inline-flex items-center gap-2 transition-colors uppercase tracking-widest shadow-md border border-red-500/50"
+                                                >
+                                                    <Cpu className="w-3 h-3 text-red-500" />
+                                                    Route Constraint to Pricing Engine
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 ))}

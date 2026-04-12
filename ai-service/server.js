@@ -25,10 +25,39 @@ const governanceAgent = spawn('python', ['app.py'], {
 });
 governanceAgent.stdout.on('data', (d) => process.stdout.write(`[Governance] ${d}`));
 governanceAgent.stderr.on('data', (d) => process.stdout.write(`[Governance] ${d}`));
-governanceAgent.on('error', (err) => {
-    if (err.code === 'ENOENT') console.warn('[Governance] ⚠ python not found in PATH');
-    else console.error('[Governance] Error:', err.message);
+
+// ─── Workforce Demand Agent ────────────────────────────────────────────────────
+const workforceDir = path.join(__dirname, 'workforce-demand');
+console.log('[Neuro Shell] Starting Workforce Demand Agent on 5003...');
+const workforceAgent = spawn('python', ['app.py'], {
+    cwd: workforceDir,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    detached: false,
 });
+workforceAgent.stdout.on('data', (d) => process.stdout.write(`[Workforce] ${d}`));
+workforceAgent.stderr.on('data', (d) => process.stdout.write(`[Workforce] ${d}`));
+
+// ─── ITOps Ticket Deflection Agent ─────────────────────────────────────────────
+const itopsDir = path.join(__dirname, 'itops-ticket-deflection', 'backend');
+console.log('[Neuro Shell] Starting ITOps Agent on 5004...');
+const itopsAgent = spawn('python', ['main.py'], {
+    cwd: itopsDir,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    detached: false,
+});
+itopsAgent.stdout.on('data', (d) => process.stdout.write(`[ITOps] ${d}`));
+itopsAgent.stderr.on('data', (d) => process.stdout.write(`[ITOps] ${d}`));
+
+// ─── Commercial Trading Agent ──────────────────────────────────────────────────
+const commercialDir = path.join(__dirname, 'commercial-agents');
+console.log('[Neuro Shell] Starting Commercial Agent on 5005...');
+const commercialAgent = spawn('python', ['main.py'], {
+    cwd: commercialDir,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    detached: false,
+});
+commercialAgent.stdout.on('data', (d) => process.stdout.write(`[Commercial] ${d}`));
+commercialAgent.stderr.on('data', (d) => process.stdout.write(`[Commercial] ${d}`));
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ─── Fire Detection Agent (on-demand via API) ─────────────────────────────────
@@ -153,7 +182,10 @@ app.post('/api/chat', (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 process.on('exit', () => {
-    try { governanceAgent.kill(); } catch { }
+    try { if (governanceAgent) governanceAgent.kill(); } catch { }
+    try { if (workforceAgent) workforceAgent.kill(); } catch { }
+    try { if (itopsAgent) itopsAgent.kill(); } catch { }
+    try { if (commercialAgent) commercialAgent.kill(); } catch { }
     try { if (fireAgent) fireAgent.kill(); } catch { }
 });
 
