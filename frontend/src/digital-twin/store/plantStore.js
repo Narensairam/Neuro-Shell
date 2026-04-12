@@ -27,7 +27,7 @@ export const usePlantStore = create((set, get) => ({
   activeScenarioId: null,
   comparisonScenarioId: null,
   selectedNodeId: null,
-  viewMode: '2d',
+  activeTab: 'dashboard',
   simulationParams: defaultParams,
   isSimulating: false,
   isLoading: true,
@@ -41,9 +41,9 @@ export const usePlantStore = create((set, get) => ({
         id: 'baseline',
         name: 'Baseline Operations',
         description: 'Current active plant configuration',
-        nodes: JSON.parse(JSON.stringify(data.nodes)),
-        edges: JSON.parse(JSON.stringify(data.edges)),
-        kpis: { ...data.kpis },
+        nodes: data.nodes,
+        edges: data.edges,
+        kpis: data.kpis,
         createdAt: new Date().toISOString(),
         isBaseline: true
       };
@@ -70,10 +70,11 @@ export const usePlantStore = create((set, get) => ({
     set({ edges: applyEdgeChanges(changes, get().edges) });
   },
 
-  onConnect: (params) => {
+  onConnect: (connection) => {
     const newEdge = {
-      ...params,
-      id: `e${params.source}-${params.target}`,
+      id: `e${connection.source}-${connection.target}`,
+      source: connection.source,
+      target: connection.target,
       animated: true,
       data: { flowRate: 0, material: 'Unknown' }
     };
@@ -102,7 +103,7 @@ export const usePlantStore = create((set, get) => ({
 
   setSelectedNode: (id) => set({ selectedNodeId: id }),
 
-  setViewMode: (mode) => set({ viewMode: mode }),
+  setActiveTab: (tab) => set({ activeTab: tab }),
 
   updateSimulationParams: (params) => {
     set({ simulationParams: { ...get().simulationParams, ...params } });

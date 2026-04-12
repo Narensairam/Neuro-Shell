@@ -13,7 +13,6 @@ import {
 
 export function KPIDashboard() {
   const { kpis } = usePlantStore();
-
   const kpiConfig = [
     {
       label: 'Efficiency',
@@ -30,52 +29,33 @@ export function KPIDashboard() {
       trend: 'up'
     },
     {
-      label: 'Risk Score',
-      value: kpis.riskScore,
-      icon: AlertTriangle,
-      color: kpis.riskScore > 30 ? 'text-amber-400' : 'text-emerald-400',
-      trend: 'down'
-    },
-    {
-      label: 'Energy',
-      value: `${kpis.energyConsumption} MW`,
-      icon: Battery,
-      color: 'text-amber-400',
-      trend: 'up'
-    },
-    {
-      label: 'Uptime',
-      value: `${kpis.uptime}%`,
-      icon: Clock,
-      color: 'text-emerald-400',
-      trend: 'up'
-    },
-    {
-      label: 'Emissions',
-      value: `${kpis.emissions} t/d`,
-      icon: CloudFog,
-      color: 'text-slate-400',
-      trend: 'down'
+      label: 'Health Status',
+      value: kpis.riskScore > 30 ? 'Warning' : 'Normal',
+      icon: Activity,
+      color: kpis.riskScore > 30 ? 'bg-amber-500/20 text-amber-400 border-amber-500/50' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50',
+      trend: kpis.riskScore > 30 ? 'down' : 'up'
     }
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 p-4">
+    <div className="grid grid-cols-3 gap-6">
       {kpiConfig.map((kpi, i) => (
         <div
           key={i}
-          className="bg-slate-800/50 border border-slate-700/50 rounded-lg p-3 flex flex-col"
+          className={`border rounded-xl p-6 flex flex-col justify-center items-center relative overflow-hidden bg-slate-800/40 ${
+            kpi.label === 'Health Status' ? kpi.color : 'border-slate-700/50'
+          }`}
         >
-          <div className="flex items-center justify-between mb-2">
-            <kpi.icon size={16} className={kpi.color} />
-            {kpi.trend === 'up' ? (
-              <TrendingUp size={14} className="text-emerald-500/70" />
-            ) : (
-              <TrendingDown size={14} className="text-emerald-500/70" />
-            )}
-          </div>
-          <span className="text-2xl font-bold text-slate-100">{kpi.value}</span>
-          <span className="text-xs text-slate-400 mt-1">{kpi.label}</span>
+          <span className="text-sm font-medium text-slate-400 mb-2">{kpi.label}</span>
+          <span className={`text-4xl font-bold tracking-tight ${kpi.label === 'Health Status' ? '' : 'text-slate-100'}`}>
+            {kpi.value}
+          </span>
+          {kpi.label === 'Efficiency' && (
+            <div className="absolute bottom-0 inset-x-0 h-1 bg-emerald-500/50"></div>
+          )}
+          {kpi.label === 'Throughput' && (
+            <div className="absolute bottom-0 inset-x-0 h-1 bg-amber-500/50"></div>
+          )}
         </div>
       ))}
     </div>

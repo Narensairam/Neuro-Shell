@@ -1,13 +1,13 @@
 import React from 'react';
 import { usePlantStore } from '../../store/plantStore';
-import { X, Activity, Thermometer, Gauge, Database as DatabaseIcon } from 'lucide-react';
+import { X, Activity, Thermometer, Gauge, DatabaseIcon } from 'lucide-react';
 
 export function NodeDetailPanel() {
   const { nodes, selectedNodeId, setSelectedNode, updateNodeData } = usePlantStore();
-
+  
   const node = nodes.find((n) => n.id === selectedNodeId);
   if (!node) return null;
-
+  
   const { label, type, metadata } = node.data;
 
   const handleStatusChange = (e) => {
@@ -40,21 +40,17 @@ export function NodeDetailPanel() {
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-4">
             <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
-              <label className="text-xs text-slate-400 mb-1 block">
-                Operational Status
-              </label>
+              <label className="text-xs text-slate-400 mb-1 block">Operational Status</label>
               <select
                 value={metadata.status}
                 onChange={handleStatusChange}
-                className="w-full bg-slate-950 border border-slate-700 text-sm rounded px-2 py-1.5 focus:outline-none focus:border-cyan-500"
-                style={{
-                  color: `var(--plant-${metadata.status})`
-                }}
+                className="w-full bg-slate-950 border border-slate-700 text-sm rounded px-2 py-1.5 focus:border-cyan-500 focus:outline-none"
+                style={{ color: `var(--plant-${metadata.status})` }}
               >
-                <option value="online">Online</option>
-                <option value="warning">Warning</option>
-                <option value="critical">Critical</option>
-                <option value="offline">Offline</option>
+                <option value="online" className="text-emerald-500">Online</option>
+                <option value="warning" className="text-amber-500">Warning</option>
+                <option value="critical" className="text-red-500">Critical</option>
+                <option value="offline" className="text-slate-500">Offline</option>
               </select>
             </div>
 
@@ -62,45 +58,33 @@ export function NodeDetailPanel() {
               {metadata.capacity !== undefined && (
                 <div className="bg-slate-800/30 p-2 rounded border border-slate-800/50">
                   <div className="flex items-center gap-1.5 text-slate-400 mb-1">
-                    <DatabaseIcon size={14} />
-                    <span className="text-[10px] uppercase">Capacity</span>
+                    <DatabaseIcon size={14} /> <span className="text-[10px] uppercase">Capacity</span>
                   </div>
-                  <div className="text-sm font-medium text-slate-200">
-                    {metadata.capacity.toLocaleString()}
-                  </div>
+                  <div className="text-sm font-medium text-slate-200">{metadata.capacity.toLocaleString()}</div>
                 </div>
               )}
               {metadata.flowRate !== undefined && (
                 <div className="bg-slate-800/30 p-2 rounded border border-slate-800/50">
                   <div className="flex items-center gap-1.5 text-slate-400 mb-1">
-                    <Activity size={14} />
-                    <span className="text-[10px] uppercase">Flow Rate</span>
+                    <Activity size={14} /> <span className="text-[10px] uppercase">Flow Rate</span>
                   </div>
-                  <div className="text-sm font-medium text-slate-200">
-                    {metadata.flowRate.toLocaleString()}
-                  </div>
+                  <div className="text-sm font-medium text-slate-200">{metadata.flowRate.toLocaleString()}</div>
                 </div>
               )}
               {metadata.pressure !== undefined && (
                 <div className="bg-slate-800/30 p-2 rounded border border-slate-800/50">
                   <div className="flex items-center gap-1.5 text-slate-400 mb-1">
-                    <Gauge size={14} />
-                    <span className="text-[10px] uppercase">Pressure</span>
+                    <Gauge size={14} /> <span className="text-[10px] uppercase">Pressure</span>
                   </div>
-                  <div className="text-sm font-medium text-slate-200">
-                    {metadata.pressure} PSI
-                  </div>
+                  <div className="text-sm font-medium text-slate-200">{metadata.pressure} PSI</div>
                 </div>
               )}
               {metadata.temperature !== undefined && (
                 <div className="bg-slate-800/30 p-2 rounded border border-slate-800/50">
                   <div className="flex items-center gap-1.5 text-slate-400 mb-1">
-                    <Thermometer size={14} />
-                    <span className="text-[10px] uppercase">Temp</span>
+                    <Thermometer size={14} /> <span className="text-[10px] uppercase">Temp</span>
                   </div>
-                  <div className="text-sm font-medium text-slate-200">
-                    {metadata.temperature} °C
-                  </div>
+                  <div className="text-sm font-medium text-slate-200">{metadata.temperature} °C</div>
                 </div>
               )}
             </div>

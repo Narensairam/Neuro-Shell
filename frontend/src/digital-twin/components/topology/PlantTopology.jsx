@@ -22,12 +22,7 @@ export function PlantTopology() {
     selectedNodeId
   } = usePlantStore();
 
-  const nodeTypes = useMemo(
-    () => ({
-      equipment: EquipmentNode
-    }),
-    []
-  );
+  const nodeTypes = useMemo(() => ({ equipment: EquipmentNode }), []);
 
   const onNodeClick = useCallback(
     (_, node) => {
@@ -64,25 +59,16 @@ export function PlantTopology() {
         minZoom={0.2}
         maxZoom={2}
       >
-        <Background
-          variant={BackgroundVariant.Dots}
-          gap={24}
-          size={2}
-          color="#334155"
-        />
+        <Background variant={BackgroundVariant.Dots} gap={24} size={2} color="#334155" />
         <Controls className="bg-slate-900 border-slate-800 fill-slate-300" />
         <MiniMap
           nodeColor={(node) => {
             const status = node.data?.metadata?.status;
             switch (status) {
-              case 'online':
-                return '#10b981';
-              case 'warning':
-                return '#f59e0b';
-              case 'critical':
-                return '#ef4444';
-              default:
-                return '#64748b';
+              case 'online': return '#10b981';
+              case 'warning': return '#f59e0b';
+              case 'critical': return '#ef4444';
+              default: return '#64748b';
             }
           }}
           maskColor="rgba(15, 23, 42, 0.7)"

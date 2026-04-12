@@ -1,74 +1,57 @@
-/* @import url() FONT IMPORTS MUST ALWAYS BE AT THE VERY TOP OF THIS FILE, ABOVE THE TAILWIND IMPORTS — DO NOT DELETE THIS COMMENT */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* CRITICAL: THE FOLLOWING TAILWIND IMPORTS MUST NEVER BE DELETED OR REORDERED — DO NOT DELETE THIS COMMENT */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
-/* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
-
-@layer base {
-  :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 191 97% 40%; /* Cyan 500 */
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 191 97% 40%;
-    --radius: 0.5rem;
-  }
-}
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground font-sans antialiased overflow-hidden;
-    font-family: 'Inter', sans-serif;
-  }
-}
-/* Custom Scrollbar for dark theme */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: hsl(var(--background)); 
-}
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted)); 
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground)); 
-}
 /* React Flow Custom Overrides for Dark Mode */
-.react-flow__panel {
-  @apply bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-md p-1;
+.digital-twin-root {
+  --plant-online: #10b981;
+  --plant-warning: #f59e0b;
+  --plant-critical: #ef4444;
+  --plant-offline: #64748b;
 }
-.react-flow__controls-button {
-  @apply bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 fill-slate-300 !important;
+
+.digital-twin-root :global(.react-flow__panel) {
+  background-color: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid #1e293b;
+  border-radius: 0.375rem;
+  padding: 0.25rem;
 }
-.react-flow__minimap {
-  @apply bg-slate-900 border border-slate-800 rounded-md overflow-hidden !important;
+
+.digital-twin-root :global(.react-flow__controls-button) {
+  background-color: #1e293b !important;
+  border-bottom: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+  fill: #cbd5e1 !important;
 }
-.react-flow__minimap-mask {
-  @apply fill-slate-900/60 !important;
+
+.digital-twin-root :global(.react-flow__controls-button:hover) {
+  background-color: #334155 !important;
 }
-.react-flow__minimap-node {
-  @apply fill-slate-600 !important;
+
+.digital-twin-root :global(.react-flow__minimap) {
+  background-color: #0f172a !important;
+  border: 1px solid #1e293b !important;
+  border-radius: 0.375rem !important;
+  overflow: hidden !important;
+}
+
+.digital-twin-root :global(.react-flow__minimap-mask) {
+  fill: rgba(15, 23, 42, 0.6) !important;
+}
+
+.digital-twin-root :global(.react-flow__minimap-node) {
+  fill: #475569 !important;
+}
+
+/* Custom Scrollbar for dark theme components in DT */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155; 
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569; 
 }

@@ -1,9 +1,10 @@
-import { AppLayout } from '../digital-twin/components/layout/AppLayout';
+import { DigitalTwinApp } from '../digital-twin/DigitalTwinApp';
+import '../digital-twin/index.css';
 
 export function DigitalTwinView() {
     return (
-        <div className="h-[calc(100vh-140px)] w-full overflow-hidden">
-            <AppLayout />
+        <div className="digital-twin-root h-[calc(100vh-84px)] w-full overflow-hidden">
+            <DigitalTwinApp />
         </div>
     );
 }

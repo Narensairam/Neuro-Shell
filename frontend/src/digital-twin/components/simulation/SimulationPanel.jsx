@@ -17,7 +17,6 @@ export function SimulationPanel() {
     activeScenarioId,
     setComparisonScenario
   } = usePlantStore();
-
   const [newScenarioName, setNewScenarioName] = useState('');
   const [newNodeType, setNewNodeType] = useState('tank');
 
@@ -51,18 +50,19 @@ export function SimulationPanel() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-900 border-r border-slate-800 overflow-y-auto custom-scrollbar">
-      <div className="p-4 border-b border-slate-800">
-        <h2 className="text-lg font-semibold text-slate-100 flex items-center gap-2">
-          <Settings2 size={20} className="text-cyan-500" />
-          Simulation Controls
+    <div className="flex flex-col h-full w-full bg-slate-950 overflow-y-auto custom-scrollbar p-6">
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+          <Settings2 size={24} className="text-cyan-500" />
+          Simulation & Control Center
         </h2>
+        <p className="text-sm text-slate-500 mt-1">Configure global parameters, manage plant topology, and test operational scenarios.</p>
       </div>
 
-      <div className="p-4 space-y-6">
+      <div className="grid grid-cols-3 gap-6 flex-1">
         {/* Parameters Section */}
-        <section className="space-y-4">
-          <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">
+        <section className="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-6">
+          <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2 border-b border-slate-800 pb-2">
             Global Parameters
           </h3>
 
@@ -92,9 +92,7 @@ export function SimulationPanel() {
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <label className="text-slate-300">Plant Load Factor</label>
-                <span className="text-cyan-400">
-                  {simulationParams.loadFactor}%
-                </span>
+                <span className="text-cyan-400">{simulationParams.loadFactor}%</span>
               </div>
               <input
                 type="range"
@@ -142,11 +140,9 @@ export function SimulationPanel() {
           </button>
         </section>
 
-        <div className="h-px bg-slate-800" />
-
         {/* Topology Editor */}
-        <section className="space-y-4">
-          <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">
+        <section className="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-6">
+          <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2 border-b border-slate-800 pb-2">
             Topology Editor
           </h3>
 
@@ -192,11 +188,9 @@ export function SimulationPanel() {
           </div>
         </section>
 
-        <div className="h-px bg-slate-800" />
-
         {/* Scenarios */}
-        <section className="space-y-4">
-          <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">
+        <section className="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-6">
+          <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2 border-b border-slate-800 pb-2">
             Scenarios
           </h3>
 
@@ -221,8 +215,11 @@ export function SimulationPanel() {
             {scenarios.map((scenario) => (
               <div
                 key={scenario.id}
-                className={`p-3 rounded-md border text-sm transition-colors cursor-pointer
-                  ${activeScenarioId === scenario.id ? 'bg-cyan-900/20 border-cyan-800/50 text-cyan-100' : 'bg-slate-800/50 border-slate-700/50 text-slate-300 hover:bg-slate-800'}`}
+                className={`p-3 rounded-md border text-sm transition-colors cursor-pointer ${
+                  activeScenarioId === scenario.id
+                    ? 'bg-cyan-900/20 border-cyan-800/50 text-cyan-100'
+                    : 'bg-slate-800/50 border-slate-700/50 text-slate-300 hover:bg-slate-800'
+                }`}
                 onClick={() => loadScenario(scenario.id)}
               >
                 <div className="flex justify-between items-center mb-1">

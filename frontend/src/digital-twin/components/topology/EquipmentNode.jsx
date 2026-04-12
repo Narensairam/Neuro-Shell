@@ -27,22 +27,14 @@ const statusGlow = {
 
 const getIcon = (type) => {
   switch (type) {
-    case 'tank':
-      return <Database size={16} />;
-    case 'pump':
-      return <Settings size={16} />;
-    case 'valve':
-      return <GitCommit size={16} />;
-    case 'reactor':
-      return <Hexagon size={16} />;
-    case 'heater':
-      return <ThermometerSun size={16} />;
-    case 'separator':
-      return <Filter size={16} />;
-    case 'pipeline':
-      return <Activity size={16} />;
-    default:
-      return <Database size={16} />;
+    case 'tank': return <Database size={16} />;
+    case 'pump': return <Settings size={16} />;
+    case 'valve': return <GitCommit size={16} />;
+    case 'reactor': return <Hexagon size={16} />;
+    case 'heater': return <ThermometerSun size={16} />;
+    case 'separator': return <Filter size={16} />;
+    case 'pipeline': return <Activity size={16} />;
+    default: return <Database size={16} />;
   }
 };
 
@@ -53,11 +45,9 @@ export function EquipmentNode({ data, selected }) {
 
   return (
     <div
-      className={`
-      relative px-4 py-3 min-w-[150px] rounded-lg border-2 backdrop-blur-md transition-all duration-200
-      ${statusClass} ${glowClass}
-      ${selected ? 'ring-2 ring-cyan-500 ring-offset-2 ring-offset-slate-900 scale-105' : ''}
-    `}
+      className={`relative px-4 py-3 min-w-[150px] rounded-lg border-2 backdrop-blur-md transition-all duration-200 ${statusClass} ${glowClass} ${
+        selected ? 'ring-2 ring-cyan-500 ring-offset-2 ring-offset-slate-900 scale-105' : ''
+      }`}
     >
       <Handle
         type="target"
@@ -77,12 +67,9 @@ export function EquipmentNode({ data, selected }) {
         </div>
       </div>
 
-      {/* Mini status indicator */}
       <div
         className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full border-2 border-slate-900"
-        style={{
-          backgroundColor: `var(--plant-${metadata.status})`
-        }}
+        style={{ backgroundColor: `var(--plant-${metadata.status})` }}
       />
 
       <Handle
