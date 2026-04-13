@@ -311,7 +311,7 @@ export function AgenticAssistant({ setCurrentView }) {
     }, []);
 
     // Speech Output with female voice
-    const speakText = useCallback((text) => {
+    const speakText = useCallback(async (text) => {
         if (isMuted || !('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel();
         const cleanText = String(text || '').replace(/[*#_`~\[\]]/g, '').trim();
