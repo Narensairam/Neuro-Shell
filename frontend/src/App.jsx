@@ -24,7 +24,6 @@ import { CoEView } from './components/CoEView';
 import { GovernanceView } from './components/GovernanceView';
 import { ChangeAdoptionView } from './components/ChangeAdoptionView';
 import { ROIDashboardView } from './components/ROIDashboardView';
-import { ComplianceMatrixView } from './components/ComplianceMatrixView';
 import { FireDetectionView } from './components/FireDetectionView';
 import { AgentTopologyView } from './components/AgentTopologyView';
 

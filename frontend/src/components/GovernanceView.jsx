@@ -99,7 +99,8 @@ export function GovernanceView() {
         { id: 'neural', label: 'Neural & AI', icon: <Zap size={14} /> },
         { id: 'industrial', label: 'Industrial & QHSE', icon: <Factory size={14} /> },
         { id: 'financial', label: 'Trade & Financial', icon: <CircleDollarSign size={14} /> },
-        { id: 'cyber', label: 'System & Cyber', icon: <ShieldAlert size={14} /> }
+        { id: 'cyber', label: 'System & Cyber', icon: <ShieldAlert size={14} /> },
+        { id: 'compliance', label: 'Compliance Matrix', icon: <Scale size={14} /> }
     ];
 
     if (loading) {
@@ -111,22 +112,27 @@ export function GovernanceView() {
     }
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 h-full overflow-y-auto pr-2 custom-scrollbar p-6">
-            <header className="mb-8">
-                <h1 className="text-[31px] font-black tracking-tight text-shell-darkText flex items-center gap-3">
-                    <Scale className="w-8 h-8 text-shell-red" />
-                    Governance and Compliance
-                </h1>
-                <p className="text-gray-500 font-medium text-[13px] mt-1 uppercase tracking-wider">Shell plc · Global Regulatory Tracking & Audit Intelligence</p>
+        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 h-full overflow-hidden flex flex-col p-6">
+            <header className="flex justify-between items-start mb-6 shrink-0 px-1">
+                <div>
+                    <h1 className="text-[25px] font-extrabold flex items-center gap-2 tracking-tight">
+                        <Scale className="w-7 h-7 text-shell-red" />
+                        Governance & Compliance
+                    </h1>
+                    <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mt-1">Shell plc · Global Regulatory Tracking & Audit Intelligence</div>
+                </div>
+                <span className="px-3 py-1 bg-red-50 text-shell-red rounded-full font-mono text-[10px] uppercase tracking-widest font-bold border border-red-100">Audit Status: Active</span>
             </header>
 
+            <div className={`flex-1 px-1 flex flex-col ${activeTab === 'summary' ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar pb-8'}`}>
+
             {/* TAB STRIP */}
-            <div className="flex bg-gray-100 p-1 rounded-xl mb-8 w-fit border border-gray-200 shadow-sm">
+            <div className="flex bg-gray-50 p-0.5 rounded-lg mb-4 w-fit border border-gray-200 shadow-sm shrink-0">
                 {tabs.map(tab => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`px-5 py-2 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${activeTab === tab.id ? 'bg-white text-shell-darkText shadow-md ring-1 ring-gray-200' : 'text-gray-500 hover:text-gray-800'}`}
+                        className={`px-3 py-1.5 rounded-md text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${activeTab === tab.id ? 'bg-white text-shell-darkText shadow-sm ring-1 ring-gray-200' : 'text-gray-500 hover:text-gray-800'}`}
                     >
                         {tab.icon}
                         {tab.label}
@@ -134,117 +140,150 @@ export function GovernanceView() {
                 ))}
             </div>
 
-            {/* GLOBAL KPIs (Always Visible top of summary or domain summary) */}
-            <div className="grid grid-cols-4 gap-6 mb-8">
-                <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="font-mono text-[10px] text-gray-400 tracking-widest uppercase font-bold">Total Compliance Score</div>
-                        <ShieldCheck className="text-green-500 w-5 h-5" />
+            {/* GLOBAL KPIs */}
+            <div className="grid grid-cols-4 gap-3 mb-4 shrink-0">
+                <div className="bg-white border border-gray-200 rounded-lg p-3.5 hover:shadow-md transition-shadow">
+                    <div className="font-mono text-[9px] text-gray-500 tracking-widest uppercase mb-1 flex justify-between">
+                        Compliance Score <ShieldCheck className="text-green-500 w-3.5 h-3.5" />
                     </div>
-                    <div className="text-[35px] font-black text-green-600 leading-none">{data.enterprise_score}%</div>
-                    <div className="text-[10px] text-gray-500 mt-2 font-mono uppercase tracking-widest">Enterprise Average</div>
+                    <div className="text-[26px] font-black text-green-600 leading-none">{data.enterprise_score}%</div>
+                    <div className="font-mono text-[8px] text-gray-400 mt-1 uppercase tracking-widest">Enterprise Avg</div>
                 </div>
 
-                <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="font-mono text-[10px] text-gray-400 tracking-widest uppercase font-bold">Critical Risks</div>
-                        <AlertOctagon className="text-red-500 w-5 h-5" />
+                <div className="bg-white border border-gray-200 rounded-lg p-3.5 hover:shadow-md transition-shadow">
+                    <div className="font-mono text-[9px] text-gray-500 tracking-widest uppercase mb-1 flex justify-between">
+                        Critical Risks <AlertOctagon className="text-red-500 w-3.5 h-3.5" />
                     </div>
-                    <div className={`text-[35px] font-black leading-none ${data.critical_risks > 0 ? 'text-red-600' : 'text-shell-darkText'}`}>{data.critical_risks}</div>
-                    <div className="text-[10px] text-gray-500 mt-2 font-mono uppercase tracking-widest">Immediate Attention Req</div>
+                    <div className={`text-[26px] font-black leading-none ${data.critical_risks > 0 ? 'text-red-600' : 'text-shell-darkText'}`}>{data.critical_risks}</div>
+                    <div className="font-mono text-[8px] text-red-400 mt-1 uppercase tracking-widest">Attention Req</div>
                 </div>
 
-                <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="font-mono text-[10px] text-gray-400 tracking-widest uppercase font-bold">Active Audits</div>
-                        <FileCheck className="text-blue-500 w-5 h-5" />
+                <div className="bg-white border border-gray-200 rounded-lg p-3.5 hover:shadow-md transition-shadow">
+                    <div className="font-mono text-[9px] text-gray-500 tracking-widest uppercase mb-1 flex justify-between">
+                        Active Audits <FileCheck className="text-blue-500 w-3.5 h-3.5" />
                     </div>
-                    <div className="text-[35px] font-black text-blue-600 leading-none">{data.active_audits}</div>
-                    <div className="text-[10px] text-gray-500 mt-2 font-mono uppercase tracking-widest">Queue in Process</div>
+                    <div className="text-[26px] font-black text-blue-600 leading-none">{data.active_audits}</div>
+                    <div className="font-mono text-[8px] text-gray-400 mt-1 uppercase tracking-widest">In Process</div>
                 </div>
 
-                <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="font-mono text-[10px] text-gray-400 tracking-widest uppercase font-bold">Regulatory Delta</div>
-                        <Activity className="text-shell-yellow w-5 h-5" />
+                <div className="bg-white border border-gray-200 rounded-lg p-3.5 hover:shadow-md transition-shadow">
+                    <div className="font-mono text-[9px] text-gray-500 tracking-widest uppercase mb-1 flex justify-between">
+                        Regulatory Delta <Activity className="text-shell-yellow w-3.5 h-3.5" />
                     </div>
-                    <div className="text-[35px] font-black text-shell-darkText leading-none">+12.4%</div>
-                    <div className="text-[10px] text-gray-500 mt-2 font-mono uppercase tracking-widest">Year-on-Year Improvement</div>
+                    <div className="text-[26px] font-black text-shell-darkText leading-none">+12.4%</div>
+                    <div className="font-mono text-[8px] text-gray-400 mt-1 uppercase tracking-widest">YoY Progress</div>
                 </div>
             </div>
 
             {/* TAB CONTENT */}
-            <div className="space-y-8 pb-12">
+            <div className="space-y-4 flex-1 h-0">
                 {activeTab === 'summary' && (
-                    <div className="grid grid-cols-2 gap-6 animate-in fade-in duration-500">
-                        {Object.entries(data.domains).map(([key, domain]) => (
-                            <div key={key} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:border-shell-yellow transition-all group">
-                                <div className="flex justify-between items-center mb-6">
-                                    <div>
-                                        <h3 className="text-[16px] font-black text-shell-darkText uppercase tracking-tight">{key.replace('_', ' & ')}</h3>
-                                        <div className="flex gap-2 mt-1">
+                    <div className="grid grid-cols-2 gap-4 animate-in fade-in duration-500 items-stretch h-full overflow-hidden">
+                        {/* LEFT HALF: 2x2 COMPLIANCE QUADRANT */}
+                        <div className="grid grid-cols-2 gap-3 h-full overflow-hidden">
+                            {Object.entries(data.domains).map(([key, domain]) => (
+                                <div key={key} className="bg-white border border-gray-200 rounded-lg p-4 hover:border-shell-yellow transition-all group shadow-sm flex flex-col justify-between">
+                                    <div className="min-h-0 flex-1 overflow-hidden">
+                                        <div className="flex justify-between items-start mb-2 shrink-0">
+                                            <h3 className="text-[12px] font-black text-shell-darkText uppercase tracking-tight">{key.replace('_', ' & ')}</h3>
+                                            <div className="text-right">
+                                                <div className="text-[22px] font-black text-shell-darkText leading-none">{domain.score}%</div>
+                                                <div className={`text-[8px] font-black uppercase tracking-wider mt-0.5 ${domain.status === 'Healthy' || domain.status === 'Safe' || domain.status === 'Secure' ? 'text-green-500' : 'text-amber-500'}`}>{domain.status}</div>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-wrap gap-1 mb-2">
                                             {domain.regulations.map(reg => (
-                                                <span key={reg} className="text-[8px] font-mono font-bold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded uppercase">{reg}</span>
+                                                <span key={reg} className="text-[7.5px] font-mono font-black bg-gray-50 text-gray-400 px-1 border border-gray-100 uppercase tracking-tighter shrink-0">{reg}</span>
+                                            ))}
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-50 shrink-0">
+                                            {Object.entries(domain.metrics).map(([mKey, mVal]) => (
+                                                <div key={mKey}>
+                                                    <div className="text-[8.5px] font-mono text-gray-400 uppercase font-black tracking-widest leading-none mb-1">{mKey.replace('_', ' ')}</div>
+                                                    <div className="text-[13px] font-black text-shell-darkText">{mVal}</div>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="text-right">
-                                        <div className="text-[25px] font-black text-shell-darkText">{domain.score}%</div>
-                                        <div className={`text-[9px] font-black uppercase ${domain.status === 'Healthy' || domain.status === 'Safe' || domain.status === 'Secure' ? 'text-green-500' : 'text-amber-500'}`}>{domain.status}</div>
-                                    </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
-                                    {Object.entries(domain.metrics).map(([mKey, mVal]) => (
-                                        <div key={mKey}>
-                                            <div className="text-[9px] font-mono text-gray-400 uppercase font-bold">{mKey.replace('_', ' ')}</div>
-                                            <div className="text-[15px] font-black text-shell-darkText">{mVal}</div>
-                                        </div>
-                                    ))}
+                            ))}
+                        </div>
+
+                        {/* RIGHT HALF: FULL-WIDTH INTELLIGENCE LOG */}
+                        <div className="bg-white border border-gray-200 rounded-lg flex flex-col h-full shadow-sm overflow-hidden">
+                            <div className="p-4 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center shrink-0">
+                                <div>
+                                    <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight leading-none">Intelligence Log</h2>
+                                    <p className="text-[8.5px] text-gray-400 font-bold mt-1 uppercase tracking-widest leading-none">Global Event Telemetry</p>
                                 </div>
+                                <Activity className="w-4 h-4 text-shell-red opacity-30" />
                             </div>
-                        ))}
+                            <div className="flex-1 overflow-y-auto p-4 space-y-2.5 custom-scrollbar">
+                                {data.audit_trail.map((log) => (
+                                    <div key={log.id} className="p-3 border border-gray-50 rounded-lg hover:bg-gray-50 transition-all group flex gap-3">
+                                        <div className="w-10 text-center shrink-0 border-r border-gray-100 pr-3">
+                                            <div className="text-[10px] font-black text-shell-darkText leading-none font-mono">{log.time}</div>
+                                            <div className="text-[7.5px] font-bold text-gray-400 mt-1 uppercase tracking-tighter">Event</div>
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex justify-between items-start mb-0.5">
+                                                <span className="text-[9px] font-black text-shell-red uppercase tracking-widest">{log.domain}</span>
+                                                <span className={`px-1 rounded-[2px] text-[7.5px] font-black uppercase tracking-widest ${log.status === 'Success' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
+                                                    {log.status === 'Success' ? 'Verified' : 'Alert'}
+                                                </span>
+                                            </div>
+                                            <div className="text-[12px] font-black text-shell-darkText mb-0.5 truncate">{log.action}</div>
+                                            <div className="text-[8.5px] text-gray-400 font-black uppercase tracking-tighter italic whitespace-nowrap overflow-hidden text-ellipsis">Reg: {log.regulation} · ID: {log.id}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="p-3 bg-gray-50 border-t border-gray-100 shrink-0">
+                                <button className="w-full py-2.5 bg-shell-darkText text-shell-yellow rounded-lg font-black text-[10px] uppercase tracking-widest hover:opacity-95 transition-all">Download Audit Pack</button>
+                            </div>
+                        </div>
                     </div>
                 )}
 
                 {activeTab === 'neural' && (
                     <div className="space-y-6 animate-in fade-in duration-500">
-                        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
-                            <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center">
-                                <h2 className="text-[13px] font-black uppercase text-gray-600 tracking-wider">AI Model Compliance Registry</h2>
-                                <button className="text-[10px] font-black uppercase tracking-widest text-shell-red hover:underline decoration-2 underline-offset-4">Export Audit Log →</button>
+                        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                            <div className="px-5 py-3 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                                <h2 className="text-[11px] font-extrabold uppercase text-gray-500 tracking-wider">AI Model Compliance Registry</h2>
+                                <button className="text-[9px] font-extrabold uppercase tracking-widest text-shell-red hover:underline decoration-2 underline-offset-4">Export Audit Log →</button>
                             </div>
                             <table className="w-full text-left">
-                                <thead className="bg-white border-b border-gray-50 text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                                <thead className="bg-white border-b border-gray-100 text-[9px] font-bold text-gray-400 uppercase tracking-widest">
                                     <tr>
-                                        <th className="px-6 py-4">Model Instance</th>
-                                        <th className="px-6 py-4">Risk Tier</th>
-                                        <th className="px-6 py-4">Accuracy</th>
-                                        <th className="px-6 py-4">Last Audit</th>
-                                        <th className="px-6 py-4 text-right">Status</th>
+                                        <th className="px-5 py-3">Model Instance</th>
+                                        <th className="px-5 py-3">Risk Tier</th>
+                                        <th className="px-5 py-3 text-center">Accuracy</th>
+                                        <th className="px-5 py-3">Last Audit</th>
+                                        <th className="px-5 py-3 text-right">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-50">
+                                <tbody className="divide-y divide-gray-100">
                                     {MODEL_DATA_FALLBACK.map((m, i) => (
                                         <tr key={i} className="hover:bg-gray-50/50 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="font-bold text-[12px]">{m.model_name}</div>
-                                                <div className="text-[9px] font-mono text-gray-400 mt-1 uppercase">v{m.version} · AI-CORE-{1024 + i}</div>
+                                            <td className="px-5 py-4">
+                                                <div className="font-bold text-[12px] text-shell-darkText">{m.model_name}</div>
+                                                <div className="text-[9px] font-mono text-gray-400 mt-1 uppercase tracking-tight">v{m.version} · AI-CORE-{1024 + i}</div>
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <span className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest border ${m.risk_tier === 'Tier 1' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>
-                                                    {m.risk_tier} (HR)
+                                            <td className="px-5 py-4">
+                                                <span className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest border ${m.risk_tier === 'Tier 1' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
+                                                    {m.risk_tier}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 font-mono text-[11px] font-bold text-shell-darkText">{m.accuracy}</td>
-                                            <td className="px-6 py-4 text-[10px] text-gray-500 font-medium">{m.last_audit}</td>
-                                            <td className="px-6 py-4 text-right">
+                                            <td className="px-5 py-4 text-center font-mono text-[11px] font-bold text-shell-darkText">{m.accuracy}</td>
+                                            <td className="px-5 py-4 text-[10px] text-gray-400 font-medium">{m.last_audit}</td>
+                                            <td className="px-5 py-4 text-right">
                                                 {m.status === 'Compliant' ? (
-                                                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-green-50 text-green-700 border border-green-200">
-                                                        <CheckCircle2 size={10} /> Compliant
+                                                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-bold text-[9px] uppercase tracking-widest bg-green-50 text-green-700 border border-green-100">
+                                                        Compliant
                                                     </span>
                                                 ) : (
-                                                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-amber-50 text-amber-700 border border-amber-200">
-                                                        <Clock size={10} /> Under Review
+                                                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-bold text-[9px] uppercase tracking-widest bg-amber-50 text-amber-700 border border-amber-100">
+                                                        Under Review
                                                     </span>
                                                 )}
                                             </td>
@@ -257,47 +296,47 @@ export function GovernanceView() {
                 )}
 
                 {activeTab === 'industrial' && (
-                    <div className="grid grid-cols-2 gap-6 animate-in fade-in duration-500">
-                        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-                             <h3 className="text-[13px] font-black uppercase text-gray-500 mb-6 tracking-wide">QHSE Site Compliance</h3>
-                             <div className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4 animate-in fade-in duration-500">
+                        <div className="bg-white border border-gray-200 rounded-lg p-5">
+                             <h3 className="text-[12px] font-extrabold uppercase text-gray-500 mb-6 tracking-tight">QHSE Site Compliance</h3>
+                             <div className="space-y-4">
                                 {['Pernis Refinery', 'Bukom Island Hub', 'Singapore Chemical', 'Deer Park Facility'].map((site, i) => (
-                                    <div key={i} className="flex items-center justify-between">
+                                    <div key={i} className="flex items-center justify-between px-1">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center font-black text-gray-400 text-[12px]">{site[0]}{site[1]}</div>
+                                            <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center font-extrabold text-gray-400 text-[11px] uppercase tracking-tighter">{site[0]}{site[1]}</div>
                                             <div>
-                                                <div className="text-[12px] font-bold">{site}</div>
-                                                <div className="text-[9px] font-mono text-gray-400 mt-1 uppercase">ISO 50001 · EU ETS Verified</div>
+                                                <div className="text-[12px] font-bold text-shell-darkText">{site}</div>
+                                                <div className="text-[9px] font-mono text-gray-400 mt-0.5 uppercase tracking-widest">ISO 50001 · EU ETS Verified</div>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-4">
-                                             <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                             <div className="w-20 h-1 bg-gray-100 rounded-full overflow-hidden">
                                                 <div className="h-full bg-green-500" style={{ width: i === 1 ? '82%' : '100%' }}></div>
                                              </div>
-                                             <span className="text-[11px] font-black text-shell-darkText">{i === 1 ? '82%' : '100%'}</span>
+                                             <span className="text-[10px] font-bold text-shell-darkText">{i === 1 ? '82%' : '100%'}</span>
                                         </div>
                                     </div>
                                 ))}
                              </div>
                         </div>
 
-                        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm border-t-4 border-t-red-500">
-                             <h3 className="text-[13px] font-black uppercase text-red-600 mb-4 tracking-wide flex items-center gap-2">
-                                <ShieldAlert size={16} /> Technical Safety Audits
+                        <div className="bg-white border border-gray-200 rounded-lg p-5 border-t-2 border-t-red-500">
+                             <h3 className="text-[12px] font-extrabold uppercase text-red-600 mb-4 tracking-tight flex items-center gap-2">
+                                <ShieldAlert size={15} /> Technical Safety Audits
                              </h3>
-                             <div className="space-y-4">
-                                 <div className="p-4 bg-red-50 rounded-xl border border-red-100">
-                                     <div className="text-[11px] font-black text-red-800 uppercase">PPE Compliance Variance</div>
-                                     <p className="text-[11px] text-red-600 mt-1">Autonomous monitoring detected PPE deviation in Pernis Refinery Zone 4 (Distillation Unit). AI-Led corrective action dispatched.</p>
-                                     <div className="mt-3 flex justify-between items-center text-[9px] font-bold text-red-400 uppercase">
+                             <div className="space-y-3">
+                                 <div className="p-3 bg-red-50/50 rounded-lg border-l-2 border-l-red-500 px-4">
+                                     <div className="text-[11px] font-bold text-red-800 uppercase tracking-tight">PPE Compliance Variance</div>
+                                     <p className="text-[11px] text-red-600 mt-1 leading-snug">Autonomous monitoring detected PPE deviation in Pernis Refinery Zone 4 (Distillation Unit). AI corrective action dispatched.</p>
+                                     <div className="mt-2.5 flex justify-between items-center text-[9px] font-mono font-bold text-red-400 uppercase tracking-widest">
                                          <span>ID: HSE-7742</span>
-                                         <span>12 minutes ago</span>
+                                         <span>12m ago</span>
                                      </div>
                                  </div>
-                                 <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                                     <div className="text-[11px] font-black text-gray-800 uppercase">Pressure Vessel Inspection</div>
-                                     <p className="text-[11px] text-gray-500 mt-1">Bukom Island Hub vessel PV-102 completed autonomous drone inspection. Compliance score: 100%.</p>
-                                     <div className="mt-3 flex justify-between items-center text-[9px] font-bold text-gray-400 uppercase">
+                                 <div className="p-3 bg-gray-50/50 rounded-lg border-l-2 border-l-gray-300 px-4 opacity-75">
+                                     <div className="text-[11px] font-bold text-gray-800 uppercase tracking-tight">Vessel Inspection</div>
+                                     <p className="text-[11px] text-gray-500 mt-1 leading-snug">Bukom Island Hub vessel PV-102 completed autonomous drone inspection. Compliance score: 100%.</p>
+                                     <div className="mt-2.5 flex justify-between items-center text-[9px] font-mono font-bold text-gray-400 uppercase tracking-widest">
                                          <span>ID: HSE-7738</span>
                                          <span>Yesterday</span>
                                      </div>
@@ -309,49 +348,51 @@ export function GovernanceView() {
 
                 {activeTab === 'financial' && (
                     <div className="space-y-6 animate-in fade-in duration-500">
-                        <div className="grid grid-cols-3 gap-6">
-                            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-                                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">SOX 404 Controls</div>
-                                <div className="text-[28px] font-black text-shell-darkText">96.8%</div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="bg-white border border-gray-200 rounded-lg p-5">
+                                <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-4">SOX 404 Controls</div>
+                                <div className="text-[28px] font-extrabold text-shell-darkText leading-none">96.8%</div>
                                 <div className="h-1 bg-gray-100 rounded-full mt-4 overflow-hidden"><div className="h-full bg-green-500 w-[96.8%]"></div></div>
-                                <div className="text-[9px] text-gray-400 font-bold mt-2 font-mono uppercase">Target: 100% / Auto-Recon</div>
+                                <div className="text-[9px] text-gray-400 font-bold mt-2 font-mono uppercase tracking-tight">Target: 100% / Auto-Recon</div>
                             </div>
-                            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-                                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Sanctions Screening</div>
-                                <div className="text-[28px] font-black text-green-600">CLEARED</div>
-                                <div className="h-1 bg-green-500 rounded-full mt-4"></div>
-                                <div className="text-[9px] text-gray-400 font-bold mt-2 font-mono uppercase">OFAC / EU / UN Scans: Pass</div>
+                            <div className="bg-white border border-gray-200 rounded-lg p-5">
+                                <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-4">Sanctions Screening</div>
+                                <div className="text-[28px] font-extrabold text-green-600 leading-none">CLEARED</div>
+                                <div className="h-1 bg-green-500/20 rounded-full mt-4 overflow-hidden"><div className="h-full bg-green-500 w-full"></div></div>
+                                <div className="text-[9px] text-gray-400 font-bold mt-2 font-mono uppercase tracking-tight">OFAC / EU / UN Scans: Pass</div>
                             </div>
-                            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm relative">
-                                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Trading Anomalies</div>
-                                <div className="text-[28px] font-black text-amber-500">{data.domains.trade_financial.metrics.trading_anomalies}</div>
-                                <div className="h-1 bg-amber-500 rounded-full mt-4"></div>
-                                <div className="text-[9px] text-gray-400 font-bold mt-2 font-mono uppercase">Under Active Investigation</div>
+                            <div className="bg-white border border-gray-200 rounded-lg p-5">
+                                <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-4">Trading Anomalies</div>
+                                <div className="text-[28px] font-extrabold text-amber-500 leading-none">{data.domains.trade_financial.metrics.trading_anomalies}</div>
+                                <div className="h-1 bg-amber-500/20 rounded-full mt-4 overflow-hidden"><div className="h-full bg-amber-500 w-[40%]"></div></div>
+                                <div className="text-[9px] text-gray-400 font-bold mt-2 font-mono uppercase tracking-tight">Under Active Investigation</div>
                             </div>
                         </div>
 
-                        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-                             <h3 className="text-[13px] font-black uppercase text-gray-500 mb-6 tracking-wide">REMIT Regulatory Submissions</h3>
-                             <table className="w-full text-[12px]">
-                                 <thead className="text-[9px] uppercase font-black text-gray-400 border-b border-gray-50">
+                        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                             <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
+                                 <h3 className="text-[11px] font-extrabold uppercase text-gray-500 tracking-wider">REMIT Regulatory Submissions</h3>
+                             </div>
+                             <table className="w-full text-[12px] text-left">
+                                 <thead className="text-[9px] uppercase font-bold text-gray-400 border-b border-gray-50 bg-white">
                                      <tr>
-                                         <th className="py-3">Submission Type</th>
-                                         <th className="py-3">Period</th>
-                                         <th className="py-3">Status</th>
-                                         <th className="py-3 text-right">Submission ID</th>
+                                         <th className="px-5 py-3">Submission Type</th>
+                                         <th className="px-5 py-3">Period</th>
+                                         <th className="px-5 py-3">Status</th>
+                                         <th className="px-5 py-3 text-right">Submission ID</th>
                                       </tr>
                                  </thead>
-                                 <tbody className="divide-y divide-gray-50">
+                                 <tbody className="divide-y divide-gray-100">
                                      {[
                                          { type: 'Quarterly Price Disclosure', period: 'Q1 2026', status: 'Submitted', id: 'RM-2026-001' },
                                          { type: 'Market Integrity Audit', period: 'Feb 2026', status: 'Pending Approval', id: 'RM-2026-042' },
                                          { type: 'Sanctions Clearance Log', period: 'Weekly', status: 'Submitted', id: 'RM-2026-992' }
                                      ].map((rep, i) => (
-                                         <tr key={i} className="hover:bg-gray-50/50 transition-colors font-medium">
-                                             <td className="py-4">{rep.type}</td>
-                                             <td className="py-4 font-mono text-gray-400 uppercase">{rep.period}</td>
-                                             <td className="py-4"><span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${rep.status.includes('Sub') ? 'text-green-600 bg-green-50' : 'text-amber-600 bg-amber-50'}`}>{rep.status}</span></td>
-                                             <td className="py-4 text-right font-mono text-gray-400">{rep.id}</td>
+                                         <tr key={i} className="hover:bg-gray-50/50 transition-colors">
+                                             <td className="px-5 py-4 font-bold text-shell-darkText">{rep.type}</td>
+                                             <td className="px-5 py-4 font-mono text-gray-400 uppercase text-[10px]">{rep.period}</td>
+                                             <td className="px-5 py-4"><span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest border ${rep.status.includes('Sub') ? 'text-green-600 bg-green-50 border-green-100' : 'text-amber-600 bg-amber-50 border-amber-100'}`}>{rep.status}</span></td>
+                                             <td className="px-5 py-4 text-right font-mono text-gray-400 text-[10px]">{rep.id}</td>
                                          </tr>
                                      ))}
                                  </tbody>
@@ -360,95 +401,144 @@ export function GovernanceView() {
                     </div>
                 )}
 
-                {activeTab === 'cyber' && (
-                    <div className="grid grid-cols-2 gap-6 animate-in fade-in duration-500">
-                         <div className="bg-gray-900 rounded-2xl p-8 shadow-xl border border-gray-800 flex flex-col items-center justify-center text-center">
-                              <ShieldCheck size={80} className="text-green-500 mb-6 drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]" />
-                              <h3 className="text-white text-[25px] font-black uppercase tracking-tight">ISO 27001 Certified</h3>
-                              <p className="text-gray-400 mt-2 text-[13px] max-w-xs">Shell Enterprise AI OS security architecture fully compliant with international info-sec standards.</p>
-                              <div className="mt-8 grid grid-cols-2 gap-4 w-full">
-                                    <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                                        <div className="text-green-500 font-black text-2xl">100%</div>
-                                        <div className="text-gray-500 text-[9px] uppercase font-bold mt-1">Patches Verified</div>
+                {activeTab === 'compliance' && (
+                    <div className="space-y-6 animate-in fade-in duration-500">
+                        <div className="grid grid-cols-4 gap-4">
+                            <div className="bg-white border border-gray-200 rounded-lg p-5">
+                                <div className="font-mono text-[9px] text-gray-500 tracking-widest uppercase mb-1.5">SOX Auto-Recon</div>
+                                <div className="text-[28px] font-extrabold text-amber-500 leading-none">64<span className="text-[14px] font-normal ml-0.5">%</span></div>
+                                <div className="font-mono text-[9px] text-amber-600 mt-2 font-bold italic tracking-tight">⚠ Below Target (90%)</div>
+                            </div>
+                            <div className="bg-white border border-gray-200 rounded-lg p-5">
+                                <div className="font-mono text-[9px] text-gray-500 tracking-widest uppercase mb-1.5">GDPR Erasure SLAs</div>
+                                <div className="text-[28px] font-extrabold text-green-600 leading-none">99.8<span className="text-[14px] font-normal ml-0.5">%</span></div>
+                                <div className="font-mono text-[10px] text-gray-400 mt-2">Within 30-day window</div>
+                            </div>
+                            <div className="bg-white border border-gray-200 rounded-lg p-5">
+                                <div className="font-mono text-[9px] text-gray-500 tracking-widest uppercase mb-1.5">Penetration Tests</div>
+                                <div className="text-[28px] font-extrabold text-shell-darkText leading-none">100<span className="text-[14px] font-normal ml-0.5">%</span></div>
+                                <div className="font-mono text-[10px] text-gray-400 mt-2">Core Layer Verified</div>
+                            </div>
+                            <div className="bg-white border border-gray-200 rounded-lg p-5">
+                                <div className="font-mono text-[9px] text-gray-500 tracking-widest uppercase mb-1.5">ISO 27001 Validation</div>
+                                <div className="text-[28px] font-extrabold text-green-600 leading-none">Pass</div>
+                                <div className="font-mono text-[10px] text-gray-400 mt-2">Renewed Q1 2026</div>
+                            </div>
+                        </div>
+
+                        <div className="bg-white border border-gray-200 rounded-lg p-6">
+                            <h2 className="font-extrabold text-[13px] uppercase text-shell-darkText tracking-tight mb-6 px-1">Global Regulatory Framework Progress</h2>
+                            <div className="space-y-6 px-1">
+                                {[
+                                    { name: 'EU AI Act', progress: 65, status: 'Readiness' },
+                                    { name: 'SEC Cyber Disclosures', progress: 100, status: 'Prepared' },
+                                    { name: 'UK Data Protection', progress: 95, status: 'Scoped' }
+                                ].map((reg, i) => (
+                                    <div key={i} className="flex items-center gap-6 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
+                                        <div className="w-[140px] font-bold text-[12px] text-shell-darkText">{reg.name}</div>
+                                        <div className="flex-1">
+                                            <div className="h-1.5 bg-gray-50 rounded-full overflow-hidden border border-gray-100">
+                                                <div className={`h-full ${reg.progress === 100 ? 'bg-green-500' : 'bg-shell-yellow'}`} style={{ width: `${reg.progress}%` }}></div>
+                                            </div>
+                                        </div>
+                                        <div className="w-[110px] text-right font-mono text-[10px] text-gray-400 uppercase tracking-widest font-bold">{reg.progress}% {reg.status}</div>
                                     </div>
-                                    <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                                        <div className="text-white font-black text-2xl">SOC2</div>
-                                        <div className="text-gray-500 text-[9px] uppercase font-bold mt-1">Type II Compliant</div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {activeTab === 'cyber' && (
+                    <div className="grid grid-cols-2 gap-4 animate-in fade-in duration-500">
+                         <div className="bg-gray-900 rounded-lg p-8 shadow-xl border border-gray-800 flex flex-col items-center justify-center text-center">
+                              <ShieldCheck size={64} className="text-green-500 mb-6 drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]" />
+                              <h3 className="text-white text-[22px] font-extrabold uppercase tracking-tight">ISO 27001 Certified</h3>
+                              <p className="text-gray-400 mt-2 text-[12px] max-w-xs leading-relaxed">Enterprise AI OS security architecture fully compliant with international info-sec standards.</p>
+                              <div className="mt-8 grid grid-cols-2 gap-3 w-full">
+                                    <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+                                        <div className="text-green-500 font-extrabold text-2xl">100%</div>
+                                        <div className="text-gray-500 text-[9px] uppercase font-bold mt-1 tracking-widest">Patches Verified</div>
+                                    </div>
+                                    <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+                                        <div className="text-white font-extrabold text-2xl">SOC2</div>
+                                        <div className="text-gray-500 text-[9px] uppercase font-bold mt-1 tracking-widest">Type II Compliant</div>
                                     </div>
                               </div>
                          </div>
 
-                         <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm overflow-hidden flex flex-col">
-                             <h3 className="text-[13px] font-black uppercase text-gray-500 mb-6 tracking-wide">Infrastructure Access Audit</h3>
-                             <div className="space-y-4">
+                         <div className="bg-white border border-gray-200 rounded-lg p-5 flex flex-col">
+                             <h3 className="text-[12px] font-extrabold uppercase text-gray-500 mb-6 tracking-tight px-1">Infrastructure Access Audit</h3>
+                             <div className="space-y-2 flex-1">
                                  {[
-                                     { user: 'CE-Admin', action: 'Global Policy Update', site: 'Rotterdam Hub', status: 'Verified' },
+                                     { user: 'CE-Admin', action: 'Policy Update', site: 'Rotterdam Hub', status: 'Verified' },
                                      { user: 'Agent-APEX', action: 'Key Refresh', site: 'Neural Core', status: 'System' },
                                      { user: 'OP-Dash', action: 'Access Grant', site: 'Singapore Site', status: 'Pending' },
-                                     { user: 'DS-Root', action: 'API Key Revoke', site: 'Trading Node', status: 'Critical' }
+                                     { user: 'DS-Root', action: 'Root Revoke', site: 'Trading Node', status: 'Critical' }
                                  ].map((log, i) => (
-                                     <div key={i} className="flex items-center justify-between p-3 border border-gray-50 rounded-xl hover:bg-gray-50 transition-all cursor-pointer">
+                                     <div key={i} className="flex items-center justify-between p-3 border border-gray-50 rounded-lg hover:bg-gray-50/50 transition-all cursor-pointer group">
                                          <div className="flex items-center gap-3">
-                                             <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                                             <div className={`w-1.5 h-1.5 rounded-full ${log.status === 'Critical' ? 'bg-red-500 animate-pulse' : 'bg-blue-400'}`}></div>
                                              <div>
-                                                 <div className="text-[12px] font-bold text-shell-darkText">{log.user} · {log.action}</div>
-                                                 <div className="text-[9px] font-mono text-gray-400 uppercase mt-0.5">{log.site}</div>
+                                                 <div className="text-[11px] font-bold text-shell-darkText">{log.user} · {log.action}</div>
+                                                 <div className="text-[9px] font-mono text-gray-400 uppercase mt-0.5 tracking-tighter">{log.site}</div>
                                              </div>
                                          </div>
-                                         <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${log.status === 'Verified' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>{log.status}</span>
+                                         <span className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest ${log.status === 'Verified' || log.status === 'System' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'}`}>{log.status}</span>
                                      </div>
                                  ))}
                              </div>
-                             <div className="mt-auto pt-6">
-                                 <button className="w-full py-3 bg-shell-darkText text-shell-yellow rounded-xl font-black text-[11px] uppercase tracking-widest hover:opacity-90 transition-opacity">Global Access Review</button>
+                             <div className="mt-6">
+                                 <button className="w-full py-3 bg-shell-darkText text-shell-yellow rounded-lg font-bold text-[10px] uppercase tracking-widest hover:opacity-90 transition-opacity">Global Access Review</button>
                              </div>
                          </div>
                     </div>
                 )}
 
-                {/* UNIVERSAL AUDIT LOG (Always Footer) */}
-                <div className="bg-white border border-gray-100 rounded-2xl p-8 shadow-sm">
-                    <div className="flex items-center justify-between mb-8">
-                        <div>
-                            <h2 className="text-[18px] font-black text-shell-darkText uppercase tracking-tight">Enterprise Audit Intelligence Log</h2>
-                            <p className="text-[11px] text-gray-400 font-mono mt-0.5 uppercase tracking-widest">Universal Telemetry Feed · ISO & Regulatory Events</p>
-                        </div>
-                        <div className="flex gap-2">
-                             <div className="relative">
-                                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                                <input type="text" placeholder="Filter audit trail..." className="pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-[11px] w-64 focus:outline-none focus:border-shell-red transition-all" />
-                             </div>
-                             <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-100"><Filter size={16} className="text-gray-500" /></button>
-                        </div>
-                    </div>
-                    <div className="space-y-4">
-                        {data.audit_trail.map((log) => (
-                            <div key={log.id} className="flex flex-wrap items-center justify-between gap-4 p-4 border border-gray-50 rounded-2xl hover:border-shell-yellow transition-all group">
-                                <div className="flex items-center gap-6 flex-1 min-w-[300px]">
-                                    <div className="w-12 text-center">
-                                        <div className="text-[11px] font-black text-gray-700 leading-none">{log.time}</div>
-                                        <div className="text-[8px] font-mono text-gray-400 mt-1 uppercase tracking-tighter">12 APR 26</div>
-                                    </div>
-                                    <div className="w-px h-8 bg-gray-100"></div>
-                                    <div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[10px] font-black text-shell-red uppercase tracking-widest">{log.domain}</span>
-                                            <span className="text-gray-300">/</span>
-                                             <span className="text-[13px] font-bold text-shell-darkText">{log.action}</span>
-                                        </div>
-                                        <div className="text-[10px] text-gray-500 font-medium mt-1 uppercase tracking-widest">Regulation: {log.regulation} · Log ID: {log.id}</div>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                     <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${log.status === 'Success' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
-                                         {log.status === 'Success' ? <div className="flex items-center gap-1"><CheckCircle2 size={10} /> Verified</div> : <div className="flex items-center gap-1"><ShieldAlert size={10} /> {log.status}</div>}
-                                     </span>
-                                     <ArrowUpRight className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" size={16} />
-                                </div>
+                {/* UNIVERSAL AUDIT LOG (Only visible in drill-down tabs) */}
+                {activeTab !== 'summary' && (
+                    <div className="bg-white border border-gray-200 rounded-lg p-6">
+                        <div className="flex items-center justify-between mb-8 px-1">
+                            <div>
+                                <h2 className="text-[16px] font-extrabold text-shell-darkText uppercase tracking-tight">Enterprise Audit Intelligence Log</h2>
+                                <p className="text-[10px] text-gray-400 font-mono mt-0.5 uppercase tracking-widest">Universal Telemetry Feed · ISO & Regulatory Events</p>
                             </div>
-                        ))}
+                            <div className="flex gap-2">
+                                 <div className="relative">
+                                    <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                                    <input type="text" placeholder="Search logs..." className="pl-9 pr-4 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-[10px] w-48 focus:outline-none focus:border-shell-red transition-all" />
+                                 </div>
+                                 <button className="p-1.5 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors"><Filter size={14} className="text-gray-500" /></button>
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            {data.audit_trail.map((log) => (
+                                <div key={log.id} className="flex items-center justify-between gap-4 p-3 border border-transparent hover:border-gray-100 hover:bg-gray-50/50 rounded-lg transition-all group">
+                                    <div className="flex items-center gap-6 flex-1">
+                                        <div className="w-10 text-center">
+                                            <div className="text-[11px] font-extrabold text-shell-darkText leading-none font-mono">{log.time}</div>
+                                            <div className="text-[8px] font-bold text-gray-400 mt-1 uppercase tracking-tight">Today</div>
+                                        </div>
+                                        <div className="w-px h-6 bg-gray-100"></div>
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[9px] font-bold text-shell-red uppercase tracking-widest min-w-[90px]">{log.domain}</span>
+                                                <span className="text-[12px] font-bold text-shell-darkText">{log.action}</span>
+                                            </div>
+                                            <div className="text-[9px] text-gray-400 font-medium mt-0.5 uppercase tracking-widest">Reg: {log.regulation} · Log ID: {log.id}</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                         <span className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest border ${log.status === 'Success' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
+                                             {log.status === 'Success' ? 'Verified' : log.status}
+                                         </span>
+                                         <ArrowUpRight className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" size={14} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <button className="w-full mt-6 py-4 border-2 border-dashed border-gray-100 rounded-lg text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:border-shell-yellow hover:text-shell-darkText transition-all">Download Full Enterprise Compliance Report (PDF/JSON)</button>
                     </div>
-                    <button className="w-full mt-8 py-4 border-2 border-dashed border-gray-100 rounded-2xl text-[11px] font-black text-gray-400 uppercase tracking-widest hover:border-shell-yellow hover:text-shell-darkText transition-all">Download Full Enterprise Compliance Report (PDF/JSON)</button>
+                )}
                 </div>
             </div>
         </div>

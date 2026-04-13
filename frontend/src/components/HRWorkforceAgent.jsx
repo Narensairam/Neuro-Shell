@@ -144,10 +144,9 @@ export function HRWorkforceAgent() {
                         </div>
 
                         {/* Main Intelligence Section */}
-                        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-4">
-                            <div className="space-y-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-4 items-stretch">
                                 {/* AI Recommendation Card */}
-                                <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden shadow-sm">
+                                <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden shadow-sm flex flex-col h-full">
                                     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-30"></div>
                                     <div className="flex items-center justify-between mb-8">
                                         <div>
@@ -163,59 +162,24 @@ export function HRWorkforceAgent() {
                                         {scenario.recommendation}
                                     </p>
                                     
-                                    <div className="p-5 bg-gray-50 rounded-lg border border-gray-100 mb-6">
-                                        <h4 className="font-mono text-[9px] text-gray-400 uppercase tracking-widest mb-4">Neural Logic Stream</h4>
-                                        <p className="text-[12px] font-mono text-shell-darkText leading-relaxed">
-                                            {scenario.explanation}
-                                        </p>
+                                    <div className="overflow-y-auto no-scrollbar mb-6">
+                                        <div className="p-5 bg-gray-50 rounded-lg border border-gray-100">
+                                            <h4 className="font-mono text-[9px] text-gray-400 uppercase tracking-widest mb-4">Neural Logic Stream</h4>
+                                            <p className="text-[12px] font-mono text-shell-darkText leading-relaxed">
+                                                {scenario.explanation}
+                                            </p>
+                                        </div>
                                     </div>
                                     
                                     <button 
                                         onClick={() => crisisEventBus.dispatch('CRISIS_WORKFORCE_DEPLOYED', { scenario: scenario.title })}
-                                        className="w-full py-4 bg-shell-darkText text-white font-mono text-[10px] uppercase font-black tracking-widest rounded hover:bg-black transition-all flex items-center justify-center gap-2 border border-gray-800 shadow-md"
+                                        className="w-full py-4 bg-shell-darkText text-white font-mono text-[10px] uppercase font-black tracking-widest rounded hover:bg-black transition-all flex items-center justify-center gap-2 border border-gray-800 shadow-md shrink-0"
                                     >
                                         Authorize Resource Mobilization <ArrowRight className="w-4 h-4 text-shell-yellow" />
                                     </button>
                                 </div>
 
-                                {/* Contractor Intelligence Card */}
-                                <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden shadow-sm group">
-                                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-20"></div>
-                                    <div className="flex items-center justify-between mb-6">
-                                        <h3 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight flex items-center gap-2">
-                                            <Briefcase className="w-4 h-4 text-shell-yellow" /> Contractor Intelligence Hub
-                                        </h3>
-                                        <span className="font-mono text-[9px] px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded uppercase font-bold tracking-widest">Verified Vendor</span>
-                                    </div>
-                                    
-                                    <div className="grid grid-cols-2 gap-8 items-center">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-14 h-14 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-100 group-hover:border-shell-yellow transition-colors">
-                                                <Globe className="w-8 h-8 text-gray-300 group-hover:text-shell-yellow transition-colors" />
-                                            </div>
-                                            <div>
-                                                <div className="text-[16px] font-extrabold text-shell-darkText tracking-tight uppercase leading-none">{scenario.contractor.name}</div>
-                                                <div className="font-mono text-[10px] text-gray-400 uppercase tracking-widest mt-1.5">Strategy Node Alpha</div>
-                                            </div>
-                                        </div>
-                                        <div className="flex justify-between border-l border-gray-100 pl-8">
-                                            <div className="text-center">
-                                                <div className="font-mono text-[9px] text-gray-400 uppercase tracking-widest mb-1">Compatability</div>
-                                                <div className="text-[24px] font-extrabold text-shell-darkText leading-none font-mono tracking-tighter">
-                                                    {scenario.contractor.score}<span className="text-[12px] opacity-40">/10</span>
-                                                </div>
-                                            </div>
-                                            <div className="text-center">
-                                                <div className="font-mono text-[9px] text-gray-400 uppercase tracking-widest mb-1">Status</div>
-                                                <div className="text-[12px] font-extrabold text-green-600 uppercase mt-2 tracking-tight">{scenario.contractor.status}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                {/* Skill-Set Grid */}
+                                {/* Required Skill-Set Grid */}
                                 <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden shadow-sm h-full flex flex-col">
                                     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-20"></div>
                                     <div className="flex items-center justify-between mb-8">
@@ -223,7 +187,7 @@ export function HRWorkforceAgent() {
                                         <Award className="w-5 h-5 text-shell-yellow" />
                                     </div>
                                     
-                                    <div className="flex flex-wrap gap-2 mb-8 flex-1 content-start">
+                                    <div className="flex flex-wrap gap-2 mb-8 content-start">
                                         {scenario.skills.map((skill, i) => (
                                             <SkillChip key={i} name={skill} />
                                         ))}
@@ -234,8 +198,37 @@ export function HRWorkforceAgent() {
                                             </div>
                                         )}
                                     </div>
+
+                                    {/* Contractor Intelligence Hub (Moved here) */}
+                                    <div className="mb-8 p-5 bg-gray-50/50 rounded-lg border border-gray-100 group shadow-inner">
+                                        <div className="flex items-center justify-between mb-5">
+                                            <h4 className="text-[11px] font-extrabold text-shell-darkText uppercase tracking-tight flex items-center gap-2">
+                                                <Briefcase className="w-3.5 h-3.5 text-shell-yellow" /> Contractor Intelligence
+                                            </h4>
+                                            <span className="font-mono text-[8px] px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded uppercase font-bold tracking-widest">Verified</span>
+                                        </div>
+                                        
+                                        <div className="space-y-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 bg-white rounded flex items-center justify-center border border-gray-100 group-hover:border-shell-yellow transition-colors shadow-sm">
+                                                    <Globe className="w-6 h-6 text-gray-300 group-hover:text-shell-yellow transition-colors" />
+                                                </div>
+                                                <div>
+                                                    <div className="text-[13px] font-extrabold text-shell-darkText tracking-tight uppercase leading-none">{scenario.contractor.name}</div>
+                                                    <div className="font-mono text-[9px] text-gray-400 uppercase tracking-widest mt-1">Status: <span className="text-green-600">{scenario.contractor.status}</span></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="flex items-center justify-between pt-3 border-t border-gray-100/50">
+                                                <div className="font-mono text-[9px] text-gray-400 uppercase tracking-widest">Neural Match Score</div>
+                                                <div className="text-[18px] font-extrabold text-shell-darkText leading-none font-mono tracking-tighter">
+                                                    {scenario.contractor.score}<span className="text-[10px] opacity-40">/10</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     
-                                    <div className="pt-8 border-t border-gray-100">
+                                    <div className="pt-8 border-t border-gray-100 shrink-0">
                                         <div className="flex items-center justify-between font-mono text-[10px] text-gray-400 uppercase tracking-widest mb-3">
                                             <span>AI Skill-Match Confidence</span>
                                             <span className="text-shell-darkText font-extrabold">98.4%</span>
@@ -245,7 +238,6 @@ export function HRWorkforceAgent() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 ) : (

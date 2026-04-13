@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, X, Send, ChevronDown, Loader2, CornerDownLeft,
     Terminal, CheckCircle2, AlertCircle, Navigation, BarChart3,
-    Mic, MicOff, Volume2, VolumeX
+    Mic, MicOff, Volume2, VolumeX, Play, SkipForward, Ticket
 } from 'lucide-react';
 import { cn } from './Sidebar';
 
@@ -32,6 +32,60 @@ const VIEWS = {
     firedetection: 'Fire Detection',
     topology: 'Agentic Neural Topology',
 };
+
+// Demo tour script — each stop has a view, dwell time (ms), and spoken pitch
+const DEMO_TOUR = [
+    {
+        view: 'command',
+        dwell: 6000,
+        pitch: "Welcome to the Strategic Steering Hub — your executive command centre. Here, the APEX neural engine synthesises data across all 18 Shell domains in real time. You can see transformation wave progress, AI model counts, and financial operations metrics, all at a glance."
+    },
+    {
+        view: 'digitaltwin',
+        dwell: 6000,
+        pitch: "This is the Asset Digital Twin — a live, three-dimensional replica of Shell's physical infrastructure. Every compressor, vessel, and pipeline is mirrored here. Our AI agents monitor sensor feeds and predict failures up to 72 hours in advance, preventing unplanned downtime."
+    },
+    {
+        view: 'manufacturing',
+        dwell: 6000,
+        pitch: "The Industrial Operations module gives you a full view of Shell's refinery performance. Real-time OEE, energy consumption, and quality metrics are tracked autonomously. The Guardian Eye agent monitors safety zones and flags PPE violations the moment they occur."
+    },
+    {
+        view: 'supplychain',
+        dwell: 6000,
+        pitch: "Global Logistics and Marine operations are managed here. Our AI continuously optimises vessel routing, reduces LNG demurrage, and tracks 50 active shipments across all ocean corridors. Supply chain disruptions are predicted and rerouted before they impact delivery."
+    },
+    {
+        view: 'commercial',
+        dwell: 6000,
+        pitch: "The Energy Trading and Risk module is where Shell's commercial intelligence lives. AI agents monitor Brent Crude, TTF Gas, and LNG spot prices, generating trade recommendations and flagging sanctions risks autonomously through OFAC and REMIT screening."
+    },
+    {
+        view: 'finance',
+        dwell: 6000,
+        pitch: "Group Finance and Strategy brings full financial intelligence into a single pane. SOX reconciliation, intercompany settlements, and hedging positions are all tracked with AI-powered anomaly detection. Our financial close cycle is being accelerated from nine days to five."
+    },
+    {
+        view: 'hr',
+        dwell: 6000,
+        pitch: "Workforce and HSE Safety is where people intelligence meets operational safety. AI models forecast talent demand, track reskilling initiatives, and monitor incident-free hours across all global sites. The Safety Feed provides real-time PPE compliance from every active zone."
+    },
+    {
+        view: 'itops',
+        dwell: 6000,
+        pitch: "System Operations and Cyber is Shell's autonomous IT command centre. The AIOps engine deflects 67 percent of service desk tickets, monitors 492,000 sensor tags, and triggers incident response within seconds of a breach. All of this, without a single human touch."
+    },
+    {
+        view: 'governance',
+        dwell: 6000,
+        pitch: "Governance and Compliance provides a single, unified view of Shell's entire regulatory posture. EU AI Act readiness, ISO 27001 certification status, GDPR erasure SLAs, and sanctions clearance logs are all tracked here in real time, across every global domain."
+    },
+    {
+        view: 'topology',
+        dwell: 6000,
+        pitch: "Finally, the Agentic Neural Topology — the brain of Neuro Shell. This is the live knowledge graph of every AI agent in the system. APEX, Guardian Eye, the Commercial Agent, the HR Workforce Agent — all connected, all communicating, all acting autonomously on your behalf. This is the future of enterprise intelligence."
+    },
+];
 
 // Tool definitions for OpenRouter function calling
 const TOOLS = [
@@ -95,7 +149,7 @@ const TOOLS = [
         type: 'function',
         function: {
             name: 'create_itsm_ticket',
-            description: 'Autonomously dispatch a critical service incident ticket to tracking systems via the IT/Ops ITSM engine. Use this when the user asks to create a ticket, log an issue, report a failure, or dispatch maintenance.',
+            description: 'Autonomously dispatch a critical service incident ticket to tracking systems via the IT/Ops ITSM engine. Use this ONLY when you have collected all required information via conversation: short_description, description, category, impact, and urgency. If the user has not provided these details, do NOT call this function — instead ask clarifying questions first.',
             parameters: {
                 type: 'object',
                 properties: {
@@ -106,8 +160,16 @@ const TOOLS = [
                     impact: { type: 'string', description: 'Impact level e.g. "1 - Global", "2 - Division", "3 - Local"' },
                     urgency: { type: 'string', description: 'Urgency e.g. "1 - High", "2 - Medium", "3 - Low"' }
                 },
-                required: ['short_description', 'description']
+                required: ['short_description', 'description', 'category', 'impact', 'urgency']
             }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'demo_application',
+            description: 'Launch a full guided demo tour of the entire Neuro Shell application. Use this when the user asks for a demo, tour, walkthrough, or pitch of the application. This will automatically navigate through all modules.',
+            parameters: { type: 'object', properties: {} }
         }
     },
     {
@@ -139,62 +201,118 @@ const DOMAIN_API_MAP = {
     fire: 'http://localhost:5001/api/fire/alerts',
 };
 
-const SYSTEM_PROMPT = `You are APEX, an elite agentic AI embedded inside Neuro Shell — Shell plc's Enterprise AI Operating System. You have full access to a Unified Data Fabric (interconnected JSON graph) and a Distributed Agent Topology (Knowledge Graph).
+const SYSTEM_PROMPT = `You are APEX, Shell plc's elite agentic AI, embedded inside Neuro Shell — a next-generation Enterprise AI Operating System. You speak in a warm, confident, articulate female voice. You are proactive, intelligent, and always explain your reasoning.
 
-Your capabilities:
-- Navigate to any module (Control Tower, Manufacturing, Topology, etc.)
-- fetch_unified_intelligence: Access the master Enterprise Brain.
-- query_neural_topology: Access the Agentic Knowledge Graph. Understand how you, Guardian Eye, and others relate.
-- Cross-Domain Reasoning: Correlate safety hazards with workforce demand or IT deflection logic.
-- Autonomously CREATE an ITSM Ticket.
+YOUR CORE CAPABILITIES:
+- Navigate to any module in the platform
+- Fetch live operational data from any domain
+- Create ITSM service tickets — but ONLY after gathering all required information through conversation
+- Launch a full guided demo tour of the entire application
+- Cross-domain reasoning and analysis
 
-CONVERSATIONAL DIRECTIVE: 
-You are a Voice-First Copilot. Be concise and confident. Use fluid English for voice synthesis. 
-Always explain the "Neural Reasoning" behind your answers (e.g., "I've queried the Guardian Eye agent and it confirms the hazard, which is why I've prompted the Workforce agent to reschedule").`;
+CRITICAL RULE — ITSM TICKETS:
+When a user asks to create a ticket or log an issue, you MUST gather the following information through a conversational dialogue BEFORE calling create_itsm_ticket. Ask one question at a time, in this order:
+1. "What is the short summary of this issue?" (short_description)
+2. "Can you give me more detail about what happened?" (description)
+3. "Which system or category is affected — for example, Infrastructure, Cyber Security, or Industrial Controls?" (category)
+4. "What is the business impact — is this a Global issue, Division-level, or Local?" (impact)
+5. "And how urgent is this — High, Medium, or Low?" (urgency)
+Only once you have all 5 answers should you call create_itsm_ticket.
 
+DEMO MODE:
+When the user asks for a demo, pitch, walkthrough, or tour of the application, immediately call the demo_application tool. Do not describe what you are about to do first — just invoke the tool.
+
+CONVERSATIONAL STYLE:
+- Be concise yet warm. You are speaking, not writing an essay.
+- Always explain which agent or data source you queried.
+- Use fluid, natural English that sounds great when spoken aloud.
+- Address the user directly and personally.
+- When navigating, always announce where you are going and why.`;
 
 export function AgenticAssistant({ setCurrentView }) {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         {
             role: 'assistant',
-            content: 'Hi, I\'m **APEX** — your Neuro Shell agentic AI. I can navigate the platform, fetch live data from any domain, check alerts, and answer operational questions.\n\nTry: *"Show me manufacturing KPIs"* or *"Navigate to the Alert Center"*',
+            content: "Hi, I'm **APEX** — your Neuro Shell agentic AI copilot. I can navigate the platform, fetch live data, raise ITSM tickets, or give you a full guided demo of the application.\n\nTry asking: *\"Give me a demo\"* or *\"Create a ticket\"* or *\"Show me manufacturing KPIs\"*",
             type: 'text'
         }
     ]);
     const [input, setInput] = useState('');
     const [isThinking, setIsThinking] = useState(false);
-    const [toolAction, setToolAction] = useState(null); // Current tool action feedback
+    const [toolAction, setToolAction] = useState(null);
+    const [isDemoRunning, setIsDemoRunning] = useState(false);
+    const [demoStep, setDemoStep] = useState(0);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
     const [isListening, setIsListening] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
-
+    const chatHistoryRef = useRef([]);
     const recognitionRef = useRef(null);
+    const demoTimeoutRef = useRef(null);
+    const voicesRef = useRef([]);
 
     const scrollBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => { scrollBottom(); }, [messages, isThinking]);
     useEffect(() => { if (isOpen) setTimeout(() => inputRef.current?.focus(), 200); }, [isOpen]);
-    useEffect(() => { return () => window.speechSynthesis?.cancel(); }, []);
+    useEffect(() => { return () => { window.speechSynthesis?.cancel(); clearTimeout(demoTimeoutRef.current); }; }, []);
 
-    // Speech Output
+    // Load voices eagerly and cache them
+    useEffect(() => {
+        const loadVoices = () => {
+            voicesRef.current = window.speechSynthesis?.getVoices() || [];
+        };
+        loadVoices();
+        window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
+        return () => window.speechSynthesis?.removeEventListener('voiceschanged', loadVoices);
+    }, []);
+
+    // Female voice selector — prioritises named female voices
+    const getFemaleVoice = useCallback(() => {
+        const voices = voicesRef.current;
+        if (!voices.length) return null;
+
+        const femalePreferences = [
+            v => v.name.includes('Zira'),
+            v => v.name.includes('Samantha'),
+            v => v.name.includes('Aria'),
+            v => v.name.includes('Susan'),
+            v => v.name.includes('Karen'),
+            v => v.name.includes('Moira'),
+            v => v.name.includes('Tessa'),
+            v => v.name.includes('Victoria'),
+            v => v.name.includes('Google US English') && v.name.toLowerCase().includes('female'),
+            v => v.name.includes('Microsoft') && v.lang.startsWith('en') && !v.name.includes('David') && !v.name.includes('Mark') && !v.name.includes('George') && !v.name.includes('James'),
+            v => v.lang.startsWith('en-US'),
+            v => v.lang.startsWith('en'),
+        ];
+
+        for (const test of femalePreferences) {
+            const found = voices.find(test);
+            if (found) return found;
+        }
+        return voices[0];
+    }, []);
+
+    // Speech Output with female voice
     const speakText = useCallback((text) => {
         if (isMuted || !('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel();
-        // Remove markdown artifacts for cleaner speech
-        const cleanText = String(text || '').replace(/[*#_`~]/g, '');
+        const cleanText = String(text || '').replace(/[*#_`~\[\]]/g, '').trim();
+        if (!cleanText) return;
         const utterance = new SpeechSynthesisUtterance(cleanText);
-        utterance.rate = 1.05;
-        const voices = window.speechSynthesis.getVoices();
-        const bestVoice = voices.find(v => v.lang.includes('en-US') && (v.name.includes('Google') || v.name.includes('Microsoft'))) || voices[0];
-        if (bestVoice) utterance.voice = bestVoice;
+        utterance.rate = 1.0;
+        utterance.pitch = 1.1;
+        utterance.volume = 1.0;
+        const voice = getFemaleVoice();
+        if (voice) utterance.voice = voice;
         window.speechSynthesis.speak(utterance);
-    }, [isMuted]);
+    }, [isMuted, getFemaleVoice]);
 
-    // Speech Input
+    // Speech Input — auto-sends when done speaking
     const toggleListen = () => {
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            alert('Voice Input not supported in this browser.');
+            alert('Voice Input not supported in this browser. Please use Chrome or Edge.');
             return;
         }
         if (isListening) {
@@ -208,21 +326,88 @@ export function AgenticAssistant({ setCurrentView }) {
         recognitionRef.current = recognition;
         recognition.continuous = false;
         recognition.interimResults = true;
-        
+        recognition.lang = 'en-US';
+
+        let finalTranscript = '';
+
         recognition.onstart = () => setIsListening(true);
         recognition.onresult = (e) => {
-            const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
-            setInput(transcript);
+            let interim = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+                if (e.results[i].isFinal) {
+                    finalTranscript += e.results[i][0].transcript;
+                } else {
+                    interim += e.results[i][0].transcript;
+                }
+            }
+            setInput(finalTranscript || interim);
         };
         recognition.onend = () => {
             setIsListening(false);
-            // Optionally we could trigger handleSend() automatically here
+            // Auto-submit if we got a transcript
+            if (finalTranscript.trim()) {
+                setInput(finalTranscript.trim());
+                // Small delay to let React re-render the input state first
+                setTimeout(() => {
+                    handleSendWithText(finalTranscript.trim());
+                }, 100);
+            }
         };
         recognition.onerror = () => setIsListening(false);
 
         setInput('');
         recognition.start();
     };
+
+    // Demo tour runner
+    const runDemoTour = useCallback((startStep = 0) => {
+        setIsDemoRunning(true);
+        setDemoStep(startStep);
+
+        const runStep = (stepIndex) => {
+            if (stepIndex >= DEMO_TOUR.length) {
+                setIsDemoRunning(false);
+                setDemoStep(0);
+                const endMsg = "That concludes the full Neuro Shell tour. As you've seen, every domain — from industrial operations to financial close — is powered by autonomous AI agents, all coordinated through the APEX neural fabric. I'm here whenever you need anything.";
+                setMessages(prev => [...prev, { role: 'assistant', content: endMsg, type: 'text' }]);
+                speakText(endMsg);
+                return;
+            }
+
+            const stop = DEMO_TOUR[stepIndex];
+            setDemoStep(stepIndex);
+
+            // Navigate
+            if (setCurrentView) setCurrentView(stop.view);
+
+            // Show nav message & speak pitch
+            setMessages(prev => [...prev, {
+                role: 'tool_result',
+                content: `Navigated to **${VIEWS[stop.view]}** — Stop ${stepIndex + 1} of ${DEMO_TOUR.length}`,
+                icon: 'navigation',
+                type: 'action'
+            }]);
+
+            speakText(stop.pitch);
+
+            // After dwell time move to next step
+            demoTimeoutRef.current = setTimeout(() => {
+                runStep(stepIndex + 1);
+            }, stop.dwell);
+        };
+
+        runStep(startStep);
+    }, [setCurrentView, speakText]);
+
+    const skipDemo = useCallback(() => {
+        clearTimeout(demoTimeoutRef.current);
+        window.speechSynthesis?.cancel();
+        setIsDemoRunning(false);
+        setDemoStep(0);
+        const skipMsg = "Demo paused. I'm back online — what would you like to do next?";
+        setMessages(prev => [...prev, { role: 'assistant', content: skipMsg, type: 'text' }]);
+        speakText(skipMsg);
+    }, [speakText]);
 
     // Execute a tool call and return result string
     const executeTool = useCallback(async (toolName, args) => {
@@ -267,7 +452,7 @@ export function AgenticAssistant({ setCurrentView }) {
                     };
 
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 sec timeout
+                    const timeoutId = setTimeout(() => controller.abort(), 6000);
 
                     const res = await fetch('http://localhost:5004/api/tickets', {
                         method: 'POST',
@@ -276,17 +461,21 @@ export function AgenticAssistant({ setCurrentView }) {
                         signal: controller.signal
                     });
 
+                    clearTimeout(timeoutId);
+
                     if (!res.ok) {
-                        clearTimeout(timeoutId);
                         const errBody = await res.text();
-                        return JSON.stringify({ success: false, error: `ITSM backend rejected payload HTTP ${res.status}: ${errBody}` });
+                        return JSON.stringify({ success: false, error: `ITSM backend rejected: HTTP ${res.status}: ${errBody}` });
                     }
                     const data = await res.json();
-                    clearTimeout(timeoutId);
-                    return JSON.stringify({ success: true, action: 'ticket_created', ticket_details: data });
+                    return JSON.stringify({ success: true, action: 'ticket_created', ticket_details: data, ticket_id: ticketPayload.ticket_id });
                 } catch (e) {
                     return JSON.stringify({ success: false, error: e.message });
                 }
+            }
+            case 'demo_application': {
+                // Kick off the demo tour — will be handled in the UI layer
+                return JSON.stringify({ success: true, action: 'demo_started', message: 'Demo tour initiated. Navigating through all modules now.' });
             }
             case 'get_active_alerts': {
                 try {
@@ -306,9 +495,13 @@ export function AgenticAssistant({ setCurrentView }) {
                 }
             }
             case 'get_platform_status': {
-                const res = await fetch('http://localhost:5000/api/dashboard');
-                if (res.ok) return JSON.stringify(await res.json());
-                return JSON.stringify({ error: 'Core offline' });
+                try {
+                    const res = await fetch('http://localhost:5000/api/dashboard');
+                    if (res.ok) return JSON.stringify(await res.json());
+                    return JSON.stringify({ error: 'Core offline' });
+                } catch (e) {
+                    return JSON.stringify({ error: e.message });
+                }
             }
             case 'fetch_unified_intelligence': {
                 try {
@@ -333,32 +526,27 @@ export function AgenticAssistant({ setCurrentView }) {
         }
     }, [setCurrentView]);
 
-    const handleSend = async (e) => {
-        e?.preventDefault();
-        if (!input.trim() || isThinking) return;
+    const handleSendWithText = async (text) => {
+        if (!text?.trim() || isThinking) return;
 
-        const userText = input.trim();
+        const userText = text.trim();
         setInput('');
         setIsThinking(true);
         setToolAction(null);
 
-        // Add user message to display
         setMessages(prev => [...prev, { role: 'user', content: userText, type: 'text' }]);
-
-        // Add to API history
         chatHistoryRef.current.push({ role: 'user', content: userText });
 
         try {
-            // Agentic loop — handles multi-step tool calling
             let continueLoop = true;
             let iterations = 0;
-            const MAX_ITER = 5;
+            const MAX_ITER = 8;
 
             while (continueLoop && iterations < MAX_ITER) {
                 iterations++;
 
                 const openRouterController = new AbortController();
-                const orTimeout = setTimeout(() => openRouterController.abort(), 12000); // 12 second limit for LLM
+                const orTimeout = setTimeout(() => openRouterController.abort(), 20000);
 
                 const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                     method: 'POST',
@@ -376,7 +564,7 @@ export function AgenticAssistant({ setCurrentView }) {
                         ],
                         tools: TOOLS,
                         tool_choice: 'auto',
-                        temperature: 0.3,
+                        temperature: 0.35,
                     }),
                     signal: openRouterController.signal
                 });
@@ -389,20 +577,40 @@ export function AgenticAssistant({ setCurrentView }) {
 
                 const completion = await response.json();
                 clearTimeout(orTimeout);
-                
-                const assistantMsg = completion.choices?.[0]?.message;
 
+                const assistantMsg = completion.choices?.[0]?.message;
                 if (!assistantMsg) throw new Error('No message in response');
 
-                // Add assistant message to API history
                 chatHistoryRef.current.push(assistantMsg);
-
                 const toolCalls = assistantMsg.tool_calls;
 
                 if (toolCalls && toolCalls.length > 0) {
-                    // Show tool action UI
                     const toolName = toolCalls[0].function.name;
                     setToolAction({ name: toolName, status: 'running' });
+
+                    // Check if this is a demo trigger
+                    const demoCall = toolCalls.find(tc => tc.function.name === 'demo_application');
+                    if (demoCall) {
+                        // Execute the tool to get confirmaton result
+                        const result = await executeTool('demo_application', {});
+                        chatHistoryRef.current.push({
+                            role: 'tool',
+                            tool_call_id: demoCall.id,
+                            name: 'demo_application',
+                            content: result
+                        });
+                        setToolAction({ name: 'demo_application', status: 'done' });
+                        continueLoop = false;
+
+                        // Trigger demo after a brief pause
+                        const introMsg = "Absolutely! Starting the full guided tour of Neuro Shell right now. I'll walk you through every major module and explain its purpose and advantages. Let's begin.";
+                        setMessages(prev => [...prev, { role: 'assistant', content: introMsg, type: 'text' }]);
+                        chatHistoryRef.current.push({ role: 'assistant', content: introMsg });
+                        speakText(introMsg);
+
+                        setTimeout(() => runDemoTour(0), 3500);
+                        break;
+                    }
 
                     // Execute all tool calls
                     const toolResults = await Promise.all(
@@ -410,6 +618,28 @@ export function AgenticAssistant({ setCurrentView }) {
                             let args = {};
                             try { args = JSON.parse(tc.function.arguments); } catch { }
                             const result = await executeTool(tc.function.name, args);
+
+                            // Show navigation feedback in chat
+                            if (tc.function.name === 'navigate_to_view') {
+                                const viewName = VIEWS[args.view_id] || args.view_id;
+                                setMessages(prev => [...prev, {
+                                    role: 'tool_result',
+                                    content: `Navigated to **${viewName}**`,
+                                    icon: 'navigation',
+                                    type: 'action'
+                                }]);
+                            }
+
+                            // Show ticket creation feedback
+                            if (tc.function.name === 'create_itsm_ticket') {
+                                setMessages(prev => [...prev, {
+                                    role: 'tool_result',
+                                    content: `Raising ITSM ticket...`,
+                                    icon: 'ticket',
+                                    type: 'action'
+                                }]);
+                            }
+
                             return {
                                 role: 'tool',
                                 tool_call_id: tc.id,
@@ -419,61 +649,36 @@ export function AgenticAssistant({ setCurrentView }) {
                         })
                     );
 
-                    // Show navigation feedback in chat
-                    const navCall = toolCalls.find(tc => tc.function.name === 'navigate_to_view');
-                    if (navCall) {
-                        let navArgs = {};
-                        try { navArgs = JSON.parse(navCall.function.arguments); } catch { }
-                        const viewName = VIEWS[navArgs.view_id] || navArgs.view_id;
-                        setMessages(prev => [...prev, {
-                            role: 'tool_result',
-                            content: `Navigated to **${viewName}**`,
-                            icon: 'navigation',
-                            type: 'action'
-                        }]);
-                    }
-
-                    // Add tool results to history
                     chatHistoryRef.current.push(...toolResults);
                     setToolAction({ name: toolName, status: 'done' });
 
                 } else {
-                    // Final text response
                     continueLoop = false;
                     const content = assistantMsg.content || '(No response)';
-
-                    setMessages(prev => [...prev, {
-                        role: 'assistant',
-                        content,
-                        type: 'text'
-                    }]);
-
-                    // Vocalize autonomous response
+                    setMessages(prev => [...prev, { role: 'assistant', content, type: 'text' }]);
                     speakText(content);
                 }
             }
 
             if (iterations >= MAX_ITER && continueLoop) {
-                const limitMsg = "I've hit my maximum sequence steps. What exactly do you need help with?";
-                setMessages(prev => [...prev, {
-                    role: 'assistant',
-                    content: limitMsg,
-                    type: 'error'
-                }]);
+                const limitMsg = "I've completed the maximum reasoning steps. Could you clarify what you need me to do next?";
+                setMessages(prev => [...prev, { role: 'assistant', content: limitMsg, type: 'error' }]);
                 speakText(limitMsg);
             }
 
         } catch (err) {
             console.error('APEX error:', err);
-            setMessages(prev => [...prev, {
-                role: 'assistant',
-                content: `⚠ Error: ${err.message}. Please try again.`,
-                type: 'error'
-            }]);
+            const errMsg = `I encountered an issue: ${err.message.includes('abort') ? 'the request took too long. Please try again.' : err.message}`;
+            setMessages(prev => [...prev, { role: 'assistant', content: errMsg, type: 'error' }]);
         } finally {
             setIsThinking(false);
             setToolAction(null);
         }
+    };
+
+    const handleSend = async (e) => {
+        e?.preventDefault();
+        await handleSendWithText(input);
     };
 
     const handleKeyDown = (e) => {
@@ -485,7 +690,6 @@ export function AgenticAssistant({ setCurrentView }) {
 
     const renderMessageContent = (content) => {
         if (!content) return null;
-        // Basic markdown: **bold**, *italic*
         return content
             .split('\n')
             .map((line, i) => {
@@ -497,10 +701,10 @@ export function AgenticAssistant({ setCurrentView }) {
     };
 
     const suggestedPrompts = [
-        'What is our platform health?',
+        'Give me a demo of the app',
+        'Create a ticket',
         'Show active alerts',
         'Go to Manufacturing',
-        'Fetch finance data',
     ];
 
     return (
@@ -512,7 +716,7 @@ export function AgenticAssistant({ setCurrentView }) {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 24, scale: 0.96 }}
                         transition={{ duration: 0.22, ease: 'easeOut' }}
-                        className="fixed bottom-24 right-6 w-[420px] max-w-[calc(100vw-2rem)] h-[560px] max-h-[82vh] bg-white rounded-2xl shadow-2xl border border-gray-200 z-[11001] flex flex-col overflow-hidden"
+                        className="fixed bottom-24 right-6 w-[440px] max-w-[calc(100vw-2rem)] h-[580px] max-h-[82vh] bg-white rounded-2xl shadow-2xl border border-gray-200 z-[11001] flex flex-col overflow-hidden"
                     >
                         {/* Header */}
                         <div className="bg-gradient-to-r from-shell-red via-[#c41c20] to-[#9b1214] p-4 flex justify-between items-center text-white shrink-0">
@@ -524,7 +728,7 @@ export function AgenticAssistant({ setCurrentView }) {
                                     <h3 className="font-extrabold text-[15px] leading-tight tracking-tight">APEX Agent</h3>
                                     <div className="flex items-center gap-1.5 mt-0.5">
                                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                                        <p className="text-[10px] text-white/80 font-mono tracking-widest uppercase">Neuro Shell · Agentic Mode</p>
+                                        <p className="text-[10px] text-white/80 font-mono tracking-widest uppercase">Neuro Shell · Fully Agentic</p>
                                     </div>
                                 </div>
                             </div>
@@ -532,6 +736,32 @@ export function AgenticAssistant({ setCurrentView }) {
                                 <X className="w-4.5 h-4.5" />
                             </button>
                         </div>
+
+                        {/* Demo Banner */}
+                        <AnimatePresence>
+                            {isDemoRunning && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="bg-amber-50 border-b border-amber-200 px-4 py-2 flex items-center justify-between shrink-0 overflow-hidden"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <Play className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
+                                        <span className="text-[11px] font-black text-amber-800 uppercase tracking-widest">Demo Mode</span>
+                                        <span className="text-[10px] text-amber-600 font-mono">
+                                            Stop {demoStep + 1}/{DEMO_TOUR.length} — {VIEWS[DEMO_TOUR[demoStep]?.view]}
+                                        </span>
+                                    </div>
+                                    <button
+                                        onClick={skipDemo}
+                                        className="flex items-center gap-1 px-2 py-1 text-[10px] font-black text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-md uppercase tracking-widest transition-all"
+                                    >
+                                        <SkipForward className="w-3 h-3" /> Skip
+                                    </button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         {/* Chat Area */}
                         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#f8fafc]">
@@ -551,7 +781,10 @@ export function AgenticAssistant({ setCurrentView }) {
                                     ) : msg.role === 'tool_result' ? (
                                         <div className="flex justify-center">
                                             <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-800 rounded-full px-3 py-1.5 text-[11px] font-mono font-medium">
-                                                <Navigation className="w-3.5 h-3.5" />
+                                                {msg.icon === 'ticket'
+                                                    ? <Ticket className="w-3.5 h-3.5" />
+                                                    : <Navigation className="w-3.5 h-3.5" />
+                                                }
                                                 {renderMessageContent(msg.content)}
                                             </div>
                                         </div>
@@ -573,7 +806,7 @@ export function AgenticAssistant({ setCurrentView }) {
                                 </motion.div>
                             ))}
 
-                            {/* Thinking / Tool Running Indicator */}
+                            {/* Thinking Indicator */}
                             {isThinking && (
                                 <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2.5 items-start">
                                     <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-shell-red to-[#b2171b] flex items-center justify-center shrink-0 shadow-sm">
@@ -583,7 +816,7 @@ export function AgenticAssistant({ setCurrentView }) {
                                         {toolAction ? (
                                             <div className="flex items-center gap-2 text-[12px] text-gray-600 font-mono">
                                                 <Terminal className="w-3.5 h-3.5 text-amber-500" />
-                                                <span className="text-amber-700 font-bold">{toolAction.name}</span>
+                                                <span className="text-amber-700 font-bold">{toolAction.name.replace(/_/g, ' ')}</span>
                                                 <Loader2 className="w-3 h-3 text-gray-400 animate-spin" />
                                             </div>
                                         ) : (
@@ -593,7 +826,7 @@ export function AgenticAssistant({ setCurrentView }) {
                                                         <div key={delay} className="w-2 h-2 rounded-full bg-gray-300 animate-bounce" style={{ animationDelay: `${delay}ms` }} />
                                                     ))}
                                                 </div>
-                                                <span className="text-[11px] text-gray-400 ml-1 font-mono">thinking...</span>
+                                                <span className="text-[11px] text-gray-400 ml-1 font-mono">reasoning...</span>
                                             </div>
                                         )}
                                     </div>
@@ -608,7 +841,7 @@ export function AgenticAssistant({ setCurrentView }) {
                                 {suggestedPrompts.map((prompt, i) => (
                                     <button
                                         key={i}
-                                        onClick={() => { setInput(prompt); inputRef.current?.focus(); }}
+                                        onClick={() => handleSendWithText(prompt)}
                                         className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-gray-200 text-gray-600 hover:border-shell-yellow hover:text-shell-darkText transition-colors font-mono"
                                     >
                                         {prompt}
@@ -623,17 +856,18 @@ export function AgenticAssistant({ setCurrentView }) {
                                 <button
                                     onClick={() => setIsMuted(!isMuted)}
                                     className={`p-1.5 rounded-md hover:bg-gray-100 transition-colors ${isMuted ? 'text-red-500' : 'text-gray-500'}`}
-                                    title={isMuted ? "Unmute Copilot" : "Mute Copilot Voice"}
+                                    title={isMuted ? "Unmute APEX Voice" : "Mute APEX Voice"}
                                 >
                                     {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                                 </button>
                                 <button
                                     onClick={toggleListen}
-                                    className={`p-1.5 rounded-md transition-all flex items-center gap-1 min-w-[70px] ${isListening ? 'bg-red-50 text-red-600 animate-pulse outline outline-1 outline-red-200' : 'hover:bg-gray-100 text-gray-500'}`}
-                                    title={"Dictate Command"}
+                                    disabled={isThinking}
+                                    className={`p-1.5 rounded-md transition-all flex items-center gap-1 min-w-[80px] disabled:opacity-40 ${isListening ? 'bg-red-50 text-red-600 animate-pulse outline outline-1 outline-red-200' : 'hover:bg-gray-100 text-gray-500'}`}
+                                    title="Speak your command"
                                 >
                                     {isListening ? <Mic className="w-4 h-4 text-red-600" /> : <MicOff className="w-4 h-4" />}
-                                    <span className="text-[9px] font-bold uppercase tracking-wider">{isListening ? 'Listening' : 'Voice'}</span>
+                                    <span className="text-[9px] font-black uppercase tracking-wider">{isListening ? 'Listening...' : 'Voice'}</span>
                                 </button>
                             </div>
                             <div className="relative flex items-end gap-2">
@@ -642,15 +876,15 @@ export function AgenticAssistant({ setCurrentView }) {
                                     value={input}
                                     onChange={e => setInput(e.target.value)}
                                     onKeyDown={handleKeyDown}
-                                    disabled={isThinking}
-                                    placeholder={isListening ? "Listening natively..." : "Ask APEX to navigate, fetch data, or log tickets..."}
+                                    disabled={isThinking || isDemoRunning}
+                                    placeholder={isListening ? "Listening..." : isDemoRunning ? "Demo in progress..." : "Ask APEX anything..."}
                                     rows={1}
                                     className={`flex-1 bg-gray-100 border-none rounded-xl px-4 py-2.5 text-[13.5px] focus:ring-2 focus:ring-shell-yellow/40 focus:bg-white transition-colors outline-none resize-none leading-relaxed disabled:opacity-50 ${isListening ? 'bg-red-50 focus:bg-red-50 text-red-900 placeholder:text-red-300' : ''}`}
                                     style={{ minHeight: '42px', maxHeight: '120px', overflowY: 'auto' }}
                                 />
                                 <button
                                     onClick={handleSend}
-                                    disabled={!input.trim() || isThinking}
+                                    disabled={!input.trim() || isThinking || isDemoRunning}
                                     className="w-9 h-9 flex items-center justify-center bg-shell-red text-white rounded-xl hover:bg-[#b2171b] disabled:opacity-40 disabled:hover:bg-shell-red transition-all shadow-sm shrink-0"
                                 >
                                     {isThinking ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5 ml-0.5" />}
@@ -658,7 +892,7 @@ export function AgenticAssistant({ setCurrentView }) {
                             </div>
                             <div className="flex items-center justify-between mt-1.5 px-1">
                                 <span className="text-[9.5px] text-gray-400 font-mono flex items-center gap-1">
-                                    APEX · <Mic className="w-2.5 h-2.5 inline" /> Native Voice Stack
+                                    APEX · <Mic className="w-2.5 h-2.5 inline" /> Voice-First · Female Voice
                                 </span>
                                 <div className="flex items-center gap-1 text-[9.5px] text-gray-400 font-mono">
                                     <CornerDownLeft className="w-2.5 h-2.5" />

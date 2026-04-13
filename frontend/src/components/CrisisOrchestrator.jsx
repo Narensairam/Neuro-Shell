@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { crisisEventBus } from '../context/CrisisEventBus';
-import { ShieldAlert, Users, Truck, DollarSign, ArrowRight, Activity, Zap } from 'lucide-react';
+import { ShieldAlert, Users, Truck, DollarSign, ArrowRight, Activity, Zap, CheckCircle } from 'lucide-react';
 
 export function CrisisOrchestrator({ setCurrentView }) {
     const [activeAlert, setActiveAlert] = useState(null);
@@ -28,21 +28,20 @@ export function CrisisOrchestrator({ setCurrentView }) {
 
         const handleWorkforce = (data) => {
             setActiveAlert({
-                title: 'WORKFORCE DEPLOYED',
-                message: 'Contractors En Route. Supply Chain Disruption Detected. Routing...',
-                icon: Truck,
+                title: 'NOTIFICATION SENT',
+                message: 'Contractor notified successfully. Resource mobilization initiated.',
+                icon: CheckCircle,
                 classes: {
-                    border: 'border-amber-600',
-                    bgAccent: 'bg-amber-50',
-                    borderAccent: 'border-amber-100',
-                    text: 'text-amber-600',
-                    textHeading: 'text-amber-700',
-                    bgLine: 'bg-amber-500'
+                    border: 'border-green-600',
+                    bgAccent: 'bg-green-50',
+                    borderAccent: 'border-green-100',
+                    text: 'text-green-600',
+                    textHeading: 'text-green-700',
+                    bgLine: 'bg-green-500'
                 }
             });
             setTimeout(() => {
                 setActiveAlert(null);
-                setCurrentView('supplychain');
             }, 3000);
         };
 
@@ -82,23 +81,15 @@ export function CrisisOrchestrator({ setCurrentView }) {
     const Icon = activeAlert.icon;
 
     return (
-        <div className="fixed top-20 right-1/2 translate-x-1/2 z-[99999] animate-in slide-in-from-top-10 fade-in duration-500">
-            <div className={`bg-white border-b-4 ${activeAlert.classes.border} rounded-lg shadow-2xl p-5 flex items-start gap-4 min-w-[420px] relative overflow-hidden group`}>
-                <div className={`absolute top-0 left-0 right-0 h-[1.5px] ${activeAlert.classes.bgLine} opacity-60`}></div>
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 shadow-inner ${activeAlert.classes.bgAccent} border ${activeAlert.classes.borderAccent}`}>
-                    <Icon className={`w-6 h-6 ${activeAlert.classes.text}`} />
+        <div className="fixed top-6 right-6 z-[99999] animate-in slide-in-from-right-10 fade-in duration-500">
+            <div className={`bg-white border-l-4 ${activeAlert.classes.border} rounded shadow-xl p-3 flex items-center gap-3 max-w-[320px] relative overflow-hidden`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${activeAlert.classes.bgAccent}`}>
+                    <Icon className={`w-4 h-4 ${activeAlert.classes.text}`} />
                 </div>
-                <div className="flex-1 pr-4">
-                    <div className="flex items-center gap-2 mb-1">
-                        <Zap className={`w-3.5 h-3.5 ${activeAlert.classes.text} animate-pulse`} />
-                        <h3 className={`${activeAlert.classes.textHeading} font-black text-[13px] tracking-widest uppercase font-mono`}>{activeAlert.title}</h3>
-                    </div>
-                    <div className="text-gray-700 font-extrabold text-[15px] uppercase tracking-tight leading-snug">
+                <div className="flex-1">
+                    <h3 className={`${activeAlert.classes.textHeading} font-black text-[10px] tracking-widest uppercase font-mono leading-none mb-1`}>{activeAlert.title}</h3>
+                    <div className="text-gray-700 font-bold text-[12px] uppercase tracking-tight leading-tight">
                         {activeAlert.message}
-                    </div>
-                    <div className="mt-3 flex items-center gap-2">
-                        <Activity className="w-3 h-3 text-gray-400" />
-                        <span className="font-mono text-[9px] text-gray-400 uppercase tracking-widest">Multi-Agent Sync Active</span>
                     </div>
                 </div>
             </div>
