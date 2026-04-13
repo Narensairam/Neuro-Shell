@@ -27,8 +27,8 @@ export function CommercialView({ setCurrentView }) {
     if (!data) return null;
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 h-full overflow-hidden flex flex-col pt-6 px-6">
-            <header className="flex justify-between items-start mb-6 shrink-0 px-1">
+        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 h-full overflow-hidden flex flex-col pt-3 px-6">
+            <header className="flex justify-between items-start mb-2 shrink-0 px-1">
                 <div>
                     <h1 className="text-[25px] font-extrabold flex items-center gap-2 tracking-tight text-shell-darkText">
                         <TrendingUp className="w-7 h-7 text-shell-yellow" />
@@ -43,7 +43,7 @@ export function CommercialView({ setCurrentView }) {
                 </div>
             </header>
 
-            <div className="flex items-center gap-1 mb-6 border-b border-gray-200 px-1 shrink-0">
+            <div className="flex items-center gap-1 mb-2 border-b border-gray-200 px-1 shrink-0">
                 <button
                     onClick={() => setActiveTab('overview')}
                     className={`px-6 py-4 transition-all duration-300 border-b-2 

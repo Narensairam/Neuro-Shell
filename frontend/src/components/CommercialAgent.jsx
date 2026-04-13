@@ -25,106 +25,323 @@ const generateTrendData = (baseValue, variancePercent = 0.05, points = 12) => {
   PREMIUM VISUAL COMPONENTS - ALIGNED WITH CONTROL TOWER STYLING
 */
 
-const PricingIntelligence = ({ data }) => {
-    const chartData = useMemo(() => generateTrendData(data?.ai_adjusted_price_usd ?? 85.00), [data]);
-    
-    return (
-        <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_1fr] gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <div className="space-y-4">
-                <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-50"></div>
-                    <div className="flex items-center justify-between mb-6">
-                        <div>
-                            <span className="font-mono text-[10px] text-gray-400 tracking-widest uppercase mb-1 block">Forecast Precision</span>
-                            <h3 className="text-[15px] font-extrabold text-shell-darkText uppercase flex items-center gap-2">
-                                <Activity className="w-4 h-4 text-shell-blue" /> Price Convergence Trend
-                            </h3>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-shell-blue"></div>
-                                <span className="font-mono text-[9px] text-gray-400 uppercase tracking-widest">Technical</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-blue-200"></div>
-                                <span className="font-mono text-[9px] text-gray-400 uppercase tracking-widest">AI Target</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className="h-[250px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                                <defs>
-                                    <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#003a70" stopOpacity={0.1} />
-                                        <stop offset="95%" stopColor="#003a70" stopOpacity={0} />
-                                    </linearGradient>
-                                </defs>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                <XAxis dataKey="time" tick={{ fontSize: 9, fill: '#9ca3af', fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
-                                <YAxis tick={{ fontSize: 9, fill: '#9ca3af', fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
-                                <Tooltip 
-                                    contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '10px', fontWeight: 'bold' }}
-                                />
-                                <Area type="monotone" dataKey="value" stroke="#003a70" strokeWidth={3} fillOpacity={1} fill="url(#colorPrice)" />
-                                <Area type="monotone" dataKey="forecast" stroke="#bfdbfe" strokeWidth={1} strokeDasharray="5 5" fill="transparent" />
-                            </AreaChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
+// ─── Demand vs Price Bell Curve ───────────────────────────────────────────────
+const DemandCurveChart = ({ data, currentPrice, aiPrice }) => {
+    const chartData = useMemo(() => {
+        if (data?.demand_curve?.length) {
+            return data.demand_curve.map(d => ({ price: d.price, demand: d.demand }));
+        }
+        const ai   = aiPrice ?? 1250;
+        const peak = ai * 1.02;
+        const sigma = peak * 0.14;          // bell width
+        const start = peak - 2.6 * sigma;   // left tail
+        const step  = (5.2 * sigma) / 12;   // 13 points across ±2.6σ
+        return Array.from({ length: 13 }, (_, i) => {
+            const p = start + i * step;
+            const d = 100 * Math.exp(-0.5 * ((p - peak) / sigma) ** 2);
+            return { price: Math.round(p), demand: Math.round(d * 10) / 10 };
+        });
+    }, [data, currentPrice, aiPrice]);
 
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white border border-gray-200 rounded-lg p-5 relative overflow-hidden">
-                        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20"></div>
-                        <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Technical Baseline</div>
-                        <div className="text-[31px] font-extrabold text-shell-darkText leading-none font-mono tracking-tighter">${data?.technical_price_usd ?? '0.00'}</div>
-                        <div className="font-mono text-[10px] text-green-600 mt-1 flex items-center gap-1">
-                            <TrendingUp className="w-3 h-3" /> ↑ +1.2% Market Premium
-                        </div>
+    const cur = data?.current_price ?? currentPrice ?? 1100;
+    const ai  = data?.ai_recommended_price ?? aiPrice ?? 1250;
+
+    return (
+        <div className="relative h-full w-full">
+            <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData} margin={{ top: 20, right: 20, left: -20, bottom: 0 }}>
+                    <defs>
+                        <linearGradient id="demandGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%"  stopColor="#003a70" stopOpacity={0.18} />
+                            <stop offset="95%" stopColor="#003a70" stopOpacity={0}    />
+                        </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis
+                        dataKey="price"
+                        tick={{ fontSize: 9, fill: '#9ca3af', fontFamily: 'monospace' }}
+                        axisLine={false}
+                        tickLine={false}
+                        label={{ value: 'Price', position: 'insideBottom', offset: -2, fontSize: 9, fill: '#9ca3af' }}
+                    />
+                    <YAxis
+                        tick={{ fontSize: 9, fill: '#9ca3af', fontFamily: 'monospace' }}
+                        axisLine={false}
+                        tickLine={false}
+                        label={{ value: 'Demand', angle: -90, position: 'insideLeft', offset: 20, fontSize: 9, fill: '#9ca3af' }}
+                    />
+                    <Tooltip
+                        contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '10px', fontWeight: 'bold' }}
+                        formatter={(v) => [`${v}`, 'Demand']}
+                        labelFormatter={(l) => `Price: ₹${l}`}
+                    />
+                    <Area
+                        type="monotone"
+                        dataKey="demand"
+                        stroke="#003a70"
+                        strokeWidth={2.5}
+                        fillOpacity={1}
+                        fill="url(#demandGrad)"
+                        dot={{ r: 4, fill: '#003a70', strokeWidth: 0 }}
+                    />
+                </AreaChart>
+            </ResponsiveContainer>
+
+            {/* Revenue Peak badge */}
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-shell-blue text-white font-mono text-[9px] font-bold rounded-full shadow-md uppercase tracking-widest whitespace-nowrap">
+                Revenue Peak
+            </div>
+
+            {/* AI Price badge */}
+            <div className="absolute bottom-12 right-[28%] flex items-center gap-1.5 px-2.5 py-1 bg-shell-blue text-white font-mono text-[9px] font-bold rounded shadow-md whitespace-nowrap">
+                <div className="w-2 h-2 rounded-full bg-blue-300 shrink-0" />
+                AI Price ₹{Math.round(ai).toLocaleString()}
+            </div>
+
+            {/* Current Price badge */}
+            <div className="absolute bottom-6 right-[8%] flex items-center gap-1.5 px-2.5 py-1 bg-red-500 text-white font-mono text-[9px] font-bold rounded shadow-md whitespace-nowrap">
+                <div className="w-2 h-2 rounded-full bg-red-200 shrink-0" />
+                Current Price ₹{Math.round(cur).toLocaleString()}
+            </div>
+        </div>
+    );
+};
+
+// ─── Competitor Mini Sparkline ────────────────────────────────────────────────
+const CompetitorSparkline = () => {
+    const sparkData = useMemo(() => Array.from({ length: 14 }, (_, i) => ({
+        i,
+        v: 1180 + Math.sin(i / 2.5) * 30 + i * 3,
+    })), []);
+    return (
+        <div className="h-[70px] w-full mt-3">
+            <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={sparkData} margin={{ top: 4, right: 4, left: 4, bottom: 0 }}>
+                    <defs>
+                        <linearGradient id="compGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%"  stopColor="#16a34a" stopOpacity={0.25} />
+                            <stop offset="95%" stopColor="#16a34a" stopOpacity={0}    />
+                        </linearGradient>
+                    </defs>
+                    <Area type="monotone" dataKey="v" stroke="#16a34a" strokeWidth={2} fill="url(#compGrad)" dot={false} />
+                </AreaChart>
+            </ResponsiveContainer>
+        </div>
+    );
+};
+
+// ─── Main Pricing Intelligence Dashboard ──────────────────────────────────────
+const PricingIntelligence = ({ data }) => {
+    const [sliderPrice, setSliderPrice] = useState(null);
+
+    const cur        = data?.current_price          ?? 1100;
+    const ai         = data?.ai_recommended_price   ?? 1250;
+    const pct        = data?.price_change_pct       ?? 13.6;
+    const revImpact  = data?.revenue_impact_pct     ?? 12.4;
+    const marginChg  = data?.margin_change_pct      ?? 6.8;
+    const demandFc   = data?.demand_forecast_units  ?? 14500;
+    const confidence = data?.ai_confidence_pct      ?? 93;
+    const compAvg    = data?.competitor_avg_price   ?? 1220;
+    const percentile = data?.our_percentile         ?? 85;
+
+    const activePrice  = sliderPrice ?? ai;
+    const projRevenue  = data?.projected_revenue_m  ?? ((demandFc * activePrice) / 1_000_000).toFixed(1);
+    const projMargin   = data?.expected_margin_pct  ?? 28.2;
+    const demandEst    = data?.demand_estimate_units ?? demandFc;
+
+    const whyReasons   = data?.why_reasons ?? [
+        'Rising demand trend',
+        'Competitor prices increased',
+        'Cost of raw materials up',
+    ];
+    const insightsText = data?.ai_insights_text ??
+        'AI has identified increased competitor prices and a strong demand trend, recommending a price adjustment to maximize revenue.';
+    const riskAlerts   = data?.risk_alerts ?? [
+        { level: 'warning', label: 'Competitor',   text: 'Price Drop Risk'    },
+        { level: 'warning', label: 'Supply Chain', text: 'Constraints'        },
+        { level: 'info',    label: 'Demand',       text: 'Volatility Warning' },
+    ];
+
+    const riskIcon = (level) => {
+        if (level === 'critical') return '🔴';
+        if (level === 'warning')  return '⚠️';
+        return '🔽';
+    };
+
+    return (
+        <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-500">
+
+            {/* ── KPI Banner ── */}
+            <div className="bg-green-900 rounded-lg px-4 py-2.5 flex items-center gap-4 flex-nowrap shadow-md overflow-x-auto">
+                <div className="flex items-center gap-2 shrink-0">
+                    <div className="w-3.5 h-3.5 rounded-full border-2 border-white flex items-center justify-center shrink-0">
+                        <div className="w-1 h-1 rounded-full bg-white" />
                     </div>
-                    <div className="bg-blue-50/30 border border-blue-200 rounded-lg p-5 group relative overflow-hidden">
-                        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-50"></div>
-                        <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Alpha Opportunity</div>
-                        <div className="text-[31px] font-extrabold text-shell-darkText leading-none font-mono tracking-tighter">${data?.ai_adjusted_price_usd ?? '0.00'}</div>
-                        <div className="font-mono text-[10px] text-blue-600 mt-1 uppercase tracking-widest">AGENT SUGGESTED OPTIMIZED ENTRY</div>
-                    </div>
+                    <span className="font-mono text-[9px] text-green-300 uppercase tracking-widest whitespace-nowrap">AI Recommended Price</span>
+                    <span className="text-white font-extrabold text-[16px] tracking-tight whitespace-nowrap">₹{Math.round(ai).toLocaleString()}</span>
+                </div>
+                <div className="h-5 w-px bg-green-600 shrink-0" />
+                <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-green-300 font-mono text-[9px] uppercase whitespace-nowrap">+ Revenue Impact</span>
+                    <span className="text-white font-extrabold font-mono text-[13px]">+{revImpact}%</span>
+                </div>
+                <div className="h-5 w-px bg-green-600 shrink-0" />
+                <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-green-200 font-mono text-[9px] uppercase whitespace-nowrap">• Margin Change</span>
+                    <span className="text-white font-extrabold font-mono text-[13px]">+{marginChg}%</span>
+                </div>
+                <div className="h-5 w-px bg-green-600 shrink-0" />
+                <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-green-200 font-mono text-[9px] uppercase whitespace-nowrap">• Demand Forecast</span>
+                    <span className="text-white font-extrabold font-mono text-[13px]">{demandFc.toLocaleString()} Units</span>
+                </div>
+                <div className="h-5 w-px bg-green-600 shrink-0" />
+                <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-green-200 font-mono text-[9px] uppercase whitespace-nowrap">• AI Confidence</span>
+                    <span className="text-white font-extrabold font-mono text-[13px]">{confidence}%</span>
                 </div>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-lg p-6 flex flex-col justify-between overflow-hidden relative group">
-                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20"></div>
-                <div className="relative z-10">
-                    <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-shell-blue mb-6">
-                        <Target className="w-6 h-6" />
+            {/* ── Top Row ── */}
+            <div className="grid grid-cols-[240px_1fr_230px] gap-3">
+
+                {/* Price Recommendation */}
+                <div className="bg-white border border-gray-200 rounded-lg p-5 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-40" />
+                    <h3 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight mb-4">Price Recommendation</h3>
+                    <div className="space-y-3 mb-4">
+                        <div>
+                            <span className="font-mono text-[12px] text-gray-500">Current Price: </span>
+                            <span className="font-mono text-[14px] font-bold text-shell-darkText">₹{Math.round(cur).toLocaleString()}</span>
+                        </div>
+                        <div>
+                            <div className="font-mono text-[12px] text-gray-500">AI Suggested Price:</div>
+                            <div className="flex items-baseline gap-1 flex-wrap">
+                                <span className="font-mono text-[20px] font-extrabold text-shell-darkText">₹{Math.round(ai).toLocaleString()}</span>
+                                <span className="font-mono text-[12px] text-green-600 font-bold">(+{pct}%)</span>
+                            </div>
+                        </div>
                     </div>
-                    <h3 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight mb-4 flex items-center gap-2">
-                        Strategic Insight <div className="h-px flex-1 bg-gray-100"></div>
-                    </h3>
-                    <p className="text-[12px] font-mono text-shell-darkText leading-relaxed">
-                        {data?.reasoning ?? 'The neural engine is synthesizing real-time inventory levels, weather patterns, and geopolitical volatility to determine the optimal trade vector.'}
-                    </p>
-                    
-                    <div className="mt-8 space-y-4">
-                        <h4 className="font-mono text-[9px] text-gray-400 uppercase tracking-widest">Core Risk Coefficients</h4>
-                        <div className="grid grid-cols-1 gap-2">
-                            {data?.risk_factors?.map((risk, i) => (
-                                <div key={i} className="flex items-center justify-between p-3 bg-gray-50/50 rounded border border-gray-100 hover:border-shell-blue transition-all">
-                                    <span className="text-[11px] font-extrabold text-shell-darkText uppercase tracking-tight">{risk}</span>
-                                    <span className={`font-mono text-[9px] px-2 py-0.5 rounded uppercase font-bold tracking-widest ${i === 0 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>{i === 0 ? 'High Impact' : 'Monitoring'}</span>
-                                </div>
-                            )) || <div className="animate-pulse space-y-2"><div className="h-10 bg-gray-50 rounded"></div><div className="h-10 bg-gray-50 rounded"></div></div>}
+                    <div>
+                        <div className="font-mono text-[12px] font-bold text-shell-darkText mb-2">Why this price?</div>
+                        <ul className="space-y-2">
+                            {whyReasons.map((r, i) => (
+                                <li key={i} className="flex items-center gap-2 text-[12px] font-mono text-gray-600">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-shell-blue shrink-0" />
+                                    {r}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+                {/* Demand vs Price Chart */}
+                <div className="bg-white border border-gray-200 rounded-lg p-5 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-40" />
+                    <h3 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight mb-2">Demand vs Price</h3>
+                    <div className="h-[230px]">
+                        <DemandCurveChart data={data} currentPrice={cur} aiPrice={ai} />
+                    </div>
+                </div>
+
+                {/* Competitor Pricing */}
+                <div className="bg-white border border-gray-200 rounded-lg p-5 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-40" />
+                    <h3 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight mb-4">Competitor Pricing</h3>
+                    <div className="space-y-3">
+                        <div>
+                            <div className="font-mono text-[12px] text-gray-500">Avg. Market Price:</div>
+                            <div className="font-mono text-[26px] font-extrabold text-shell-darkText leading-none mt-1">₹{Math.round(compAvg).toLocaleString()}</div>
+                        </div>
+                        <div>
+                            <div className="font-mono text-[12px] text-gray-500">Our Position:</div>
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                                <span className="font-mono text-[17px] font-extrabold text-shell-darkText">{percentile}<sup className="text-[12px]">th</sup> Percentile</span>
+                                <TrendingUp className="w-5 h-5 text-green-500 shrink-0" />
+                            </div>
+                        </div>
+                    </div>
+                    <CompetitorSparkline />
+                </div>
+            </div>
+
+            {/* ── Bottom Row ── */}
+            <div className="grid grid-cols-[240px_1fr_230px] gap-3">
+
+                {/* Margin & Revenue Simulator */}
+                <div className="bg-white border border-gray-200 rounded-lg p-5 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-40" />
+                    <h3 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight mb-4">Margin &amp; Revenue Simulator</h3>
+                    <div className="mb-4">
+                        <div className="font-mono text-[12px] text-gray-500 mb-1.5">
+                            Adjust Price: <span className="font-bold text-shell-darkText">₹{Math.round(activePrice).toLocaleString()}</span>
+                        </div>
+                        <input
+                            type="range"
+                            min={Math.round(cur * 0.80)}
+                            max={Math.round(cur * 1.40)}
+                            step={10}
+                            value={Math.round(activePrice)}
+                            onChange={e => setSliderPrice(Number(e.target.value))}
+                            className="w-full accent-shell-blue cursor-pointer"
+                        />
+                    </div>
+                    <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                            <span className="font-mono text-[12px] text-gray-500">Projected Revenue:</span>
+                            <span className="font-mono text-[12px] font-bold text-shell-darkText">₹{projRevenue}M</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="font-mono text-[12px] text-gray-500">Expected Margin:</span>
+                            <span className="font-mono text-[12px] font-bold text-shell-darkText">{projMargin}%</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="font-mono text-[12px] text-gray-500">Demand Estimate:</span>
+                            <span className="font-mono text-[12px] font-bold text-shell-darkText">{demandEst.toLocaleString()} Units</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-gray-100 relative z-10">
-                    <div className="flex items-center justify-between font-mono text-[10px] text-gray-400 uppercase tracking-widest mb-2">
-                        <span>Confidence Buffer</span>
-                        <span className="text-shell-darkText font-extrabold">84.2%</span>
+                {/* AI Insights + Actions */}
+                <div className="bg-white border border-gray-200 rounded-lg p-5 relative overflow-hidden flex flex-col gap-4">
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-40" />
+                    <div>
+                        <h3 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight mb-3">AI Insights</h3>
+                        <p className="font-mono text-[13px] text-gray-600 leading-relaxed">{insightsText}</p>
                     </div>
-                    <div className="w-full h-1.5 bg-gray-50 rounded-full overflow-hidden border border-gray-100">
-                        <div className="h-full bg-shell-yellow rounded-full w-[84%] transition-all duration-1000"></div>
+                    <div>
+                        <h3 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight mb-3">Actions</h3>
+                        <div className="flex flex-wrap gap-2">
+                            <button className="flex items-center gap-1.5 px-4 py-2.5 bg-shell-blue text-white font-mono text-[11px] font-black uppercase tracking-widest rounded hover:bg-blue-800 transition-colors shadow-sm">
+                                <ChevronRight className="w-3.5 h-3.5" /> Approve AI Price
+                            </button>
+                            <button className="px-4 py-2.5 bg-green-600 text-white font-mono text-[11px] font-black uppercase tracking-widest rounded hover:bg-green-700 transition-colors shadow-sm">
+                                Run Simulation
+                            </button>
+                            <button className="px-4 py-2.5 bg-red-500 text-white font-mono text-[11px] font-black uppercase tracking-widest rounded hover:bg-red-600 transition-colors shadow-sm">
+                                Override Price
+                            </button>
+                            <button className="flex items-center gap-1.5 px-4 py-2.5 bg-white text-shell-darkText border border-gray-300 font-mono text-[11px] font-black uppercase tracking-widest rounded hover:bg-gray-50 transition-colors shadow-sm">
+                                <FileText className="w-3.5 h-3.5" /> Export Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Risk Alerts */}
+                <div className="bg-white border border-gray-200 rounded-lg p-5 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-40" />
+                    <h3 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight mb-4">Risk Alerts</h3>
+                    <div className="space-y-4">
+                        {riskAlerts.map((alert, i) => (
+                            <div key={i} className="flex items-start gap-2.5">
+                                <span className="text-[17px] leading-none mt-0.5 shrink-0">{riskIcon(alert.level)}</span>
+                                <div>
+                                    <span className="font-mono text-[12px] font-extrabold text-shell-darkText uppercase">{alert.label} </span>
+                                    <span className="font-mono text-[12px] text-gray-600">{alert.text}</span>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -142,7 +359,7 @@ const MarketTerminal = ({ data }) => (
                 { label: 'Neural Precision', value: '98.4%', sub: 'Ensemble Score', color: 'text-shell-blue' }
             ].map((kpi, i) => (
                 <div key={i} className="bg-white border border-gray-200 p-5 rounded-lg relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20"></div>
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20" />
                     <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">{kpi.label}</div>
                     <div className={`text-[31px] font-extrabold leading-none uppercase ${kpi.color}`}>{kpi.value}</div>
                     <div className="font-mono text-[9px] text-gray-400 mt-1 uppercase tracking-widest">{kpi.sub}</div>
@@ -188,7 +405,7 @@ const MarketTerminal = ({ data }) => (
 
             <div className="space-y-4">
                 <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden group h-full flex flex-col">
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-20"></div>
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-20" />
                     <div className="flex items-center justify-between mb-8">
                         <h4 className="font-mono text-[10px] text-gray-400 uppercase tracking-widest flex items-center gap-2">
                              <Zap className="w-3 h-3 text-shell-yellow" /> Strategic Protocol
@@ -198,10 +415,8 @@ const MarketTerminal = ({ data }) => (
                     <div className="space-y-6 flex-1">
                         {data?.ai_recommendations?.map((rec, i) => (
                             <div key={i} className="flex gap-3">
-                                <div className="w-1.5 h-1.5 rounded-full bg-shell-blue mt-1.5 shrink-0"></div>
-                                <p className="text-[12px] font-mono text-shell-darkText leading-relaxed">
-                                    {rec}
-                                </p>
+                                <div className="w-1.5 h-1.5 rounded-full bg-shell-blue mt-1.5 shrink-0" />
+                                <p className="text-[12px] font-mono text-shell-darkText leading-relaxed">{rec}</p>
                             </div>
                         ))}
                     </div>
@@ -222,7 +437,7 @@ const ChurnRiskCenter = ({ data }) => {
         <div className="grid grid-cols-1 xl:grid-cols-[1fr_1.3fr] gap-4 animate-in fade-in slide-in-from-bottom-2 duration-700">
             <div className="space-y-4">
                 <div className="bg-white border border-gray-200 rounded-lg p-10 flex flex-col items-center justify-center relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20"></div>
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20" />
                     <span className="font-mono text-[10px] text-gray-400 tracking-widest uppercase mb-10">Risk Probability Index</span>
                     
                     <div className="relative w-56 h-56">
@@ -260,7 +475,7 @@ const ChurnRiskCenter = ({ data }) => {
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20"></div>
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20" />
                     <h4 className="font-mono text-[10px] text-gray-400 uppercase tracking-widest mb-4">Probability Evolution</h4>
                     <div className="h-[100px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
@@ -273,7 +488,7 @@ const ChurnRiskCenter = ({ data }) => {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-8 h-full flex flex-col relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20"></div>
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20" />
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h3 className="text-[15px] font-extrabold text-shell-darkText uppercase tracking-tight">Strategic Retention Protocol</h3>
@@ -291,7 +506,7 @@ const ChurnRiskCenter = ({ data }) => {
                             <div className="space-y-3">
                                 {data?.primary_drivers?.map((driver, i) => (
                                     <div key={i} className="flex items-center gap-3">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                                        <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
                                         <span className="text-[12px] font-extrabold text-shell-darkText uppercase tracking-tight">{driver}</span>
                                     </div>
                                 ))}
@@ -345,7 +560,7 @@ const ContractRiskVector = ({ data }) => {
     return (
         <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-4 animate-in fade-in slide-in-from-bottom-2 duration-700">
             <div className="bg-white border border-gray-200 rounded-lg p-8 flex flex-col relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20"></div>
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20" />
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h3 className="text-[15px] font-extrabold text-shell-darkText uppercase tracking-tight">Contract Risk Vector Map</h3>
@@ -384,7 +599,7 @@ const ContractRiskVector = ({ data }) => {
 
             <div className="space-y-4">
                 <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden h-full flex flex-col">
-                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20"></div>
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-blue to-transparent opacity-20" />
                     <div className="flex items-center gap-4 mb-8">
                         <div className="w-12 h-12 rounded bg-gray-50 border border-gray-100 flex items-center justify-center">
                             <FileText className="w-6 h-6 text-shell-blue" />
@@ -449,7 +664,7 @@ export function CommercialAgent() {
         
         let payload = {};
         if (agentKey === 'pricing') {
-            payload = { commodity: "Brent Crude", market_data: { current_price: 85.50, volatility: 0.15 } };
+            payload = { commodity: "Brent Crude", market_data: { current_price: 1100, spot_price: 1100, volatility: 0.15 } };
         } else if (agentKey === 'arbitrage') {
             payload = { market_prices: { "Rotterdam": 85.50, "Singapore": 88.20, "Houston": 84.10 } };
         } else if (agentKey === 'churn') {
@@ -462,9 +677,29 @@ export function CommercialAgent() {
             // Crisis Orchestrator Simulation Response
             setTimeout(() => {
                 setResult({
-                    technical_price_usd: 88.50, // Base increased heavily
-                    ai_adjusted_price_usd: 94.20, // AI suggests even higher due to scarcity
-                    reasoning: 'CRITICAL SUPPLY CONSTRAINT: Neural engine has intercepted a severed logistics route (Fire Damage) reducing global supply availability by 4.2%. Applying a severe scarcity premium to current Brent Crude spot allocations.',
+                    current_price: 1100,
+                    ai_recommended_price: 1310,
+                    price_change_pct: 19.1,
+                    revenue_impact_pct: 17.4,
+                    margin_change_pct: 9.6,
+                    demand_forecast_units: 12800,
+                    ai_confidence_pct: 91,
+                    competitor_avg_price: 1280,
+                    our_percentile: 92,
+                    projected_revenue_m: 16.8,
+                    expected_margin_pct: 31.4,
+                    demand_estimate_units: 12800,
+                    why_reasons: ['Severe supply disruption detected', 'Logistics rerouting in progress', 'Scarcity premium applied'],
+                    ai_insights_text: 'CRITICAL SUPPLY CONSTRAINT: Neural engine has intercepted a severed logistics route (Fire Damage) reducing global supply availability by 4.2%. Applying a severe scarcity premium.',
+                    risk_alerts: [
+                        { level: 'critical', label: 'Supply Route',  text: 'Severed – Fire Damage'    },
+                        { level: 'critical', label: 'Allocation',    text: 'Scarcity Premium Active'    },
+                        { level: 'warning',  label: 'Geopolitical',  text: 'Tension Escalation Risk'    },
+                    ],
+                    // legacy
+                    technical_price_usd: 1100,
+                    ai_adjusted_price_usd: 1310,
+                    reasoning: 'CRITICAL SUPPLY CONSTRAINT: Neural engine has intercepted a severed logistics route.',
                     risk_factors: ['Severe Supply Disruption', 'Logistics Rerouting Delay', 'Geopolitical Tension'],
                 });
                 setLoading(false);
@@ -504,7 +739,7 @@ export function CommercialAgent() {
             <div className="flex flex-col items-center justify-center min-h-[500px] animate-in fade-in duration-500">
                 <div className="relative mb-8 text-shell-blue">
                     <Activity className="w-12 h-12 animate-pulse" />
-                    <div className="absolute -inset-4 border border-shell-blue rounded-full animate-ping opacity-20"></div>
+                    <div className="absolute -inset-4 border border-shell-blue rounded-full animate-ping opacity-20" />
                 </div>
                 <div className="text-center">
                     <h3 className="font-mono text-[11px] font-black uppercase tracking-[0.3em] text-shell-darkText mb-1">Neural Stream Active</h3>
@@ -528,11 +763,11 @@ export function CommercialAgent() {
 
         try {
             switch(activeAgent) {
-                case 'pricing': return <PricingIntelligence data={result} />;
+                case 'pricing':   return <PricingIntelligence data={result} />;
                 case 'arbitrage': return <MarketTerminal data={result} />;
-                case 'churn': return <ChurnRiskCenter data={result} />;
-                case 'contract': return <ContractRiskVector data={result} />;
-                default: return <div className="p-20 text-center font-mono text-[10px] tracking-widest uppercase text-gray-300">System Standby</div>;
+                case 'churn':     return <ChurnRiskCenter data={result} />;
+                case 'contract':  return <ContractRiskVector data={result} />;
+                default:          return <div className="p-20 text-center font-mono text-[10px] tracking-widest uppercase text-gray-300">System Standby</div>;
             }
         } catch (e) {
             return (
@@ -546,9 +781,9 @@ export function CommercialAgent() {
     };
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 h-full overflow-hidden flex flex-col p-6 pt-0">
+        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 h-full overflow-hidden flex flex-col pt-0 px-1">
             {/* Agent Control Bar */}
-            <div className="flex items-center gap-1 mb-8 border-b border-gray-200 shrink-0">
+            <div className="flex items-center gap-1 mb-2 border-b border-gray-200 shrink-0">
                 {agents.map((agent) => (
                     <button
                         key={agent.id}
