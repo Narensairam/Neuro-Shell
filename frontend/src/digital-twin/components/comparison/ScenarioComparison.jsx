@@ -35,7 +35,7 @@ export function ScenarioComparison() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-950 overflow-y-auto custom-scrollbar p-6">
+    <div className="flex-1 flex flex-col w-full bg-slate-950 p-6 overflow-y-auto custom-scrollbar min-h-0">
       <div className="mb-6 flex justify-between items-center">
         <div>
           <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
@@ -56,7 +56,7 @@ export function ScenarioComparison() {
       </div>
 
       <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-5xl mx-auto w-full overflow-hidden flex flex-col">
-        <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
+        <div className="p-6">
           <div className="flex gap-4 mb-8">
             <select
               value={compareScenario.id}

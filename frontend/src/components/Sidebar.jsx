@@ -142,19 +142,15 @@ export function Sidebar({ currentView, setCurrentView, role }) {
                                 key={item.id}
                                 onClick={() => setCurrentView(item.id)}
                                 className={cn(
-                                    "flex items-center gap-3 px-5 py-2.5 cursor-pointer text-[13.5px] transition-all border-l-2",
+                                    "flex items-center gap-3 px-5 py-2.5 cursor-pointer text-[13.5px] transition-all border-l-[3px]",
                                     currentView === item.id
-                                        ? item.id === 'commercial' 
-                                            ? "bg-blue-50/50 border-shell-blue text-shell-blue font-semibold"
-                                            : "bg-amber-50/50 border-shell-yellow text-shell-darkText font-semibold"
+                                        ? "bg-red-50 border-shell-red text-shell-darkText font-bold"
                                         : "border-transparent text-gray-500 hover:bg-gray-50 hover:text-shell-darkText"
                                 )}
                             >
                                 <div className={cn(
                                     "w-5 text-center flex-shrink-0",
-                                    currentView === item.id 
-                                        ? item.id === 'commercial' ? "text-shell-blue" : "text-shell-yellow"
-                                        : "text-gray-400"
+                                    currentView === item.id ? "text-shell-red" : "text-gray-400"
                                 )}>
                                     {item.icon}
                                 </div>

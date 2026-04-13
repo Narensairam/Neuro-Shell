@@ -51,7 +51,7 @@ function FloatingTooltip({ vessel, mousePos }) {
         <div
             style={{
                 position: 'fixed', left, top, width: tipW, zIndex: 9999,
-                pointerEvents: 'auto',
+                pointerEvents: 'none',
                 boxShadow: `0 8px 40px rgba(0,0,0,0.6), 0 0 30px ${v.color}33`,
                 fontFamily: 'inherit',
             }}
@@ -195,11 +195,30 @@ function FloatingTooltip({ vessel, mousePos }) {
     );
 }
 
-// ─── Map mouse tracker ────────────────────────────────────────────────────────
-function MouseTracker({ onMove }) {
-    useMapEvents({ mousemove: (e) => onMove({ x: e.originalEvent.clientX, y: e.originalEvent.clientY }) });
+// ─── Proximity-aware mouse tracker ───────────────────────────────────────────
+function ProximityTracker({ onMove, vessels, onClearHover }) {
+    const map = useMap();
+    useMapEvents({
+        mousemove(e) {
+            const { clientX: mx, clientY: my } = e.originalEvent;
+            onMove({ x: mx, y: my });
+
+            // Project each vessel to screen coords; clear tooltip if none are nearby
+            const THRESHOLD = 48;
+            const rect = map.getContainer().getBoundingClientRect();
+            const isNear = vessels.some(v => {
+                try {
+                    const pt = map.latLngToContainerPoint([v.lat, v.lng]);
+                    return Math.hypot((pt.x + rect.left) - mx, (pt.y + rect.top) - my) < THRESHOLD;
+                } catch { return false; }
+            });
+            if (!isNear) onClearHover();
+        },
+        mouseout() { onClearHover(); },
+    });
     return null;
 }
+
 
 // ─── Map FlyTo ────────────────────────────────────────────────────────────────
 function MapFlyTo({ vessel }) {
@@ -210,80 +229,124 @@ function MapFlyTo({ vessel }) {
     return null;
 }
 
-// ─── KPI Bar ─────────────────────────────────────────────────────────────────
-function KpiBar({ vessels }) {
+// ─── Static Sidebar ──────────────────────────────────────────────────────────
+function RouteSidebar({ vessels }) {
     const avgSpeed = vessels.length
         ? (vessels.reduce((s, v) => s + parseFloat(v.speed || 0), 0) / vessels.length).toFixed(1)
         : '--';
     const totalCostSaved = vessels.reduce((s, v) => s + (v.costSaved || 0), 0);
     const totalFuelSaved = vessels.reduce((s, v) => s + (v.fuelSavedMT || 0), 0);
+    const reroutingCount = vessels.filter(v => v.reroutingStatus !== 'None').length;
 
     return (
-        <div className="flex items-center gap-6 px-6 py-2.5 bg-[#0a0c10] border-b border-white/10 shrink-0">
-            <div className="flex items-center gap-2">
-                <Ship className="w-3.5 h-3.5 text-yellow-400" />
-                <span className="text-[9px] text-gray-500 uppercase tracking-widest">Vessels</span>
-                <span className="text-[14px] font-black text-white ml-1">{vessels.length}</span>
+        <div className="w-[320px] bg-gray-50 border-l border-gray-200 flex flex-col shrink-0 overflow-y-auto h-full p-4 space-y-4 shadow-xl z-20">
+            {/* Header */}
+            <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col relative overflow-hidden group">
+                <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                        <Activity className="w-4 h-4 text-shell-blue" />
+                        <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Fleet Intelligence</h2>
+                    </div>
+                    <div className="px-2 py-0.5 bg-green-50 text-green-700 rounded text-[9px] font-bold uppercase tracking-wider flex items-center gap-1.5 border border-green-100">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div> Live
+                    </div>
+                </div>
+                <div className="text-[10px] text-shell-mutedText font-medium leading-tight">Neural Simulation Environment</div>
             </div>
-            <div className="h-4 w-px bg-white/10"></div>
-            <div className="flex items-center gap-2">
-                <Navigation className="w-3.5 h-3.5 text-cyan-400" />
-                <span className="text-[9px] text-gray-500 uppercase tracking-widest">Avg Speed</span>
-                <span className="text-[14px] font-black text-white ml-1">{avgSpeed} <span className="text-[10px] text-gray-500">kn</span></span>
+
+            {/* Core Metrics */}
+            <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm group hover:border-shell-blue transition-all">
+                    <div className="flex items-center gap-1.5 mb-2">
+                        <Ship className="w-3 h-3 text-shell-blue" />
+                        <span className="text-[9px] text-shell-mutedText uppercase font-black tracking-widest">Active Fleet</span>
+                    </div>
+                    <div className="text-[26px] font-black text-shell-darkText leading-none">{vessels.length}</div>
+                </div>
+                <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm group hover:border-cyan-500 transition-all">
+                    <div className="flex items-center gap-1.5 mb-2">
+                        <Navigation className="w-3 h-3 text-cyan-500" />
+                        <span className="text-[9px] text-shell-mutedText uppercase font-black tracking-widest">Avg Speed</span>
+                    </div>
+                    <div className="text-[26px] font-black text-shell-darkText leading-none">{avgSpeed}<span className="text-[12px] text-gray-400 font-normal ml-1">kn</span></div>
+                </div>
             </div>
-            <div className="h-4 w-px bg-white/10"></div>
-            <div className="flex items-center gap-2">
-                <DollarSign className="w-3.5 h-3.5 text-green-400" />
-                <span className="text-[9px] text-gray-500 uppercase tracking-widest">Cost Saved</span>
-                <span className="text-[14px] font-black text-green-400 ml-1">${(totalCostSaved / 1000).toFixed(0)}K</span>
+
+            {/* Impact Metrics */}
+            <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col group hover:border-green-400 transition-all">
+                <div className="text-[11px] font-black text-shell-darkText uppercase tracking-tight mb-4">Optimization Impact</div>
+                <div className="space-y-4">
+                    <div className="flex justify-between items-end border-b border-gray-50 pb-2">
+                        <div>
+                            <div className="flex items-center gap-1.5 mb-1 text-[9px] font-black text-green-600 uppercase tracking-widest">
+                                <DollarSign className="w-3 h-3" /> Cost Reduced
+                            </div>
+                            <div className="text-[22px] font-black text-shell-darkText leading-none">${(totalCostSaved / 1000).toFixed(0)}K</div>
+                        </div>
+                        <div className="text-[10px] font-black text-green-500 uppercase tracking-tight">↑ Value</div>
+                    </div>
+                    <div className="flex justify-between items-end">
+                        <div>
+                            <div className="flex items-center gap-1.5 mb-1 text-[9px] font-black text-orange-500 uppercase tracking-widest">
+                                <Fuel className="w-3 h-3" /> Fuel Saved
+                            </div>
+                            <div className="text-[22px] font-black text-shell-darkText leading-none">{totalFuelSaved} <span className="text-[12px] font-normal text-gray-400">MT</span></div>
+                        </div>
+                        <div className="text-[10px] font-black text-orange-400 uppercase tracking-tight">↓ Burn</div>
+                    </div>
+                </div>
             </div>
-            <div className="h-4 w-px bg-white/10"></div>
-            <div className="flex items-center gap-2">
-                <Fuel className="w-3.5 h-3.5 text-orange-400" />
-                <span className="text-[9px] text-gray-500 uppercase tracking-widest">Fuel Saved</span>
-                <span className="text-[14px] font-black text-orange-400 ml-1">{totalFuelSaved} <span className="text-[10px] text-gray-500">MT</span></span>
-            </div>
-            <div className="h-4 w-px bg-white/10"></div>
-            <div className="flex items-center gap-2">
-                <Zap className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-[9px] text-gray-500 uppercase tracking-widest">AI Rerouting</span>
-                <span className="text-[13px] font-black text-amber-400 ml-1">{vessels.filter(v => v.reroutingStatus !== 'None').length} active</span>
-            </div>
-            <div className="ml-auto flex items-center gap-1.5">
-                <RefreshCw className="w-3 h-3 text-yellow-400 animate-spin" style={{ animationDuration: '3s' }} />
-                <span className="text-[9px] font-mono text-yellow-400 uppercase">Simulation Live</span>
-                <span className="text-[8px] text-gray-600 ml-1">· Set AISSTREAM_KEY for real AIS</span>
+
+            {/* Rerouting Status */}
+            <div className="bg-gradient-to-br from-white to-amber-50/30 border border-gray-100 rounded-xl p-4 shadow-sm group hover:border-amber-300 transition-all mt-auto flex flex-col justify-end">
+                <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded bg-amber-50 flex items-center justify-center shrink-0 mt-0.5">
+                        <Zap className="w-4 h-4 text-amber-500" />
+                    </div>
+                    <div>
+                        <div className="text-[11px] font-black text-shell-darkText uppercase tracking-tight">AI Active Diversions</div>
+                        <div className="text-[24px] font-black text-amber-600 leading-none mt-1.5 mb-1">{reroutingCount} <span className="text-[12px] font-bold text-shell-mutedText lowercase">ships</span></div>
+                        <div className="text-[9px] text-shell-mutedText font-medium mt-1">Currently taking AI computed evasion paths.</div>
+                    </div>
+                </div>
             </div>
         </div>
     );
 }
 
 // ─── Legend ──────────────────────────────────────────────────────────────────
-function MapLegend({ vessels }) {
+function MapLegend({ vessels, selectedVesselMmsi, setSelectedVesselMmsi }) {
     return (
-        <div className="absolute bottom-6 left-6 z-[1000] bg-[#0a0c10]/95 backdrop-blur-md border border-white/10 rounded-xl p-3.5 min-w-[190px] shadow-2xl pointer-events-none">
-            <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-2.5">Fleet Legend</div>
-            {vessels.map(v => (
-                <div key={v.mmsi} className="flex items-center gap-2 mb-2">
-                    <div style={{ backgroundColor: v.color }} className="w-2.5 h-2.5 rounded-full shrink-0"></div>
-                    <span className="text-[10px] font-bold text-white truncate">{v.name}</span>
-                    {v.reroutingStatus !== 'None' && (
-                        <AlertTriangle className="w-2.5 h-2.5 text-amber-400 shrink-0 ml-auto" />
-                    )}
-                </div>
-            ))}
-            <div className="border-t border-white/10 mt-2.5 pt-2.5 space-y-1.5">
+        <div className="absolute bottom-6 left-6 z-[1000] bg-white/90 backdrop-blur-md border border-gray-200 rounded-xl p-3.5 min-w-[210px] shadow-lg pointer-events-auto">
+            <div className="flex justify-between items-center mb-2.5">
+                 <div className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Fleet Select</div>
+                 {selectedVesselMmsi && (
+                     <button onClick={() => setSelectedVesselMmsi(null)} className="text-[9px] text-blue-600 hover:underline font-bold uppercase">Show All</button>
+                 )}
+            </div>
+            <div className="max-h-[220px] overflow-y-auto custom-scrollbar pr-1 space-y-1.5">
+                {vessels.map(v => (
+                    <div 
+                        key={v.mmsi} 
+                        onClick={() => setSelectedVesselMmsi(selectedVesselMmsi === v.mmsi ? null : v.mmsi)}
+                        className={`flex items-center gap-2 p-1.5 rounded cursor-pointer transition-colors ${selectedVesselMmsi === v.mmsi ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-100 border border-transparent'}`}
+                    >
+                        <div style={{ backgroundColor: v.color }} className="w-2.5 h-2.5 rounded-full shrink-0"></div>
+                        <span className={`text-[11px] truncate ${selectedVesselMmsi === v.mmsi ? 'font-black text-shell-darkText' : 'font-bold text-gray-700'}`}>{v.name}</span>
+                        {v.reroutingStatus !== 'None' && (
+                            <AlertTriangle className="w-3 h-3 text-amber-500 shrink-0 ml-auto" />
+                        )}
+                    </div>
+                ))}
+            </div>
+            <div className="border-t border-gray-200 mt-2.5 pt-2.5 space-y-2">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-0.5 bg-white/40 rounded flex-shrink-0"></div>
-                    <span className="text-[8px] text-gray-500">Traveled route</span>
+                    <div className="w-8 h-0.5 bg-gray-400 rounded flex-shrink-0"></div>
+                    <span className="text-[9px] font-bold text-gray-600 uppercase">Standard Route</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="w-8 border-t-2 border-dashed border-white/25 flex-shrink-0"></div>
-                    <span className="text-[8px] text-gray-500">AI optimized route</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <AlertTriangle className="w-2.5 h-2.5 text-amber-400" />
-                    <span className="text-[8px] text-gray-500">Active rerouting</span>
+                    <div className="w-8 border-t-[2.5px] border-dotted border-shell-blue flex-shrink-0"></div>
+                    <span className="text-[9px] font-bold text-gray-600 uppercase">AI Optimized</span>
                 </div>
             </div>
         </div>
@@ -294,6 +357,7 @@ function MapLegend({ vessels }) {
 export function RouteOptimizationView() {
     const [vessels, setVessels] = useState([]);
     const [hoveredVessel, setHoveredVessel] = useState(null);
+    const [selectedVesselMmsi, setSelectedVesselMmsi] = useState(null);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [loading, setLoading] = useState(true);
     const intervalRef = useRef(null);
@@ -317,7 +381,7 @@ export function RouteOptimizationView() {
 
     const handleMouseMove = useCallback((pos) => setMousePos(pos), []);
     const handleMarkerEnter = useCallback((v) => setHoveredVessel(v), []);
-    const handleMarkerLeave = useCallback(() => setHoveredVessel(null), []);
+    const handleClearHover = useCallback(() => setHoveredVessel(null), []);
 
     if (loading) return (
         <div className="flex-1 flex items-center justify-center bg-[#0a0c10] text-white h-full">
@@ -329,11 +393,8 @@ export function RouteOptimizationView() {
     );
 
     return (
-        // This outer div fills exactly the space given by SupplyChainView, no extra padding
-        <div className="flex flex-col h-full" style={{ background: '#0a0c10' }}>
-            <KpiBar vessels={vessels} />
-
-            <div className="flex-1 relative" style={{ minHeight: 0 }}>
+        <div className="flex flex-row h-full bg-gray-50">
+            <div className="flex-1 relative z-10" style={{ minWidth: 0 }}>
                 <MapContainer
                     center={[20, 20]}
                     zoom={3}
@@ -343,52 +404,45 @@ export function RouteOptimizationView() {
                     preferCanvas={true}
                 >
                     <TileLayer
-                        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                         attribution="© CartoDB"
                         maxZoom={18}
                     />
 
-                    <MouseTracker onMove={handleMouseMove} />
-                    <MapFlyTo vessel={hoveredVessel} />
+                    <ProximityTracker onMove={handleMouseMove} vessels={vessels} onClearHover={handleClearHover} />
+                    <MapFlyTo vessel={selectedVesselMmsi ? vessels.find(v => v.mmsi === selectedVesselMmsi) : hoveredVessel} />
 
-                    {vessels.map(v => (
+                    {vessels.map(v => {
+                        const showRoutes = !selectedVesselMmsi || selectedVesselMmsi === v.mmsi;
+                        const isHighlighted = hoveredVessel?.mmsi === v.mmsi || selectedVesselMmsi === v.mmsi;
+                        return (
                         <div key={v.mmsi}>
-                            {v.trail?.length > 1 && (
-                                <Polyline positions={v.trail}
-                                    pathOptions={{ color: v.color, weight: 2.5, opacity: 0.6 }} />
+                            {showRoutes && v.plannedWaypoints?.length > 1 && (
+                                <Polyline positions={v.plannedWaypoints}
+                                    pathOptions={{ color: v.color, weight: 2.5, opacity: 0.5 }} />
                             )}
-                            {v.remaining?.length > 1 && (
-                                <Polyline positions={v.remaining}
-                                    pathOptions={{ color: v.color, weight: 2, opacity: 0.8, dashArray: '10, 8' }} />
-                            )}
-                            {v.optimizedWaypoints?.length > 1 && (
+                            {showRoutes && v.optimizedWaypoints?.length > 1 && (
                                 <Polyline positions={v.optimizedWaypoints}
-                                    pathOptions={{ color: v.color, weight: 1, opacity: 0.15 }} />
+                                    pathOptions={{ color: v.color, weight: 3, opacity: 0.9, dashArray: '6, 8' }} />
                             )}
                             <Marker
                                 position={[v.lat, v.lng]}
-                                icon={createShipIcon(v.color, v.heading, hoveredVessel?.mmsi === v.mmsi)}
+                                icon={createShipIcon(v.color, v.heading, isHighlighted)}
                                 eventHandlers={{
                                     mouseover: () => handleMarkerEnter(v),
-                                    mouseout: handleMarkerLeave,
-                                    click: () => handleMarkerEnter(hoveredVessel?.mmsi === v.mmsi ? null : v),
+                                    click: () => setSelectedVesselMmsi(selectedVesselMmsi === v.mmsi ? null : v.mmsi),
                                 }}
                             />
                         </div>
-                    ))}
+                    )})}
                 </MapContainer>
 
-                <MapLegend vessels={vessels} />
-
-                {/* Vignette */}
-                <div className="absolute inset-0 pointer-events-none"
-                    style={{
-                        background: 'radial-gradient(ellipse at center, transparent 55%, rgba(8,10,16,0.45) 100%)',
-                        zIndex: 999
-                    }} />
+                <MapLegend vessels={vessels} selectedVesselMmsi={selectedVesselMmsi} setSelectedVesselMmsi={setSelectedVesselMmsi} />
             </div>
 
-            {/* Floating tooltip — rendered OUTSIDE map, in fixed position, always visible */}
+            <RouteSidebar vessels={vessels} />
+
+            {/* Floating tooltip */}
             {hoveredVessel && (
                 <FloatingTooltip vessel={hoveredVessel} mousePos={mousePos} />
             )}
