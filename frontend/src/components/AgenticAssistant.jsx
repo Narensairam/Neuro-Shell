@@ -11,6 +11,10 @@ import { cn } from './Sidebar';
 const OPENROUTER_API_KEY = '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';
 const MODEL = 'deepseek/deepseek-chat';
 
+// ElevenLabs TTS configuration
+const ELEVENLABS_API_KEY = 'sk_8041ed035be065e72f316745cff450da122329ccdee15f08';
+const ELEVENLABS_VOICE_ID = 'zGjIP4SZlMnY9m93k97r';
+
 // All navigable views in the Neuro Shell ERP
 const VIEWS = {
     command: 'Strategic Steering Hub',
@@ -250,64 +254,82 @@ export function AgenticAssistant({ setCurrentView }) {
     const chatHistoryRef = useRef([]);
     const recognitionRef = useRef(null);
     const demoTimeoutRef = useRef(null);
-    const voicesRef = useRef([]);
+    const currentAudioRef = useRef(null);
 
     const scrollBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => { scrollBottom(); }, [messages, isThinking]);
     useEffect(() => { if (isOpen) setTimeout(() => inputRef.current?.focus(), 200); }, [isOpen]);
-    useEffect(() => { return () => { window.speechSynthesis?.cancel(); clearTimeout(demoTimeoutRef.current); }; }, []);
-
-    // Load voices eagerly and cache them
     useEffect(() => {
-        const loadVoices = () => {
-            voicesRef.current = window.speechSynthesis?.getVoices() || [];
+        return () => {
+            if (currentAudioRef.current) {
+                currentAudioRef.current.pause();
+                currentAudioRef.current = null;
+            }
+            clearTimeout(demoTimeoutRef.current);
         };
-        loadVoices();
-        window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
-        return () => window.speechSynthesis?.removeEventListener('voiceschanged', loadVoices);
     }, []);
 
-    // Female voice selector — prioritises named female voices
-    const getFemaleVoice = useCallback(() => {
-        const voices = voicesRef.current;
-        if (!voices.length) return null;
+    // ElevenLabs TTS — streams MP3 and plays via Audio API
+    const speakText = useCallback(async (text) => {
+        if (isMuted) return;
 
-        const femalePreferences = [
-            v => v.name.includes('Zira'),
-            v => v.name.includes('Samantha'),
-            v => v.name.includes('Aria'),
-            v => v.name.includes('Susan'),
-            v => v.name.includes('Karen'),
-            v => v.name.includes('Moira'),
-            v => v.name.includes('Tessa'),
-            v => v.name.includes('Victoria'),
-            v => v.name.includes('Google US English') && v.name.toLowerCase().includes('female'),
-            v => v.name.includes('Microsoft') && v.lang.startsWith('en') && !v.name.includes('David') && !v.name.includes('Mark') && !v.name.includes('George') && !v.name.includes('James'),
-            v => v.lang.startsWith('en-US'),
-            v => v.lang.startsWith('en'),
-        ];
-
-        for (const test of femalePreferences) {
-            const found = voices.find(test);
-            if (found) return found;
+        // Stop any audio currently playing
+        if (currentAudioRef.current) {
+            currentAudioRef.current.pause();
+            currentAudioRef.current = null;
         }
-        return voices[0];
-    }, []);
 
-    // Speech Output with female voice
-    const speakText = useCallback((text) => {
-        if (isMuted || !('speechSynthesis' in window)) return;
-        window.speechSynthesis.cancel();
         const cleanText = String(text || '').replace(/[*#_`~\[\]]/g, '').trim();
         if (!cleanText) return;
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-        utterance.rate = 1.0;
-        utterance.pitch = 1.1;
-        utterance.volume = 1.0;
-        const voice = getFemaleVoice();
-        if (voice) utterance.voice = voice;
-        window.speechSynthesis.speak(utterance);
-    }, [isMuted, getFemaleVoice]);
+
+        try {
+            const response = await fetch(
+                `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'xi-api-key': ELEVENLABS_API_KEY,
+                        'Content-Type': 'application/json',
+                        'Accept': 'audio/mpeg',
+                    },
+                    body: JSON.stringify({
+                        text: cleanText,
+                        model_id: 'eleven_multilingual_v2',
+                        voice_settings: {
+                            stability: 0.45,
+                            similarity_boost: 0.80,
+                            style: 0.15,
+                            use_speaker_boost: true,
+                        },
+                    }),
+                }
+            );
+
+            if (!response.ok) {
+                console.error('ElevenLabs TTS error:', response.status, await response.text());
+                return;
+            }
+
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            currentAudioRef.current = audio;
+
+            audio.onended = () => {
+                URL.revokeObjectURL(audioUrl);
+                if (currentAudioRef.current === audio) currentAudioRef.current = null;
+            };
+
+            audio.onerror = () => {
+                URL.revokeObjectURL(audioUrl);
+                if (currentAudioRef.current === audio) currentAudioRef.current = null;
+            };
+
+            await audio.play();
+        } catch (err) {
+            console.error('ElevenLabs TTS exception:', err);
+        }
+    }, [isMuted]);
 
     // Speech Input — auto-sends when done speaking
     const toggleListen = () => {
@@ -401,7 +423,10 @@ export function AgenticAssistant({ setCurrentView }) {
 
     const skipDemo = useCallback(() => {
         clearTimeout(demoTimeoutRef.current);
-        window.speechSynthesis?.cancel();
+        if (currentAudioRef.current) {
+            currentAudioRef.current.pause();
+            currentAudioRef.current = null;
+        }
         setIsDemoRunning(false);
         setDemoStep(0);
         const skipMsg = "Demo paused. I'm back online — what would you like to do next?";
