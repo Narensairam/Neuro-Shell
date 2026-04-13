@@ -24,6 +24,16 @@ export function CommercialView({ setCurrentView }) {
             .catch(() => setData(MOCK_COMMERCIAL));
     }, []);
 
+    useEffect(() => {
+        const handleDemoTab = (e) => {
+            if (e.detail?.view === 'commercial' && e.detail?.tab) {
+                setActiveTab(e.detail.tab);
+            }
+        };
+        window.addEventListener('DEMO_GOTO_TAB', handleDemoTab);
+        return () => window.removeEventListener('DEMO_GOTO_TAB', handleDemoTab);
+    }, []);
+
     if (!data) return null;
 
     return (

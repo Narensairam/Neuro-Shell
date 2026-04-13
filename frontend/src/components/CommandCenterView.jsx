@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Factory, Ship, TrendingUp, TrendingDown, CircleDollarSign, HardHat, ShieldCheck, Flame, Bell, Info, AlertCircle, AlertTriangle, CheckCircle2, ChevronRight, BarChart3, Globe2, Activity, Zap, Cpu, Layers, X, Target, Leaf, ShieldAlert, LineChart, Wind } from 'lucide-react';
+import { Factory, Ship, TrendingUp, TrendingDown, CircleDollarSign, HardHat, ShieldCheck, Flame, Bell, Info, AlertCircle, AlertTriangle, CheckCircle2, ChevronRight, BarChart3, Globe2, Activity, Zap, Cpu, Layers, X, Target, Leaf, ShieldAlert, LineChart, Wind, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { RouteOptimizationView } from './RouteOptimizationView';
+import { HRWorkforceAgent } from './HRWorkforceAgent';
 
 export function CommandCenterView({ setCurrentView }) {
     const [fireAlert, setFireAlert] = useState(null);
@@ -255,262 +257,218 @@ export function CommandCenterView({ setCurrentView }) {
                 </div>
             </div>
 
-            {/* TRIPARTITE INTELLIGENCE GRID */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
-                {/* 1. EXECUTIVE ESG & SAFETY PORTAL (Business Knowledge) */}
-                <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col group h-full">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                            <ShieldCheck className="text-red-600 w-4 h-4" />
-                            <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">ESG & Safety Control</h2>
+            {/* MAIN DASHBOARD GRID — matches wireframe layout */}
+            <div className="grid gap-4 mb-4" style={{ gridTemplateColumns: '3fr 2fr' }}>
+
+                {/* ── LEFT COLUMN ── */}
+                <div className="flex flex-col gap-4">
+
+                    {/* Route Optimization Map (large) */}
+                    <div className="bg-white border border-gray-100 rounded-xl shadow-sm flex flex-col overflow-hidden" style={{ height: '420px' }}>
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
+                            <div className="flex items-center gap-2">
+                                <Ship className="text-shell-blue w-4 h-4" />
+                                <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Route Optimization Agent</h2>
+                            </div>
+                            <div className="flex items-center gap-1.5 px-2 py-1 bg-green-50 text-green-700 rounded-sm border border-green-100">
+                                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                                <span className="text-[9px] font-black uppercase tracking-widest">AIS Live</span>
+                            </div>
                         </div>
-                        <div className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[9px] font-bold uppercase tracking-wider">Group Compliance: Active</div>
+                        <div className="flex-1 overflow-hidden">
+                            <RouteOptimizationView embedded={true} />
+                        </div>
                     </div>
 
-                    <div className="flex-1 flex flex-col gap-3">
-                        {/* A. SAFETY PERFORMANCE CARD */}
-                        <div className="p-4 bg-red-50/30 border border-red-100 rounded group hover:bg-white hover:border-red-500 transition-all cursor-pointer">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="text-[11px] font-black text-red-700 uppercase tracking-tight">Safety Performance</span>
-                                <div className="text-[9px] font-mono text-gray-500 uppercase font-bold">Target: 0 Incidents</div>
-                            </div>
-                            <div className="flex items-end justify-between">
-                                <div>
-                                    <div className="text-[24px] font-black text-shell-darkText leading-none">8,420<span className="text-[12px] text-shell-mutedText font-normal ml-1">hrs</span></div>
-                                    <div className="text-[10px] font-mono text-red-600 uppercase font-black mt-1">Incident-Free Operations</div>
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-[16px] font-black text-green-600">↑ 14%</div>
-                                    <div className="text-[9px] font-mono text-gray-400 uppercase tracking-tighter leading-none font-bold">vs Trend</div>
-                                </div>
-                            </div>
-                        </div>
+                    {/* Bottom row: Market Intelligence + Agent Topology */}
+                    <div className="grid grid-cols-2 gap-4">
 
-                        {/* B. SUSTAINABILITY & CARBON TRACKER */}
-                        <div className="p-4 bg-gray-50/50 border border-gray-100 rounded group hover:border-shell-yellow transition-all">
-                             <div className="text-[11px] font-black text-shell-darkText uppercase tracking-tight mb-3">Sustainability Mix</div>
-                             <div className="space-y-3">
-                                 <div>
-                                     <div className="flex justify-between items-center text-[10px] uppercase font-black mb-1.5">
-                                         <span className="text-shell-mutedText">CO2 Offset Progress</span>
-                                         <span className="text-shell-darkText">62.4%</span>
-                                     </div>
-                                     <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                                         <div className="h-full bg-green-500 w-[62%]"></div>
-                                     </div>
-                                 </div>
-                                 <div>
-                                     <div className="flex justify-between items-center text-[10px] uppercase font-black mb-1.5">
-                                         <span className="text-shell-mutedText">Renewable Mix %</span>
-                                         <span className="text-shell-darkText">28.0%</span>
-                                     </div>
-                                     <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                                         <div className="h-full bg-shell-yellow w-[28%]"></div>
-                                     </div>
-                                 </div>
-                             </div>
-                        </div>
-
-                        {/* C. WORKFORCE RESKILLING PORTAL */}
-                        <div className="p-4 bg-blue-50/30 border border-blue-100 rounded group hover:bg-white hover:border-blue-500 transition-all">
-                             <div className="flex justify-between items-center mb-2">
-                                <span className="text-[11px] font-black text-blue-800 uppercase tracking-tight">Workforce Future-Skills</span>
-                                <Zap className="w-3 h-3 text-blue-500" />
-                             </div>
-                             <div className="text-[22px] font-black text-shell-darkText leading-none">74<span className="text-[12px] text-shell-mutedText font-normal ml-1">% reskilling index</span></div>
-                             <p className="text-[10px] text-blue-600 font-black uppercase mt-2">↑ +4.2% Growth / AI-Native Training</p>
-                        </div>
-
-                        {/* D. GLOBAL MARKET INTELLIGENCE (Enhanced Size) */}
-                        <div className="p-4 bg-white border border-gray-100 rounded group hover:border-gray-300 transition-all">
-                             <div className="flex justify-between items-center mb-4">
-                                <span className="text-[11px] font-black text-shell-darkText uppercase tracking-widest">Global Market Intelligence</span>
-                                <div className="flex items-center gap-1.5 px-2 py-1 bg-shell-yellow/10 rounded-sm border border-shell-yellow/20">
+                        {/* Market Intelligence */}
+                        <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
                                     <TrendingUp className="w-4 h-4 text-shell-yellow" />
+                                    <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Market Intelligence</h2>
+                                </div>
+                                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-shell-yellow/10 rounded border border-shell-yellow/20">
                                     <span className="text-[9px] font-black text-shell-yellow uppercase">Live</span>
                                 </div>
-                             </div>
-                             <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                                 <div className="border-l-2 border-gray-200 pl-3">
-                                     <div className="text-[10px] font-mono text-gray-500 uppercase leading-none mb-2 font-bold">Brent Crude</div>
-                                     <div className="text-[20px] font-black text-shell-darkText">$82.41<span className="text-[11px] text-green-500 ml-1.5 font-black">↑ 1.2%</span></div>
-                                 </div>
-                                 <div className="border-l-2 border-gray-200 pl-3">
-                                     <div className="text-[10px] font-mono text-gray-500 uppercase leading-none mb-2 font-bold">Gas (TTF)</div>
-                                     <div className="text-[20px] font-black text-shell-darkText">€28.90<span className="text-[11px] text-red-500 ml-1.5 font-black">↓ 0.8%</span></div>
-                                 </div>
-                                 <div className="border-l-2 border-gray-200 pl-3">
-                                     <div className="text-[10px] font-mono text-gray-500 uppercase leading-none mb-2 font-bold">LNG (JKM)</div>
-                                     <div className="text-[20px] font-black text-shell-darkText">$10.04<span className="text-[11px] text-green-500 ml-1.5 font-black">↑ 0.4%</span></div>
-                                 </div>
-                                 <div className="border-l-2 border-gray-200 pl-3">
-                                     <div className="text-[10px] font-mono text-gray-500 uppercase leading-none mb-2 font-bold">Carbon (ETS)</div>
-                                     <div className="text-[20px] font-black text-shell-darkText">€54.12<span className="text-[11px] text-gray-400 ml-1.5 font-black">→ 0.0%</span></div>
-                                 </div>
-                             </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+                                {[
+                                    { label: 'Brent Crude', val: '$82.41', trend: '↑ 1.2%', up: true },
+                                    { label: 'Gas (TTF)', val: '€28.90', trend: '↓ 0.8%', up: false },
+                                    { label: 'LNG (JKM)', val: '$10.04', trend: '↑ 0.4%', up: true },
+                                    { label: 'Carbon (ETS)', val: '€54.12', trend: '→ 0.0%', up: null },
+                                ].map((item, i) => (
+                                    <div key={i} className="border-l-2 border-gray-200 pl-3">
+                                        <div className="text-[9px] font-mono text-gray-500 uppercase leading-none mb-1 font-bold">{item.label}</div>
+                                        <div className="text-[16px] font-black text-shell-darkText leading-none">
+                                            {item.val}
+                                            <span className={`text-[10px] ml-1.5 font-black ${item.up === true ? 'text-green-500' : item.up === false ? 'text-red-500' : 'text-gray-400'}`}>{item.trend}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* System Telemetry */}
+                        <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <Activity className="w-4 h-4 text-shell-blue" />
+                                    <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">System Telemetry</h2>
+                                </div>
+                                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-shell-blue/10 rounded border border-shell-blue/20">
+                                    <span className="text-[9px] font-black text-shell-blue uppercase">Inference</span>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+                                {[
+                                    { label: 'Cloud Load', val: '42.1%', trend: '↓ 5.4%', up: true },
+                                    { label: 'Edge Nodes', val: '8,492', trend: '↑ 122', up: true },
+                                    { label: 'Data Ingest', val: '1.2 PB', trend: '↑ 20TB', up: null },
+                                    { label: 'Neural Sync', val: '0.4ms', trend: '→ 0.0', up: true },
+                                ].map((item, i) => (
+                                    <div key={i} className="border-l-2 border-gray-200 pl-3">
+                                        <div className="text-[9px] font-mono text-gray-500 uppercase leading-none mb-1 font-bold">{item.label}</div>
+                                        <div className="text-[16px] font-black text-shell-darkText leading-none">
+                                            {item.val}
+                                            <span className={`text-[10px] ml-1.5 font-black ${item.up === true ? 'text-green-500' : item.up === false ? 'text-red-500' : 'text-gray-400'}`}>{item.trend}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
+                    
+                    {/* Global Yield Analysis Chart */}
+                    <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex flex-col flex-1 min-h-[160px]">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-2">
+                                <LineChart className="text-shell-blue w-4 h-4" />
+                                <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Global Optimization Yield</h2>
+                            </div>
+                            <div className="text-[16px] font-black text-green-600 leading-none flex items-end gap-1">
+                                +14.2% <span className="text-[9px] text-gray-400 font-mono mb-0.5 uppercase tracking-widest">vs prev 24h</span>
+                            </div>
+                        </div>
+                        <div className="flex-1 flex items-end gap-1.5 pt-2 relative">
+                            {/* Subtle grid lines */}
+                            <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-2">
+                                <div className="border-t border-dashed border-gray-100 w-full h-0"></div>
+                                <div className="border-t border-dashed border-gray-100 w-full h-0"></div>
+                                <div className="border-t border-dashed border-gray-100 w-full h-0 mt-auto"></div>
+                            </div>
+                            
+                            {/* CSS bar chart */}
+                            {[40, 42, 38, 55, 62, 58, 70, 75, 68, 85, 88, 92, 90, 94, 89, 96, 95, 98].map((val, i) => (
+                                <div key={i} className="flex-1 bg-gray-50 rounded-t relative group overflow-hidden" style={{ height: '100%' }}>
+                                    <div className={`absolute bottom-0 w-full transition-all duration-1000 ${val > 88 ? 'bg-green-500' : val > 60 ? 'bg-shell-blue' : 'bg-shell-yellow'}`} style={{ height: `${val}%` }}></div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex justify-between mt-3 text-[9px] font-mono font-bold text-gray-400 uppercase tracking-widest">
+                            <span>T-24H</span>
+                            <span>T-18H</span>
+                            <span>T-12H</span>
+                            <span>T-6H</span>
+                            <span className="text-shell-blue">LIVE</span>
+                        </div>
+                    </div>
+
                 </div>
 
-                {/* 2. STRATEGIC PORTFOLIO PULSE (Executive Insights) */}
-                <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col h-full">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-2">
-                             <div className="w-6 h-6 bg-shell-yellow rounded-lg flex items-center justify-center"><BarChart3 size={14} className="text-gray-900" /></div>
-                             <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Strategic Portfolio Pulse</h2>
-                        </div>
-                        <span className="text-[9px] font-mono text-shell-mutedText uppercase font-bold tracking-widest">Enterprise Sync: T+0</span>
-                    </div>
+                {/* ── RIGHT COLUMN ── */}
+                <div className="flex flex-col gap-4">
 
-                    <div className="flex-1 flex flex-col gap-3">
-                        {/* 1. PRODUCTION & REFINING PILLAR */}
-                        <div className="p-4 bg-gray-50/50 border border-gray-100 rounded-lg group hover:border-shell-yellow transition-all">
-                            <div className="flex justify-between items-start mb-2">
-                                <div className="text-[11px] font-black text-shell-darkText uppercase tracking-tight">Production & Refining</div>
-                                <span className="font-mono text-[9px] px-2 py-0.5 bg-green-50 text-green-700 rounded-sm font-bold uppercase">Optimal</span>
+                    {/* Demand Planning Agent (Workforce AI) */}
+                    <div className="bg-white border border-gray-100 rounded-xl shadow-sm flex flex-col overflow-hidden shrink-0" style={{ height: '420px' }}>
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
+                            <div className="flex items-center gap-2">
+                                <Users className="text-amber-500 w-4 h-4" />
+                                <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Workforce Management</h2>
                             </div>
-                            <div className="flex items-center gap-4 mb-3">
-                                <div className="flex-1">
-                                    <div className="text-[18px] font-black text-shell-darkText">96.4%<span className="text-[10px] text-shell-mutedText ml-1 lowercase font-normal">thru-put</span></div>
-                                    <div className="h-1 bg-gray-200 rounded-full mt-1 overflow-hidden"><div className="h-full bg-green-500 w-[96%]"></div></div>
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-[14px] font-bold text-shell-darkText">$4.2M</div>
-                                    <div className="text-[8px] font-mono text-gray-400 uppercase tracking-tighter">Opex Offset</div>
-                                </div>
-                            </div>
-                            <p className="text-[10px] text-shell-mutedText leading-relaxed border-l-2 border-shell-yellow pl-3">
-                                <span className="font-bold text-shell-darkText">Neural Insight:</span> Predictive maintenance on CDU-4 successfully averted 14h of potential thermal downtime.
-                            </p>
-                        </div>
-
-                        {/* 2. FINANCIAL OPS PILLAR (Moved Higher) */}
-                        <div className="p-4 bg-gray-50/50 border border-gray-100 rounded-lg group hover:border-shell-yellow transition-all">
-                            <div className="flex justify-between items-start mb-2">
-                                <div className="text-[11px] font-black text-shell-darkText uppercase tracking-tight">Financial Operations</div>
-                                <span className="font-mono text-[9px] px-2 py-0.5 bg-blue-50 text-blue-700 rounded-sm font-bold uppercase">Closing</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                 <div>
-                                    <div className="text-[16px] font-black text-shell-darkText">Day 2.4 / Cycle</div>
-                                    <div className="text-[8px] font-mono text-gray-400 uppercase tracking-tighter leading-none mt-1">Group Reconciliation Status</div>
-                                 </div>
-                                 <div className="flex gap-1">
-                                     {[...Array(5)].map((_, i) => (
-                                         <div key={i} className={`w-2 h-4 rounded-sm ${i < 3 ? 'bg-blue-500' : 'bg-gray-200'}`}></div>
-                                     ))}
-                                 </div>
+                            <div className="flex items-center gap-1.5 px-2 py-1 bg-amber-50 text-amber-700 rounded-sm border border-amber-100">
+                                <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
+                                <span className="text-[9px] font-black uppercase tracking-widest">Wave 1</span>
                             </div>
                         </div>
-
-                        {/* 3. TRADING & ARBITRAGE PILLAR */}
-                        <div className="p-4 bg-gray-50/50 border border-gray-100 rounded-lg group hover:border-shell-yellow transition-all">
-                            <div className="flex justify-between items-start mb-2">
-                                <div className="text-[11px] font-black text-shell-darkText uppercase tracking-tight">Trading & Arbitrage</div>
-                                <span className="font-mono text-[9px] px-2 py-0.5 bg-amber-50 text-amber-700 rounded-sm font-bold uppercase">Optimizing</span>
-                            </div>
-                            <div className="flex items-center gap-4 mb-3">
-                                <div className="flex-1">
-                                    <div className="text-[18px] font-black text-shell-darkText">+8.2%<span className="text-[10px] text-shell-mutedText ml-1 lowercase font-normal">spread yield</span></div>
-                                    <div className="h-1 bg-gray-200 rounded-full mt-1 overflow-hidden"><div className="h-full bg-shell-yellow w-[82%]"></div></div>
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-[14px] font-bold text-shell-darkText">$12.8M</div>
-                                    <div className="text-[8px] font-mono text-gray-400 uppercase tracking-tighter">Capture Value</div>
-                                </div>
-                            </div>
-                            <p className="text-[10px] text-shell-mutedText leading-relaxed border-l-2 border-shell-yellow pl-3">
-                                <span className="font-bold text-shell-darkText">Neural Insight:</span> AI identified Brent/WTI spread anomaly; executed real-time diversion of 2 VLCC tankers.
-                            </p>
-                        </div>
-
-                        {/* 4. LOGISTICS & SUPPLY PILLAR */}
-                        <div className="p-4 bg-gray-50/50 border border-gray-100 rounded-lg group hover:border-shell-yellow transition-all">
-                            <div className="flex justify-between items-start mb-2">
-                                <div className="text-[11px] font-black text-shell-darkText uppercase tracking-tight">Logistics & Supply</div>
-                                <span className="font-mono text-[9px] px-2 py-0.5 bg-green-50 text-green-700 rounded-sm font-bold uppercase">Steady</span>
-                            </div>
-                            <div className="flex items-center gap-4 mb-3">
-                                <div className="flex-1">
-                                    <div className="text-[18px] font-black text-shell-darkText">102<span className="text-[10px] text-shell-mutedText ml-1 lowercase font-normal">assets en route</span></div>
-                                    <div className="h-1 bg-gray-200 rounded-full mt-1 overflow-hidden"><div className="h-full bg-green-500 w-[88%]"></div></div>
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-[14px] font-bold text-shell-darkText">98.2%</div>
-                                    <div className="text-[8px] font-mono text-gray-400 uppercase tracking-tighter">ETA Accuracy</div>
-                                </div>
-                            </div>
+                        <div className="flex-1 overflow-y-auto">
+                            <HRWorkforceAgent embedded={true} />
                         </div>
                     </div>
 
-                    <div className="mt-4 pt-4 border-t border-gray-50 flex justify-between items-center bg-gray-50 p-2 rounded-lg">
-                         <div className="flex gap-1.5 grayscale opacity-30">
-                             <div className="w-2.5 h-2.5 rounded-sm bg-green-500"></div>
-                             <div className="w-2.5 h-2.5 rounded-sm bg-shell-yellow"></div>
-                             <div className="w-2.5 h-2.5 rounded-sm bg-red-500"></div>
-                         </div>
-                         <span className="text-[8px] font-mono text-shell-mutedText uppercase font-bold tracking-tighter italic">Neuro-Sync Phase III Integrated</span>
-                    </div>
-                </div>
-
-                {/* 3. NEURAL INCIDENT FEED (Integrated & On-screen) */}
-                <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col h-full">
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="font-black text-[14px] text-shell-darkText uppercase tracking-tight flex items-center gap-2">
-                            <Bell className="w-4 h-4 text-shell-yellow" /> Neural Feed
-                        </h2>
-                        <span onClick={() => setCurrentView('alerts')} className="font-mono text-[9px] text-blue-600 uppercase tracking-widest cursor-pointer hover:underline font-bold">ALL LOGS</span>
-                    </div>
-                    
-                    <div className="flex-1 space-y-3 overflow-y-auto pr-1">
-                        <div className="flex gap-4 p-4 rounded-lg bg-red-50/50 border-l-[3px] border-l-red-500">
-                            <AlertCircle className="w-5 h-5 shrink-0 text-red-600" />
-                            <div>
-                                <div className="text-[13px] font-black text-shell-darkText leading-none">Industrial OT Disconnect</div>
-                                <div className="text-[10px] text-shell-mutedText uppercase mt-1 tracking-tight font-black">Critical · Site Rotterdam</div>
+                    {/* Alerts Feed */}
+                    <div className="bg-white border border-gray-100 rounded-xl shadow-sm flex flex-col overflow-hidden flex-1">
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
+                            <div className="flex items-center gap-2">
+                                <Bell className="w-4 h-4 text-amber-500" />
+                                <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Alert Center Feed</h2>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <span className="px-2 py-0.5 bg-red-100 text-red-700 font-bold border border-red-200 rounded font-mono text-[9px] tracking-widest uppercase">3 Critical</span>
+                                <span onClick={() => setCurrentView('alerts')} className="font-mono text-[9px] text-blue-600 uppercase tracking-widest cursor-pointer hover:underline font-bold">View All</span>
                             </div>
                         </div>
-                        <div className="flex gap-4 p-4 rounded-lg bg-amber-50/50 border-l-[3px] border-l-shell-yellow">
-                            <TrendingUp className="w-5 h-5 shrink-0 text-shell-yellow" />
-                            <div>
-                                <div className="text-[13px] font-black text-shell-darkText leading-none">Market Volatility Detected</div>
-                                <div className="text-[10px] text-shell-mutedText uppercase mt-1 tracking-tight font-black">Warning · Brent Spreads Spike</div>
+                        <div className="flex-1 overflow-y-auto p-3 space-y-2">
+                            {fireAlert && (
+                                <div className={`flex gap-3 rounded-lg transition-all duration-300 ${isNewAlert ? 'p-3 border-2 border-red-600 bg-red-700 text-white animate-pulse shadow-[0_0_20px_rgba(220,38,38,0.5)]' : 'p-3 border-l-[3px] border-l-red-600 bg-red-50'}`}>
+                                    <Flame className={`w-4 h-4 shrink-0 mt-0.5 ${isNewAlert ? 'text-white' : 'text-red-600'}`} />
+                                    <div>
+                                        <div className={`text-[12px] font-black uppercase tracking-tight leading-tight ${isNewAlert ? 'text-white' : 'text-red-700'}`}>CRITICAL: Live Fire Detected</div>
+                                        <div className={`text-[10px] mt-0.5 ${isNewAlert ? 'text-white/80' : 'text-gray-600'}`}>Cam {fireAlert.camera_id} · {Math.round(fireAlert.confidence * 100)}% confidence · Suppression active</div>
+                                        <div className={`font-mono text-[9px] mt-1 font-bold uppercase ${isNewAlert ? 'text-white/70' : 'text-red-600'}`}>HSE Emergency · Priority 1</div>
+                                    </div>
+                                </div>
+                            )}
+                            <div className="flex gap-3 p-3 rounded-lg border-l-[3px] border-l-red-500 bg-red-50/40">
+                                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+                                <div>
+                                    <div className="text-[12px] font-black text-shell-darkText leading-tight">OT / IT Disconnect</div>
+                                    <div className="text-[10px] text-gray-600 mt-0.5 leading-snug">492K+ sensor tags offline. Predictive maintenance severely limited.</div>
+                                    <div className="font-mono text-[9px] text-red-600 mt-1 font-bold uppercase">Critical · Owner: CTO</div>
+                                </div>
+                            </div>
+                            <div className="flex gap-3 p-3 rounded-lg border-l-[3px] border-l-red-500 bg-red-50/40">
+                                <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+                                <div>
+                                    <div className="text-[12px] font-black text-shell-darkText leading-tight">AI Governance Gap</div>
+                                    <div className="text-[10px] text-gray-600 mt-0.5 leading-snug">153 AI projects with no lifecycle management. EU AI Act exposure.</div>
+                                    <div className="font-mono text-[9px] text-red-600 mt-1 font-bold uppercase">Critical · Owner: CDO</div>
+                                </div>
+                            </div>
+                            <div className="flex gap-3 p-3 rounded-lg border-l-[3px] border-l-red-500 bg-red-50/40">
+                                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+                                <div>
+                                    <div className="text-[12px] font-black text-shell-darkText leading-tight">Finance Close Cycle</div>
+                                    <div className="text-[10px] text-gray-600 mt-0.5 leading-snug">Month-end close averaging 9 days vs 5–7 day target. SOX audit risk.</div>
+                                    <div className="font-mono text-[9px] text-red-600 mt-1 font-bold uppercase">Critical · Owner: CFO</div>
+                                </div>
+                            </div>
+                            <div className="flex gap-3 p-3 rounded-lg border-l-[3px] border-l-amber-400 bg-amber-50/40">
+                                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+                                <div>
+                                    <div className="text-[12px] font-black text-shell-darkText leading-tight">Interco Reconciliation Drift</div>
+                                    <div className="text-[10px] text-gray-600 mt-0.5 leading-snug">Model accuracy at 83.1%, below 87% threshold. Retraining queued.</div>
+                                    <div className="font-mono text-[9px] text-amber-600 mt-1 font-bold uppercase">Warning · Owner: CoE</div>
+                                </div>
+                            </div>
+                            <div className="flex gap-3 p-3 rounded-lg border-l-[3px] border-l-amber-400 bg-amber-50/40">
+                                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+                                <div>
+                                    <div className="text-[12px] font-black text-shell-darkText leading-tight">ABAP Assessment Lag</div>
+                                    <div className="text-[10px] text-gray-600 mt-0.5 leading-snug">Only 31% of 500+ ABAP programs assessed. S/4HANA migration risk.</div>
+                                    <div className="font-mono text-[9px] text-amber-600 mt-1 font-bold uppercase">Warning · Owner: CTO</div>
+                                </div>
                             </div>
                         </div>
-                        <div className="flex gap-4 p-4 rounded-lg bg-green-50/50 border-l-[3px] border-l-green-500">
-                            <CheckCircle2 className="w-5 h-5 shrink-0 text-green-600" />
-                            <div>
-                                <div className="text-[13px] font-black text-shell-darkText leading-none">Finance Hub Sync</div>
-                                <div className="text-[10px] text-shell-mutedText uppercase mt-1 tracking-tight font-black">Optimal · Reconciliation Complete</div>
-                            </div>
-                        </div>
-                        <div className="flex gap-3 p-3 rounded-lg bg-blue-50/50 border-l-2 border-l-blue-500">
-                            <Info className="w-4 h-4 shrink-0 text-blue-500" />
-                            <div>
-                                <div className="text-[11px] font-bold text-shell-darkText">Agent Mesh Expansion</div>
-                                <div className="text-[9px] text-shell-mutedText uppercase mt-0.5 tracking-tight font-medium">Info · APEX Node Scaled</div>
-                            </div>
-                        </div>
-                        <div className="flex gap-3 p-3 rounded-lg bg-gray-50 border-l-2 border-l-gray-400 opacity-60">
-                            <Activity className="w-4 h-4 shrink-0 text-gray-500" />
-                            <div>
-                                <div className="text-[11px] font-bold text-gray-500">Scheduled Model Re-train</div>
-                                <div className="text-[9px] text-gray-400 uppercase mt-0.5 tracking-tight font-medium">System · 14.02.26 Routine</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                         <div className="bg-gray-50 border border-gray-100 rounded-lg p-4 text-center">
-                             <div className="text-[10px] font-black text-shell-darkText uppercase tracking-[0.2em] mb-2">Total Threats Neutralized</div>
-                             <div className="text-2xl font-black text-shell-darkText">4,902</div>
-                         </div>
                     </div>
                 </div>
             </div>
 
             {/* AI ADOPTION & METRICS ROW */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
                  {/* 1. ENTERPRISE AI ADOPTION HEATMAP */}
                  <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col min-h-[260px]">
                      <div className="flex items-center justify-between mb-4">
@@ -591,68 +549,7 @@ export function CommandCenterView({ setCurrentView }) {
                      </div>
                  </div>
 
-                 {/* 3. ROLLOUT HORIZON (WAVE 0 & 1) */}
-                 <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col min-h-[260px] relative overflow-hidden">
-                     <div className="flex items-center justify-between mb-5 relative z-10 border-b border-gray-100 pb-3 shrink-0">
-                         <div className="flex items-center gap-2">
-                             <Layers className="text-shell-blue w-4 h-4" />
-                             <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Strategic Rollout Horizon</h2>
-                         </div>
-                         <div className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[9px] font-bold uppercase tracking-wider">H1 2026</div>
-                     </div>
-                     
-                     <div className="flex-1 flex flex-col gap-4 overflow-y-auto custom-scrollbar pr-1">
-                         {/* WAVE 0 */}
-                         <div className="p-3 rounded-lg border border-green-200 bg-green-50/40">
-                             <div className="flex justify-between items-center mb-2">
-                                 <div className="flex items-center gap-2">
-                                     <span className="font-mono text-[10px] text-green-700 font-black uppercase tracking-widest bg-green-100 px-2 py-0.5 rounded">Wave 0</span>
-                                     <span className="text-[12px] font-black text-shell-darkText tracking-tight uppercase">Base Infrastructure</span>
-                                 </div>
-                                 <CheckCircle2 className="w-4 h-4 text-green-600" />
-                             </div>
-                             <div className="flex gap-4 items-end mt-3">
-                                 <div>
-                                     <div className="text-[20px] font-black text-shell-darkText leading-none">100%</div>
-                                     <div className="text-[9px] font-mono text-gray-500 uppercase tracking-widest mt-1">Deployed</div>
-                                 </div>
-                                 <div className="flex-1 mb-1.5">
-                                     <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-                                         <div className="h-full bg-green-500 w-full"></div>
-                                     </div>
-                                 </div>
-                             </div>
-                             <p className="text-[10px] text-shell-mutedText mt-3 font-medium leading-relaxed">
-                                 Legacy systems successfully bypassed. APEX Orchestrator and core data pipelines are fully operational.
-                             </p>
-                         </div>
 
-                         {/* WAVE 1 */}
-                         <div className="p-3 rounded-lg border border-shell-yellow/40 bg-amber-50/30">
-                             <div className="flex justify-between items-center mb-2">
-                                 <div className="flex items-center gap-2">
-                                     <span className="font-mono text-[10px] text-amber-700 font-black uppercase tracking-widest bg-amber-100 px-2 py-0.5 rounded">Wave 1</span>
-                                     <span className="text-[12px] font-black text-shell-darkText tracking-tight uppercase">Agentic Copilot</span>
-                                 </div>
-                                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse outline outline-2 outline-amber-200"></div>
-                             </div>
-                             <div className="flex gap-4 items-end mt-3">
-                                 <div>
-                                     <div className="text-[20px] font-black text-shell-darkText leading-none">62%</div>
-                                     <div className="text-[9px] font-mono text-gray-500 uppercase tracking-widest mt-1">In Progress</div>
-                                 </div>
-                                 <div className="flex-1 mb-1.5">
-                                     <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-                                         <div className="h-full bg-shell-yellow w-[62%]"></div>
-                                     </div>
-                                 </div>
-                             </div>
-                             <p className="text-[10px] text-shell-mutedText mt-3 font-medium leading-relaxed">
-                                 Deploying domain-specific cognitive agents to Supply Chain, IT Ops, and Trading. Expected completion: Q2.
-                             </p>
-                         </div>
-                     </div>
-                 </div>
             </div>
             {/* KPI DETAIL POPOVER (ANCHORED RELATIVE TO CARDS) */}
             <AnimatePresence>

@@ -35,6 +35,16 @@ export function HRView() {
         return () => { isMounted = false; };
     }, []);
 
+    useEffect(() => {
+        const handleDemoTab = (e) => {
+            if (e.detail?.view === 'hr' && e.detail?.tab) {
+                setActiveTab(e.detail.tab);
+            }
+        };
+        window.addEventListener('DEMO_GOTO_TAB', handleDemoTab);
+        return () => window.removeEventListener('DEMO_GOTO_TAB', handleDemoTab);
+    }, []);
+
     if (!data) return null;
 
     return (

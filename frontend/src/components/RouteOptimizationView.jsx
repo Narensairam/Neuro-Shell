@@ -229,8 +229,61 @@ function MapFlyTo({ vessel }) {
     return null;
 }
 
-// ─── Static Sidebar ──────────────────────────────────────────────────────────
-function RouteSidebar({ vessels }) {
+// ─── Full vertical sidebar (Standalone Mode) ──────────────────────────────────
+function RouteOptimizationSidebar({ vessels }) {
+    const avgSpeed = vessels.length ? (vessels.reduce((s, v) => s + parseFloat(v.speed || 0), 0) / vessels.length).toFixed(1) : '--';
+    const totalCostSaved = vessels.reduce((s, v) => s + (v.costSaved || 0), 0);
+    const totalFuelSaved = vessels.reduce((s, v) => s + (v.fuelSavedMT || 0), 0);
+    const reroutingCount = vessels.filter(v => v.reroutingStatus !== 'None').length;
+
+    return (
+        <div className="w-64 bg-white border-l border-gray-100 flex flex-col h-full shrink-0 z-20 overflow-y-auto shadow-[-4px_0_24px_rgba(0,0,0,0.02)]">
+            <div className="p-5 pt-6">
+                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 border-b border-gray-100 pb-2">Fleet Overview</h3>
+                <div className="grid grid-cols-2 gap-3 mb-8">
+                    <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Active Fleet</div>
+                        <div className="text-[24px] font-black text-shell-darkText leading-none flex items-end gap-1">
+                            {vessels.length} <span className="text-[10px] text-green-500 font-mono mb-1 uppercase tracking-widest">Ships</span>
+                        </div>
+                    </div>
+                    <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                        <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Avg Speed</div>
+                        <div className="text-[24px] font-black text-cyan-600 leading-none flex items-end gap-1">
+                            {avgSpeed} <span className="text-[10px] text-gray-400 font-mono mb-1 uppercase tracking-widest">Kn</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 border-b border-gray-100 pb-2">AI Performance</h3>
+                <div className="bg-green-50/30 border border-green-100/50 rounded-xl p-5 mb-4 shadow-sm">
+                    <div className="flex items-center gap-2 mb-5">
+                        <TrendingDown className="w-4 h-4 text-green-600" />
+                        <span className="text-[12px] font-black text-green-700 uppercase tracking-tight">Global Savings</span>
+                    </div>
+                    
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-end border-b border-green-100/30 pb-3">
+                             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Cost Diverted</div>
+                             <div className="text-[20px] font-black text-green-600 leading-none">${(totalCostSaved / 1000).toFixed(0)}K</div>
+                        </div>
+                        <div className="flex justify-between items-end border-b border-green-100/30 pb-3">
+                             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Fuel Diverted</div>
+                             <div className="text-[20px] font-black text-orange-500 leading-none">{totalFuelSaved} <span className="text-[12px]">MT</span></div>
+                        </div>
+                        <div className="flex justify-between items-end">
+                             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Active Diversions</div>
+                             <div className="text-[20px] font-black text-amber-500 leading-none">{reroutingCount}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// ─── Compact horizontal stats bar (Embedded Mode replace sidebar) ─────────────
+function RouteStatsBar({ vessels }) {
     const avgSpeed = vessels.length
         ? (vessels.reduce((s, v) => s + parseFloat(v.speed || 0), 0) / vessels.length).toFixed(1)
         : '--';
@@ -239,122 +292,79 @@ function RouteSidebar({ vessels }) {
     const reroutingCount = vessels.filter(v => v.reroutingStatus !== 'None').length;
 
     return (
-        <div className="w-[320px] bg-gray-50 border-l border-gray-200 flex flex-col shrink-0 overflow-y-auto h-full p-4 space-y-4 shadow-xl z-20">
-            {/* Header */}
-            <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col relative overflow-hidden group">
-                <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-shell-blue" />
-                        <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Fleet Intelligence</h2>
-                    </div>
-                    <div className="px-2 py-0.5 bg-green-50 text-green-700 rounded text-[9px] font-bold uppercase tracking-wider flex items-center gap-1.5 border border-green-100">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div> Live
-                    </div>
-                </div>
-                <div className="text-[10px] text-shell-mutedText font-medium leading-tight">Neural Simulation Environment</div>
-            </div>
-
-            {/* Core Metrics */}
-            <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm group hover:border-shell-blue transition-all">
-                    <div className="flex items-center gap-1.5 mb-2">
-                        <Ship className="w-3 h-3 text-shell-blue" />
-                        <span className="text-[9px] text-shell-mutedText uppercase font-black tracking-widest">Active Fleet</span>
-                    </div>
-                    <div className="text-[26px] font-black text-shell-darkText leading-none">{vessels.length}</div>
-                </div>
-                <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm group hover:border-cyan-500 transition-all">
-                    <div className="flex items-center gap-1.5 mb-2">
-                        <Navigation className="w-3 h-3 text-cyan-500" />
-                        <span className="text-[9px] text-shell-mutedText uppercase font-black tracking-widest">Avg Speed</span>
-                    </div>
-                    <div className="text-[26px] font-black text-shell-darkText leading-none">{avgSpeed}<span className="text-[12px] text-gray-400 font-normal ml-1">kn</span></div>
+        <div className="flex items-center gap-3 px-3 py-2 bg-white border-b border-gray-100 shrink-0">
+            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3">
+                <Ship className="w-3 h-3 text-shell-blue" />
+                <div>
+                    <div className="text-[8px] font-mono text-gray-500 uppercase leading-none">Fleet</div>
+                    <div className="text-[14px] font-black text-shell-darkText leading-none">{vessels.length}</div>
                 </div>
             </div>
-
-            {/* Impact Metrics */}
-            <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col group hover:border-green-400 transition-all">
-                <div className="text-[11px] font-black text-shell-darkText uppercase tracking-tight mb-4">Optimization Impact</div>
-                <div className="space-y-4">
-                    <div className="flex justify-between items-end border-b border-gray-50 pb-2">
-                        <div>
-                            <div className="flex items-center gap-1.5 mb-1 text-[9px] font-black text-green-600 uppercase tracking-widest">
-                                <DollarSign className="w-3 h-3" /> Cost Reduced
-                            </div>
-                            <div className="text-[22px] font-black text-shell-darkText leading-none">${(totalCostSaved / 1000).toFixed(0)}K</div>
-                        </div>
-                        <div className="text-[10px] font-black text-green-500 uppercase tracking-tight">↑ Value</div>
-                    </div>
-                    <div className="flex justify-between items-end">
-                        <div>
-                            <div className="flex items-center gap-1.5 mb-1 text-[9px] font-black text-orange-500 uppercase tracking-widest">
-                                <Fuel className="w-3 h-3" /> Fuel Saved
-                            </div>
-                            <div className="text-[22px] font-black text-shell-darkText leading-none">{totalFuelSaved} <span className="text-[12px] font-normal text-gray-400">MT</span></div>
-                        </div>
-                        <div className="text-[10px] font-black text-orange-400 uppercase tracking-tight">↓ Burn</div>
-                    </div>
+            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3">
+                <Navigation className="w-3 h-3 text-cyan-500" />
+                <div>
+                    <div className="text-[8px] font-mono text-gray-500 uppercase leading-none">Avg Speed</div>
+                    <div className="text-[14px] font-black text-shell-darkText leading-none">{avgSpeed}<span className="text-[9px] text-gray-400 ml-0.5">kn</span></div>
                 </div>
             </div>
-
-            {/* Rerouting Status */}
-            <div className="bg-gradient-to-br from-white to-amber-50/30 border border-gray-100 rounded-xl p-4 shadow-sm group hover:border-amber-300 transition-all mt-auto flex flex-col justify-end">
-                <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded bg-amber-50 flex items-center justify-center shrink-0 mt-0.5">
-                        <Zap className="w-4 h-4 text-amber-500" />
-                    </div>
-                    <div>
-                        <div className="text-[11px] font-black text-shell-darkText uppercase tracking-tight">AI Active Diversions</div>
-                        <div className="text-[24px] font-black text-amber-600 leading-none mt-1.5 mb-1">{reroutingCount} <span className="text-[12px] font-bold text-shell-mutedText lowercase">ships</span></div>
-                        <div className="text-[9px] text-shell-mutedText font-medium mt-1">Currently taking AI computed evasion paths.</div>
-                    </div>
+            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3">
+                <DollarSign className="w-3 h-3 text-green-500" />
+                <div>
+                    <div className="text-[8px] font-mono text-gray-500 uppercase leading-none">Cost Saved</div>
+                    <div className="text-[14px] font-black text-green-600 leading-none">${(totalCostSaved / 1000).toFixed(0)}K</div>
+                </div>
+            </div>
+            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3">
+                <Fuel className="w-3 h-3 text-orange-500" />
+                <div>
+                    <div className="text-[8px] font-mono text-gray-500 uppercase leading-none">Fuel Saved</div>
+                    <div className="text-[14px] font-black text-orange-600 leading-none">{totalFuelSaved}<span className="text-[9px] text-gray-400 ml-0.5">MT</span></div>
+                </div>
+            </div>
+            <div className="flex items-center gap-1.5">
+                <Zap className="w-3 h-3 text-amber-500" />
+                <div>
+                    <div className="text-[8px] font-mono text-gray-500 uppercase leading-none">AI Diversions</div>
+                    <div className="text-[14px] font-black text-amber-600 leading-none">{reroutingCount}</div>
                 </div>
             </div>
         </div>
     );
 }
 
-// ─── Legend ──────────────────────────────────────────────────────────────────
+// ─── Legend (compact) ────────────────────────────────────────────────────────
 function MapLegend({ vessels, selectedVesselMmsi, setSelectedVesselMmsi }) {
     return (
-        <div className="absolute bottom-6 left-6 z-[1000] bg-white/90 backdrop-blur-md border border-gray-200 rounded-xl p-3.5 min-w-[210px] shadow-lg pointer-events-auto">
-            <div className="flex justify-between items-center mb-2.5">
-                 <div className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Fleet Select</div>
+        <div className="absolute bottom-3 left-3 z-[1000] bg-white/90 backdrop-blur-md border border-gray-200 rounded-lg p-2 shadow-md pointer-events-auto">
+            <div className="flex justify-between items-center mb-1">
+                 <div className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Vessels</div>
                  {selectedVesselMmsi && (
-                     <button onClick={() => setSelectedVesselMmsi(null)} className="text-[9px] text-blue-600 hover:underline font-bold uppercase">Show All</button>
+                     <button onClick={() => setSelectedVesselMmsi(null)} className="text-[8px] text-blue-600 hover:underline font-bold uppercase ml-2">All</button>
                  )}
             </div>
-            <div className="max-h-[220px] overflow-y-auto custom-scrollbar pr-1 space-y-1.5">
+            <div className="max-h-[120px] overflow-y-auto space-y-1">
                 {vessels.map(v => (
                     <div 
                         key={v.mmsi} 
                         onClick={() => setSelectedVesselMmsi(selectedVesselMmsi === v.mmsi ? null : v.mmsi)}
-                        className={`flex items-center gap-2 p-1.5 rounded cursor-pointer transition-colors ${selectedVesselMmsi === v.mmsi ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-100 border border-transparent'}`}
+                        className={`flex items-center gap-1.5 p-1 rounded cursor-pointer transition-colors ${selectedVesselMmsi === v.mmsi ? 'bg-blue-50' : 'hover:bg-gray-100'}`}
                     >
-                        <div style={{ backgroundColor: v.color }} className="w-2.5 h-2.5 rounded-full shrink-0"></div>
-                        <span className={`text-[11px] truncate ${selectedVesselMmsi === v.mmsi ? 'font-black text-shell-darkText' : 'font-bold text-gray-700'}`}>{v.name}</span>
-                        {v.reroutingStatus !== 'None' && (
-                            <AlertTriangle className="w-3 h-3 text-amber-500 shrink-0 ml-auto" />
-                        )}
+                        <div style={{ backgroundColor: v.color }} className="w-2 h-2 rounded-full shrink-0"></div>
+                        <span className="text-[9px] truncate font-bold text-gray-700 max-w-[90px]">{v.name}</span>
+                        {v.reroutingStatus !== 'None' && <AlertTriangle className="w-2.5 h-2.5 text-amber-500 shrink-0 ml-auto" />}
                     </div>
                 ))}
             </div>
-            <div className="border-t border-gray-200 mt-2.5 pt-2.5 space-y-2">
-                <div className="flex items-center gap-2">
-                    <div className="w-8 h-0.5 bg-gray-400 rounded flex-shrink-0"></div>
-                    <span className="text-[9px] font-bold text-gray-600 uppercase">Standard Route</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <div className="w-8 border-t-[2.5px] border-dotted border-shell-blue flex-shrink-0"></div>
-                    <span className="text-[9px] font-bold text-gray-600 uppercase">AI Optimized</span>
-                </div>
+            <div className="border-t border-gray-200 mt-1.5 pt-1.5 flex gap-3">
+                <div className="flex items-center gap-1"><div className="w-4 h-px bg-gray-400"></div><span className="text-[7px] font-bold text-gray-500 uppercase">Route</span></div>
+                <div className="flex items-center gap-1"><div className="w-4 border-t border-dotted border-shell-blue"></div><span className="text-[7px] font-bold text-gray-500 uppercase">AI</span></div>
             </div>
         </div>
     );
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
-export function RouteOptimizationView() {
+export function RouteOptimizationView({ embedded = false }) {
     const [vessels, setVessels] = useState([]);
     const [hoveredVessel, setHoveredVessel] = useState(null);
     const [selectedVesselMmsi, setSelectedVesselMmsi] = useState(null);
@@ -393,8 +403,12 @@ export function RouteOptimizationView() {
     );
 
     return (
-        <div className="flex flex-row h-full bg-gray-50">
-            <div className="flex-1 relative z-10" style={{ minWidth: 0 }}>
+        <div className={`flex ${embedded ? 'flex-col' : 'flex-row'} h-full bg-gray-50 w-full`}>
+            {/* Horizontal stats bar (ONLY in embedded mode) */}
+            {embedded && <RouteStatsBar vessels={vessels} />}
+
+            {/* Map fills remaining space */}
+            <div className="flex-1 relative z-10" style={{ minWidth: 0, height: '100%' }}>
                 <MapContainer
                     center={[20, 20]}
                     zoom={3}
@@ -437,10 +451,18 @@ export function RouteOptimizationView() {
                     )})}
                 </MapContainer>
 
+                {/* MapLegend always visible when expected (bottom left of map) */}
                 <MapLegend vessels={vessels} selectedVesselMmsi={selectedVesselMmsi} setSelectedVesselMmsi={setSelectedVesselMmsi} />
             </div>
 
-            <RouteSidebar vessels={vessels} />
+            {/* Full vertical sidebar (Standalone Mode) goes on the RIGHT */}
+            {!embedded && (
+                <RouteOptimizationSidebar 
+                    vessels={vessels} 
+                    selectedVesselMmsi={selectedVesselMmsi} 
+                    setSelectedVesselMmsi={setSelectedVesselMmsi} 
+                />
+            )}
 
             {/* Floating tooltip */}
             {hoveredVessel && (

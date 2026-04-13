@@ -45,53 +45,48 @@ const VIEWS = {
 const DEMO_TOUR = [
     {
         view: 'command',
-        dwell: 24000,
-        pitch: "Hi, welcome to Neuro Shell. You are looking at the Strategic Steering Hub, the executive brain of the enterprise. Here, the APEX agent synthesizes millions of data points across 18 distinct global domains into a single pane of glass. Unlike traditional ERPs that look backward, APEX acts as a proactive operating system, continuously calculating risk, optimizing resources, and surfacing critical insights before they become business bottlenecks."
+        pitch: "Welcome to Neuro Shell. This is not just an ERP; it is the definitive AI Engine Operating System built specifically for the staggering scale of Shell. The Strategic Steering Hub synthesizes millions of telemetry points across all global domains, actively predicting bottlenecks and optimizing resources before risks materialize."
     },
     {
         view: 'digitaltwin',
-        dwell: 24000,
-        pitch: "Next, we enter the Asset Digital Twin. What makes Neuro Shell unique is its direct connection to the physical world. This is a live, 3D spatial replica of our global infrastructure. Specialized AI agents continuously ingest telemetry from thousands of IoT sensors. They don't just monitor — they predict. By identifying harmonic anomalies in a physical compressor, the agent can predict a mechanical failure up to 72 hours in advance, completely eliminating unplanned industrial downtime."
+        pitch: "An AI OS must deeply understand physical realities. Enter the Asset Digital Twin. Here, specialized agents ingest real-time IoT vibrations. This enables them to pinpoint and predict a mechanical failure in a deep-water compressor up to seventy two hours in advance, fundamentally eliminating unplanned industrial downtime."
     },
     {
         view: 'manufacturing',
-        dwell: 23000,
-        pitch: "Moving to Industrial Operations and Refining. Here, operational efficiency meets uncompromised safety. Watch how the Guardian Eye agent operates: it autonomously scans live CCTV feeds across all active safety zones. If it detects a worker missing critical PPE, it immediately flags the hazard, recalculates the site's overall safety compliance score, and logs an immutable audit trail without any human intervention."
+        tab: 'surveillance',
+        pitch: "In Manufacturing and Refining, the Guardian Eye agent acts as our omnipresent safety orchestrator. It autonomously monitors global camera feeds. If a worker enters an exclusion zone without proper gear, it immediately triggers localized alerts and recalculates site compliance, securing our frontline without requiring manual oversight."
     },
     {
         view: 'supplychain',
-        dwell: 24000,
-        pitch: "In Global Logistics and Marine, we redefine supply chain resilience. The Logistics Agent actively tracks 50 active shipments across volatile ocean corridors. But its true power lies in predictive routing. If a geopolitical event or weather anomaly threatens a shipping lane, the agent autonomously simulates alternative routes, calculates the exact impact on LNG demurrage, and restructures the supply chain to protect margins."
+        tab: 'routes',
+        pitch: "For Global Logistics, true AI-native routing shines. The Supply Chain Agent precisely commands our entire heavy fleet. If a sudden geopolitical event disrupts an ocean corridor, it immediately simulates alternative waypoints to protect our LNG margins and minimize demurrage, fully autonomously and in real-time."
     },
     {
-        view: 'commercial_agent',
-        dwell: 24000,
-        pitch: "Welcome to the Energy Trading and Risk terminal. This is where market intelligence is weaponized. The Commercial Agent ingests real-time pricing for Brent Crude, TTF Gas, and LNG spots. It doesn't just display data; it actively screens counterparties against live OFAC and REMIT sanctions databases. It prevents non-compliant trades in milliseconds, offering a level of proactive regulatory shielding that human compliance teams simply cannot match."
+        view: 'commercial',
+        tab: 'agent',
+        pitch: "At the Energy Trading Risk terminal, the Commercial Agent weaponizes market intelligence. It actively ingests Brent Crude and TTF Gas volatilities while simultaneously screening all counterparties against live sanctions databases. It prevents non-compliant trades in milliseconds, offering an invincible, instantaneous regulatory shield for our traders."
     },
     {
         view: 'finance',
-        dwell: 24000,
-        pitch: "In Group Finance and Strategy, we are fundamentally accelerating corporate velocity. The Finance Agent oversees SOX reconciliations, intercompany settlements, and global hedging positions. By deploying machine learning to instantly flag accounting anomalies and automate reconciliations, Neuro Shell is actively compressing the financial close cycle from an industry-standard nine days, down to an unprecedented five days."
+        pitch: "In Group Finance, we accelerate corporate velocity. The Finance Agent continuously oversees complex intercompany reconciliations and global hedging positions. By deploying deep learning to flag accounting anomalies instantly, Neuro Shell compresses our financial close cycle from the industry standard of nine days down to an unprecedented five."
     },
     {
-        view: 'hr_agent',
-        dwell: 22000,
-        pitch: "Workforce and HSE Safety is where we manage our most critical asset — our people. The HR Workforce Agent doesn't just track headcount. It correlates operational safety data with talent demand, forecasting exact workforce needs for the next quarter. It ensures that critical sites have the right certified personnel, seamlessly connecting human capital management directly to on-the-ground operational realities."
+        view: 'hr',
+        tab: 'agent',
+        pitch: "To manage Shell's most vital asset, the HR Workforce Agent correlates continuous operational data directly with our talent demand scale. It forecasts exact workforce constraints, guaranteeing that mission-critical extraction sites have their necessary certified personnel deployed flawlessly and optimally at the right time."
     },
     {
-        view: 'itops_agent',
-        dwell: 24000,
-        pitch: "This is the System Operations and Cyber command center. Watch what happens when IT support becomes fully agentic. The AIOps engine monitors 492,000 sensor tags globally. When an anomaly occurs, it doesn't wait for a user to complain. It autonomously triages the alert, deflects up to 67 percent of routine service desk tickets, and automatically dispatches L3 engineers for critical failures — shrinking incident response times from hours to mere seconds."
+        view: 'itops',
+        tab: 'agent',
+        pitch: "This is the AIOPS Engine, standing guard over our IT infrastructure. When systemic anomalies occur across our half a million sensor tags, it autonomously deflects routine service tickets and dispatches Level 3 engineers for critical failures, shrinking system response times from multiple hours to mere seconds."
     },
     {
         view: 'governance',
-        dwell: 25000,
-        pitch: "In the Governance and Compliance module, we address the boardroom's highest priority: risk elimination. Neuro Shell provides a unified, continuous audit feed. The compliance agent tracks EU AI Act readiness, ISO 27001 validation, and GDPR erasure SLAs simultaneously. It proves that within Neuro Shell, compliance is not an annual retrospective audit — it is an active, continuous, and automated state of business."
+        pitch: "At the executive level, the Governance Agent provides an immutable corporate audit feed. By tracking AI Act readiness, ISO compliance, and GDPR parameters simultaneously, it proves that for Shell, compliance is absolutely no longer a retrospective audit, but an automated, living, actively enforced state."
     },
     {
         view: 'topology',
-        dwell: 26000,
-        pitch: "Finally, the Agentic Neural Topology. This is the architectural marvel binding it all together — the live knowledge graph. You are seeing the actual neural pathways connecting APEX, Guardian Eye, the Commercial Agent, and the IT Ops engine. They communicate seamlessly, sharing context across silos to execute complex, multi-step actions on behalf of the enterprise. Thank you, jury, for experiencing Neuro Shell — the definitive blueprint for the autonomous enterprise."
+        pitch: "Finally, the Neural Topology knowledge graph. This conclusively proves why Neuro Shell is the perfect AI EOS for Shell. Domain agents seamlessly communicate deep context across operational silos. We have transitioned from fragmented, legacy software to a truly autonomous enterprise nervous system. Thank you for viewing."
     },
 ];
 
@@ -260,18 +255,39 @@ export function AgenticAssistant({ setCurrentView }) {
     const recognitionRef = useRef(null);
     const demoTimeoutRef = useRef(null);
     const currentAudioRef = useRef(null);
+    const voicesRef = useRef([]);
+    const [isSpeaking, setIsSpeaking] = useState(false);
 
     const scrollBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => { scrollBottom(); }, [messages, isThinking]);
     useEffect(() => { if (isOpen) setTimeout(() => inputRef.current?.focus(), 200); }, [isOpen]);
     useEffect(() => {
+        const loadVoices = () => {
+            voicesRef.current = window.speechSynthesis.getVoices();
+        };
+        loadVoices();
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
         return () => {
             if (currentAudioRef.current) {
                 currentAudioRef.current.pause();
                 currentAudioRef.current = null;
             }
+            window.speechSynthesis.cancel();
             clearTimeout(demoTimeoutRef.current);
         };
+    }, []);
+
+    const stopSpeech = useCallback(() => {
+        if (currentAudioRef.current) {
+            currentAudioRef.current.pause();
+            currentAudioRef.current = null;
+        }
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+        setIsSpeaking(false);
     }, []);
 
     // Female voice selector — prioritises named female voices
@@ -311,60 +327,73 @@ export function AgenticAssistant({ setCurrentView }) {
     }, []);
 
     // Speech Output with female voice
-    const speakText = useCallback(async (text) => {
-        if (isMuted || !('speechSynthesis' in window)) return;
-        window.speechSynthesis.cancel();
-        const cleanText = String(text || '').replace(/[*#_`~\[\]]/g, '').trim();
-        if (!cleanText) return;
+    const speakText = useCallback(async (text, onFinished) => {
+        if (isMuted) return;
+        
+        stopSpeech();
+        const cleanText = String(text || '').replace(/[*#_`~\[\]]/g, '').replace(/<[^>]+>/g, '').trim();
+        if (!cleanText) {
+            if (onFinished) onFinished();
+            return;
+        }
 
-        try {
-            const response = await fetch(
-                `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'xi-api-key': ELEVENLABS_API_KEY,
-                        'Content-Type': 'application/json',
-                        'Accept': 'audio/mpeg',
-                    },
-                    body: JSON.stringify({
-                        text: cleanText,
-                        model_id: 'eleven_multilingual_v2',
-                        voice_settings: {
-                            stability: 0.45,
-                            similarity_boost: 0.80,
-                            style: 0.15,
-                            use_speaker_boost: true,
-                        },
-                    }),
-                }
-            );
+        setIsSpeaking(true);
 
-            if (!response.ok) {
-                console.error('ElevenLabs TTS error:', response.status, await response.text());
+        if (!('speechSynthesis' in window)) {
+            setIsSpeaking(false);
+            if (onFinished) onFinished();
+            return;
+        }
+
+        // Split text into sentences to avoid Chromium long-text cutoff bug
+        const sentences = cleanText.match(/[^.!?]+[.!?]*/g) || [cleanText];
+        let currentSentence = 0;
+
+        const speakNext = () => {
+            if (currentSentence >= sentences.length) {
+                setIsSpeaking(false);
+                if (onFinished) onFinished();
                 return;
             }
 
-            const audioBlob = await response.blob();
-            const audioUrl = URL.createObjectURL(audioBlob);
-            const audio = new Audio(audioUrl);
-            currentAudioRef.current = audio;
+            const utterance = new SpeechSynthesisUtterance(sentences[currentSentence].trim());
+            let voices = window.speechSynthesis.getVoices();
+            if (voices.length === 0) voices = voicesRef.current;
 
-            audio.onended = () => {
-                URL.revokeObjectURL(audioUrl);
-                if (currentAudioRef.current === audio) currentAudioRef.current = null;
+            const femalePreferences = [
+                v => v.name.includes('Google') && v.name.includes('Female'),
+                v => v.name.includes('Samantha'),
+                v => v.name.includes('Zira'),
+                v => v.name.includes('Microsoft') && v.lang.startsWith('en') && !v.name.includes('David'),
+                v => v.lang.startsWith('en-US'),
+            ];
+
+            let voiceToUse = null;
+            for (const test of femalePreferences) {
+                const found = voices.find(test);
+                if (found) { voiceToUse = found; break; }
+            }
+            if (!voiceToUse && voices.length > 0) voiceToUse = voices[0];
+            if (voiceToUse) utterance.voice = voiceToUse;
+
+            utterance.pitch = 1.1;
+            utterance.rate = 1.0;
+
+            utterance.onend = () => {
+                currentSentence++;
+                speakNext();
+            };
+            utterance.onerror = () => {
+                currentSentence++;
+                speakNext();
             };
 
-            audio.onerror = () => {
-                URL.revokeObjectURL(audioUrl);
-                if (currentAudioRef.current === audio) currentAudioRef.current = null;
-            };
+            window.speechSynthesis.resume();
+            window.speechSynthesis.speak(utterance);
+        };
 
-            await audio.play();
-        } catch (err) {
-            console.error('ElevenLabs TTS exception:', err);
-        }
-    }, [isMuted]);
+        speakNext();
+    }, [isMuted, stopSpeech]);
 
     // Speech Input — auto-sends when done speaking
     const toggleListen = () => {
@@ -418,6 +447,8 @@ export function AgenticAssistant({ setCurrentView }) {
 
     // Demo tour runner
     const runDemoTour = useCallback((startStep = 0) => {
+        if (isDemoRunning) return; // Prevent double trigger
+        
         setIsDemoRunning(true);
         setDemoStep(startStep);
 
@@ -425,7 +456,7 @@ export function AgenticAssistant({ setCurrentView }) {
             if (stepIndex >= DEMO_TOUR.length) {
                 setIsDemoRunning(false);
                 setDemoStep(0);
-                const endMsg = "That concludes the full Neuro Shell tour. As you've seen, every domain — from industrial operations to financial close — is powered by autonomous AI agents, all coordinated through the APEX neural fabric. I'm here whenever you need anything.";
+                const endMsg = "That concludes the full Neuro Shell tour. As you've seen, every domain is powered by autonomous AI agents, coordinated through the APEX neural fabric. Thank you for your leadership.";
                 setMessages(prev => [...prev, { role: 'assistant', content: endMsg, type: 'text' }]);
                 speakText(endMsg);
                 return;
@@ -437,24 +468,33 @@ export function AgenticAssistant({ setCurrentView }) {
             // Navigate
             if (setCurrentView) setCurrentView(stop.view);
 
-            // Show nav message & speak pitch
+            if (stop.tab) {
+                // Wait slightly longer for module to mount before firing tab change
+                setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('DEMO_GOTO_TAB', { 
+                        detail: { view: stop.view, tab: stop.tab } 
+                    }));
+                }, 600);
+            }
+
+            // Show nav message
             setMessages(prev => [...prev, {
                 role: 'tool_result',
-                content: `Navigated to **${VIEWS[stop.view]}** — Stop ${stepIndex + 1} of ${DEMO_TOUR.length}`,
+                content: `Navigating to **${VIEWS[stop.view] || stop.view}**...`,
                 icon: 'navigation',
                 type: 'action'
             }]);
 
-            speakText(stop.pitch);
-
-            // After dwell time move to next step
-            demoTimeoutRef.current = setTimeout(() => {
-                runStep(stepIndex + 1);
-            }, stop.dwell);
+            // Speak and only advance once finish signal is received
+            speakText(stop.pitch, () => {
+                demoTimeoutRef.current = setTimeout(() => {
+                    runStep(stepIndex + 1);
+                }, 4000); // 4s finish pause
+            });
         };
 
         runStep(startStep);
-    }, [setCurrentView, speakText]);
+    }, [setCurrentView, speakText, isDemoRunning]);
 
     const skipDemo = useCallback(() => {
         clearTimeout(demoTimeoutRef.current);
@@ -485,8 +525,8 @@ export function AgenticAssistant({ setCurrentView }) {
     const toggleMute = () => {
         const nextMuted = !isMuted;
         setIsMuted(nextMuted);
-        if (nextMuted && window.speechSynthesis) {
-            window.speechSynthesis.cancel();
+        if (nextMuted) {
+            stopSpeech();
         }
     };
 
@@ -687,9 +727,9 @@ export function AgenticAssistant({ setCurrentView }) {
                         const introMsg = "Absolutely! Starting the full guided tour of Neuro Shell right now. I'll walk you through every major module and explain its purpose and advantages. Let's begin.";
                         setMessages(prev => [...prev, { role: 'assistant', content: introMsg, type: 'text' }]);
                         chatHistoryRef.current.push({ role: 'assistant', content: introMsg });
-                        speakText(introMsg);
-
-                        setTimeout(() => runDemoTour(0), 3500);
+                        speakText(introMsg, () => {
+                            setTimeout(() => runDemoTour(0), 1000);
+                        });
                         break;
                     }
 
@@ -952,6 +992,17 @@ export function AgenticAssistant({ setCurrentView }) {
                                 >
                                     {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                                 </button>
+                                
+                                {isSpeaking && (
+                                    <button
+                                        onClick={stopSpeech}
+                                        className="p-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition-all flex items-center gap-1.5 border border-red-100"
+                                        title="Stop Voice"
+                                    >
+                                        <VolumeX className="w-3.5 h-3.5" />
+                                        <span className="text-[9px] font-black uppercase tracking-wider">Stop Voice</span>
+                                    </button>
+                                )}
                                 <button
                                     onClick={toggleListen}
                                     disabled={isThinking}

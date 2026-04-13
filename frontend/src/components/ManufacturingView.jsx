@@ -29,6 +29,15 @@ export function ManufacturingView({ setCurrentView }) {
         return () => { isMounted = false; };
     }, []);
 
+    useEffect(() => {
+        const handleDemoTab = (e) => {
+            if (e.detail?.view === 'manufacturing' && e.detail?.tab) {
+                setActiveTab(e.detail.tab);
+            }
+        };
+        window.addEventListener('DEMO_GOTO_TAB', handleDemoTab);
+        return () => window.removeEventListener('DEMO_GOTO_TAB', handleDemoTab);
+    }, []);
 
     return (
         <div className="flex flex-col h-full animate-in fade-in duration-300 p-6">

@@ -20,6 +20,7 @@ const TABS = [
     { id: 'ot',         label: 'OT Threats' },
     { id: 'predictive', label: 'Predictive' },
     { id: 'shadow',     label: 'Shadow IT' },
+    { id: 'agent',      label: 'AIOps Engine' },
 ];
 
 export function ITOpsView({ setCurrentView }) {
@@ -35,10 +36,20 @@ export function ITOpsView({ setCurrentView }) {
         return () => { isMounted = false; };
     }, []);
 
+    useEffect(() => {
+        const handleDemoTab = (e) => {
+            if (e.detail?.view === 'itops' && e.detail?.tab) {
+                setActiveTab(e.detail.tab);
+            }
+        };
+        window.addEventListener('DEMO_GOTO_TAB', handleDemoTab);
+        return () => window.removeEventListener('DEMO_GOTO_TAB', handleDemoTab);
+    }, []);
+
     if (!data) return null;
 
     // Full-screen sub-modules (hide header + tabs when active)
-    const isFullModule = ['itsm', 'ot', 'predictive', 'shadow'].includes(activeTab);
+    const isFullModule = ['itsm', 'ot', 'predictive', 'shadow', 'agent'].includes(activeTab);
 
     const renderTab = () => {
         switch (activeTab) {
@@ -46,6 +57,7 @@ export function ITOpsView({ setCurrentView }) {
             case 'ot':         return <OTThreatView />;
             case 'predictive': return <PredictiveMonitoringView />;
             case 'shadow':     return <ShadowITView />;
+            case 'agent':      return <ITOpsAgent />;
             default:           return null;
         }
     };

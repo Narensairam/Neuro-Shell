@@ -72,73 +72,65 @@ function App() {
     }
   };
 
-  // ── Digital Twin: true fullscreen layout ──────────────────────────────────
-  if (isDigitalTwin) {
-    return (
-      <div className="flex h-screen w-full overflow-hidden flex-col bg-black">
-        {/* Keep the main Neuro Shell header */}
-        <Header role={role} setRole={setRole} setCurrentView={setCurrentView} />
-
-        {/* Hamburger button — top-left, just under header */}
-        <button
-          onClick={() => setSidebarOpen(v => !v)}
-          className="fixed top-[66px] left-3 z-[9999] w-9 h-9 rounded-lg bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all shadow-lg"
-          title="Toggle Navigation"
-        >
-          {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
-        </button>
-
-        {/* Slide-in sidebar drawer */}
-        <div
-          className={`fixed inset-y-0 left-0 z-[9998] transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        >
-          <Sidebar
-            currentView={currentView}
-            setCurrentView={(v) => { setCurrentView(v); setSidebarOpen(false); }}
-            role={role}
-          />
-        </div>
-
-        {/* Dimmed backdrop when sidebar is open */}
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 z-[9997] bg-black/40 backdrop-blur-[1px]"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-
-        {/* Full-screen Digital Twin area — no top-level scroll, internal components handle it */}
-        <main className="flex-1 min-h-0 overflow-hidden w-full pt-[58px] flex flex-col">
-          <div className="flex-1 min-h-0 flex flex-col">
-            <DigitalTwinView setCurrentView={(v) => { setCurrentView(v); setSidebarOpen(false); }} />
-          </div>
-        </main>
-
-        <AgenticAssistant setCurrentView={setCurrentView} />
-        <CrisisOrchestrator setCurrentView={setCurrentView} />
-      </div>
-    );
-  }
-
-  // ── Normal layout ─────────────────────────────────────────────────────────
   return (
-    <div className="flex h-screen w-full bg-shell-gray overflow-hidden font-sans text-shell-darkText text-[14px]">
-      <Header role={role} setRole={setRole} setCurrentView={setCurrentView} />
+    <>
+      {isDigitalTwin ? (
+        <div className="flex h-screen w-full overflow-hidden flex-col bg-black relative z-0">
+          {/* Keep the main Neuro Shell header */}
+          <Header role={role} setRole={setRole} setCurrentView={setCurrentView} />
 
-      <div className="flex w-full pt-[58px] pb-[26px]">
-        <Sidebar currentView={currentView} setCurrentView={setCurrentView} role={role} />
+          {/* Hamburger button — top-left, just under header */}
+          <button
+            onClick={() => setSidebarOpen(v => !v)}
+            className="fixed top-[66px] left-3 z-[9999] w-9 h-9 rounded-lg bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all shadow-lg"
+            title="Toggle Navigation"
+          >
+            {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
 
-        <main className="flex-1 min-h-0 bg-shell-gray relative">
-          <div className="h-full">
-            {renderView()}
+          {/* Slide-in sidebar drawer */}
+          <div className={`fixed inset-y-0 left-0 z-[9998] transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <Sidebar
+              currentView={currentView}
+              setCurrentView={(v) => { setCurrentView(v); setSidebarOpen(false); }}
+              role={role}
+            />
           </div>
-        </main>
-      </div>
 
-      <Ticker />
+          {/* Dimmed backdrop when sidebar is open */}
+          {sidebarOpen && (
+            <div className="fixed inset-0 z-[9997] bg-black/40 backdrop-blur-[1px]" onClick={() => setSidebarOpen(false)} />
+          )}
+
+          {/* Full-screen Digital Twin area — no top-level scroll, internal components handle it */}
+          <main className="flex-1 min-h-0 overflow-hidden w-full pt-[58px] flex flex-col">
+            <div className="flex-1 min-h-0 flex flex-col">
+              <DigitalTwinView setCurrentView={(v) => { setCurrentView(v); setSidebarOpen(false); }} />
+            </div>
+          </main>
+        </div>
+      ) : (
+        <div className="flex h-screen w-full bg-shell-gray overflow-hidden font-sans text-shell-darkText text-[14px] relative z-0">
+          <Header role={role} setRole={setRole} setCurrentView={setCurrentView} />
+
+          <div className="flex w-full pt-[58px] pb-[26px]">
+            <Sidebar currentView={currentView} setCurrentView={setCurrentView} role={role} />
+
+            <main className="flex-1 min-h-0 bg-shell-gray relative">
+              <div className="h-full">
+                {renderView()}
+              </div>
+            </main>
+          </div>
+
+          <Ticker />
+        </div>
+      )}
+
+      {/* Global Persisted Elements — NEVER UNMOUNT DURING VIEW CHANGES */}
       <AgenticAssistant setCurrentView={setCurrentView} />
       <CrisisOrchestrator setCurrentView={setCurrentView} />
-    </div>
+    </>
   );
 }
 

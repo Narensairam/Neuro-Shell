@@ -22,7 +22,6 @@ export function CrisisOrchestrator({ setCurrentView }) {
             });
             setTimeout(() => {
                 setActiveAlert(null);
-                setCurrentView('hr');
             }, 3000);
         };
 

@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { crisisEventBus } from '../context/CrisisEventBus';
 
-export function HRWorkforceAgent() {
+export function HRWorkforceAgent({ embedded = false }) {
     const [scenario, setScenario] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -58,38 +58,42 @@ export function HRWorkforceAgent() {
 
     return (
         <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 h-full overflow-hidden flex flex-col p-6 pt-0">
-            {/* Control Header */}
-            <div className="flex items-start justify-between mb-8">
-                <div>
-                    <h1 className="text-[25px] font-extrabold leading-tight text-shell-darkText uppercase tracking-tight">Workforce AI Terminal</h1>
-                    <div className="font-mono text-[10px] text-gray-400 tracking-widest uppercase mt-1">
-                        Shell plc · HR Intelligence & Resource Allocation · <span className="text-shell-yellow">Wave 1 Deployment</span>
+            {/* Control Header — hidden when embedded in another panel */}
+            {!embedded && (
+                <div className="flex items-start justify-between mb-8">
+                    <div>
+                        <h1 className="text-[25px] font-extrabold leading-tight text-shell-darkText uppercase tracking-tight">Workforce AI Terminal</h1>
+                        <div className="font-mono text-[10px] text-gray-400 tracking-widest uppercase mt-1">
+                            Shell plc · HR Intelligence & Resource Allocation · <span className="text-shell-yellow">Wave 1 Deployment</span>
+                        </div>
+                    </div>
+                    <div className="flex gap-2">
+                        <button 
+                            onClick={() => runScenario('fire')}
+                            disabled={loading}
+                            className="px-4 py-2 bg-red-600 text-white font-mono text-[9px] uppercase font-bold tracking-widest rounded hover:bg-red-700 transition-colors flex items-center gap-2 shadow-sm"
+                        >
+                            <ShieldAlert className="w-3.5 h-3.5" /> Fire Alert
+                        </button>
+                        <button 
+                            onClick={() => runScenario('maintenance')}
+                            disabled={loading}
+                            className="px-4 py-2 bg-shell-darkText text-white font-mono text-[9px] uppercase font-bold tracking-widest rounded hover:bg-black transition-colors flex items-center gap-2 shadow-sm"
+                        >
+                            <Zap className="w-3.5 h-3.5" /> Maintenance
+                        </button>
+                        <button 
+                            onClick={() => runScenario('holiday_shortage')}
+                            disabled={loading}
+                            className="px-4 py-2 bg-amber-500 text-white font-mono text-[9px] uppercase font-bold tracking-widest rounded hover:bg-amber-600 transition-colors flex items-center gap-2 shadow-sm"
+                        >
+                            <Globe className="w-3.5 h-3.5" /> Holiday Protocol
+                        </button>
                     </div>
                 </div>
-                <div className="flex gap-2">
-                    <button 
-                        onClick={() => runScenario('fire')}
-                        disabled={loading}
-                        className="px-4 py-2 bg-red-600 text-white font-mono text-[9px] uppercase font-bold tracking-widest rounded hover:bg-red-700 transition-colors flex items-center gap-2 shadow-sm"
-                    >
-                        <ShieldAlert className="w-3.5 h-3.5" /> Fire Alert
-                    </button>
-                    <button 
-                        onClick={() => runScenario('maintenance')}
-                        disabled={loading}
-                        className="px-4 py-2 bg-shell-darkText text-white font-mono text-[9px] uppercase font-bold tracking-widest rounded hover:bg-black transition-colors flex items-center gap-2 shadow-sm"
-                    >
-                        <Zap className="w-3.5 h-3.5" /> Maintenance
-                    </button>
-                    <button 
-                        onClick={() => runScenario('holiday_shortage')}
-                        disabled={loading}
-                        className="px-4 py-2 bg-amber-500 text-white font-mono text-[9px] uppercase font-bold tracking-widest rounded hover:bg-amber-600 transition-colors flex items-center gap-2 shadow-sm"
-                    >
-                        <Globe className="w-3.5 h-3.5" /> Holiday Protocol
-                    </button>
-                </div>
-            </div>
+            )}
+
+            {/* Compact scenario controls when embedded (removed per user request) */}
 
             <div className="flex-1 overflow-y-auto custom-scrollbar px-1 pb-10">
                 {loading ? (
@@ -106,134 +110,136 @@ export function HRWorkforceAgent() {
                 ) : scenario ? (
                     <div className="space-y-4 animate-in fade-in zoom-in-95 duration-500">
                         {/* KPI Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div className="bg-white border border-gray-200 p-5 rounded-lg relative overflow-hidden group">
+                        <div className={`grid ${embedded ? 'grid-cols-4 gap-2 mb-0' : 'grid-cols-1 md:grid-cols-4 gap-4'}`}>
+                            <div className={`bg-white border border-gray-200 ${embedded ? 'p-2' : 'p-5'} rounded-lg relative overflow-hidden group`}>
                                 <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-red-600 opacity-60"></div>
-                                <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5 flex justify-between">
-                                    Anomaly Risk <HardHat className="w-3 h-3 opacity-30" />
+                                <div className={`font-mono ${embedded ? 'text-[8px] mb-0.5' : 'text-[10px] mb-1.5'} text-gray-500 tracking-widest uppercase flex justify-between`}>
+                                    Risk <HardHat className="w-3 h-3 opacity-30" />
                                 </div>
-                                <div className={`text-[31px] font-extrabold leading-none uppercase ${scenario.risk === 'HIGH' ? 'text-red-600' : 'text-amber-600'}`}>
+                                <div className={`${embedded ? 'text-[18px]' : 'text-[31px]'} font-extrabold leading-none uppercase ${scenario.risk === 'HIGH' ? 'text-red-600' : 'text-amber-600'}`}>
                                     {scenario.risk}
                                 </div>
-                                <div className="font-mono text-[9px] text-gray-400 mt-1 uppercase tracking-widest">Severity Classification</div>
+                                {!embedded && <div className="font-mono text-[9px] text-gray-400 mt-1 uppercase tracking-widest">Severity Classification</div>}
                             </div>
-                            <div className="bg-white border border-gray-200 p-5 rounded-lg relative overflow-hidden">
+                            <div className={`bg-white border border-gray-200 ${embedded ? 'p-2' : 'p-5'} rounded-lg relative overflow-hidden`}>
                                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-20"></div>
-                                <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Staffing Demand</div>
-                                <div className="text-[31px] font-extrabold text-shell-darkText leading-none font-mono tracking-tighter">
+                                <div className={`font-mono ${embedded ? 'text-[8px] mb-0.5' : 'text-[10px] mb-1.5'} text-gray-500 tracking-widest uppercase`}>Demand</div>
+                                <div className={`${embedded ? 'text-[18px]' : 'text-[31px]'} font-extrabold text-shell-darkText leading-none font-mono tracking-tighter`}>
                                     {scenario.demand}
                                 </div>
-                                <div className="font-mono text-[9px] text-gray-400 mt-1 uppercase tracking-widest">Required Headcount</div>
+                                {!embedded && <div className="font-mono text-[9px] text-gray-400 mt-1 uppercase tracking-widest">Required Headcount</div>}
                             </div>
-                            <div className="bg-white border border-gray-200 p-5 rounded-lg relative overflow-hidden">
+                            <div className={`bg-white border border-gray-200 ${embedded ? 'p-2' : 'p-5'} rounded-lg relative overflow-hidden`}>
                                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-20"></div>
-                                <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Availability</div>
-                                <div className="text-[31px] font-extrabold text-shell-darkText leading-none font-mono tracking-tighter">
+                                <div className={`font-mono ${embedded ? 'text-[8px] mb-0.5' : 'text-[10px] mb-1.5'} text-gray-500 tracking-widest uppercase`}>Available</div>
+                                <div className={`${embedded ? 'text-[18px]' : 'text-[31px]'} font-extrabold text-shell-darkText leading-none font-mono tracking-tighter`}>
                                     {scenario.available}
                                 </div>
-                                <div className="font-mono text-[9px] text-gray-400 mt-1 uppercase tracking-widest">Headcount On-Site</div>
+                                {!embedded && <div className="font-mono text-[9px] text-gray-400 mt-1 uppercase tracking-widest">Headcount On-Site</div>}
                             </div>
-                            <div className="bg-white border border-gray-200 p-5 rounded-lg relative overflow-hidden">
+                            <div className={`bg-white border border-gray-200 ${embedded ? 'p-2' : 'p-5'} rounded-lg relative overflow-hidden`}>
                                 <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-amber-500 opacity-60"></div>
-                                <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Resource Gap</div>
-                                <div className="text-[31px] font-extrabold text-red-600 leading-none font-mono tracking-tighter">
+                                <div className={`font-mono ${embedded ? 'text-[8px] mb-0.5' : 'text-[10px] mb-1.5'} text-gray-500 tracking-widest uppercase`}>Gap</div>
+                                <div className={`${embedded ? 'text-[18px]' : 'text-[31px]'} font-extrabold text-red-600 leading-none font-mono tracking-tighter`}>
                                     {scenario.gap}
                                 </div>
-                                <div className="font-mono text-[9px] text-gray-400 mt-1 uppercase tracking-widest">Deployment Delta</div>
+                                {!embedded && <div className="font-mono text-[9px] text-gray-400 mt-1 uppercase tracking-widest">Deployment Delta</div>}
                             </div>
                         </div>
 
                         {/* Main Intelligence Section */}
-                        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-4 items-stretch">
+                        <div className={`grid ${embedded ? 'grid-cols-2 gap-2 mt-2 h-[270px]' : 'grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-4 items-stretch'}`}>
                                 {/* AI Recommendation Card */}
-                                <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden shadow-sm flex flex-col h-full">
+                                <div className={`bg-white border border-gray-200 rounded-lg ${embedded ? 'p-3' : 'p-6'} relative overflow-hidden shadow-sm flex flex-col h-full`}>
                                     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-30"></div>
-                                    <div className="flex items-center justify-between mb-8">
+                                    <div className={`flex items-center justify-between ${embedded ? 'mb-2' : 'mb-8'}`}>
                                         <div>
-                                            <h3 className="text-[15px] font-extrabold text-shell-darkText uppercase tracking-tight">AI Deployment Recommendation</h3>
-                                            <div className="font-mono text-[9.5px] text-gray-400 tracking-widest uppercase mt-1">
-                                                Scenario: {scenario.title} {scenario.isHoliday && <span className="text-amber-600 ml-2">● Holiday Mode Active</span>}
+                                            <h3 className={`${embedded ? 'text-[11px]' : 'text-[15px]'} font-extrabold text-shell-darkText uppercase tracking-tight`}>AI Recommendation</h3>
+                                            <div className={`font-mono ${embedded ? 'text-[8px] mt-0.5' : 'text-[9.5px] mt-1'} text-gray-400 tracking-widest uppercase`}>
+                                                Scenario: {scenario.title} {scenario.isHoliday && <span className="text-amber-600 ml-1">● Holiday</span>}
                                             </div>
                                         </div>
-                                        <Target className="w-5 h-5 text-shell-yellow" />
                                     </div>
                                     
-                                    <p className="text-[14px] font-extrabold text-shell-darkText leading-relaxed mb-6 border-l-2 border-shell-yellow pl-4 py-1 uppercase tracking-tight">
+                                    <p className={`${embedded ? 'text-[10px] mb-2 leading-snug pl-2' : 'text-[14px] mb-6 leading-relaxed pl-4 line-clamp-3'} font-extrabold text-shell-darkText border-l-2 border-shell-yellow py-0.5 uppercase tracking-tight`}>
                                         {scenario.recommendation}
                                     </p>
                                     
-                                    <div className="overflow-y-auto no-scrollbar mb-6">
-                                        <div className="p-5 bg-gray-50 rounded-lg border border-gray-100">
-                                            <h4 className="font-mono text-[9px] text-gray-400 uppercase tracking-widest mb-4">Neural Logic Stream</h4>
-                                            <p className="text-[12px] font-mono text-shell-darkText leading-relaxed">
+                                    <div className={`overflow-y-auto no-scrollbar ${embedded ? 'mb-1' : 'mb-6'}`}>
+                                        <div className={`bg-gray-50 rounded-lg border border-gray-100 ${embedded ? 'p-2' : 'p-5'}`}>
+                                            <h4 className={`font-mono ${embedded ? 'text-[8px] mb-1' : 'text-[9px] mb-4'} text-gray-400 uppercase tracking-widest`}>Neural Logic Stream</h4>
+                                            <p className={`${embedded ? 'text-[8px] leading-tight' : 'text-[12px] leading-relaxed'} font-mono text-shell-darkText`}>
                                                 {scenario.explanation}
                                             </p>
                                         </div>
                                     </div>
                                     
-                                    <button 
-                                        onClick={() => crisisEventBus.dispatch('CRISIS_WORKFORCE_DEPLOYED', { scenario: scenario.title })}
-                                        className="w-full py-4 bg-shell-darkText text-white font-mono text-[10px] uppercase font-black tracking-widest rounded hover:bg-black transition-all flex items-center justify-center gap-2 border border-gray-800 shadow-md shrink-0"
-                                    >
-                                        Authorize Resource Mobilization <ArrowRight className="w-4 h-4 text-shell-yellow" />
-                                    </button>
+                                    {!embedded && (
+                                        <button 
+                                            onClick={() => crisisEventBus.dispatch('CRISIS_WORKFORCE_DEPLOYED', { scenario: scenario.title })}
+                                            className="w-full py-4 bg-shell-darkText text-white font-mono text-[10px] uppercase font-black tracking-widest rounded hover:bg-black transition-all flex items-center justify-center gap-2 border border-gray-800 shadow-md shrink-0 mt-auto"
+                                        >
+                                            Authorize Resource Mobilization <ArrowRight className="w-4 h-4 text-shell-yellow" />
+                                        </button>
+                                    )}
                                 </div>
 
                                 {/* Required Skill-Set Grid */}
-                                <div className="bg-white border border-gray-200 rounded-lg p-6 relative overflow-hidden shadow-sm h-full flex flex-col">
+                                <div className={`bg-white border border-gray-200 rounded-lg ${embedded ? 'p-3' : 'p-6'} relative shadow-sm h-full flex flex-col no-scrollbar overflow-y-auto`}>
                                     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-shell-yellow to-transparent opacity-20"></div>
-                                    <div className="flex items-center justify-between mb-8">
-                                        <h3 className="text-[15px] font-extrabold text-shell-darkText uppercase tracking-tight">Required Skill-Set Grid</h3>
-                                        <Award className="w-5 h-5 text-shell-yellow" />
+                                    <div className={`flex items-center justify-between ${embedded ? 'mb-2' : 'mb-8'}`}>
+                                        <h3 className={`${embedded ? 'text-[11px]' : 'text-[15px]'} font-extrabold text-shell-darkText uppercase tracking-tight`}>Skill-Set Grid</h3>
                                     </div>
                                     
-                                    <div className="flex flex-wrap gap-2 mb-8 content-start">
+                                    <div className={`flex flex-wrap ${embedded ? 'gap-1 mb-3' : 'gap-2 mb-8'} content-start`}>
                                         {scenario.skills.map((skill, i) => (
-                                            <SkillChip key={i} name={skill} />
+                                            <span key={i} className={`bg-gray-50 text-shell-darkText border border-gray-200 rounded font-mono uppercase font-bold tracking-widest hover:border-shell-yellow ${embedded ? 'px-1.5 py-0.5 text-[7px]' : 'px-2.5 py-1 text-[9px]'}`}>
+                                                {skill}
+                                            </span>
                                         ))}
                                         {scenario.skills.length === 0 && (
-                                            <div className="w-full flex flex-col items-center justify-center py-10 opacity-30">
-                                                <Search className="w-8 h-8 mb-2" />
-                                                <span className="font-mono text-[10px] uppercase tracking-widest">Scanning Competencies...</span>
+                                            <div className="w-full flex flex-col items-center justify-center opacity-30 py-2">
+                                                <span className="font-mono text-[8px] uppercase tracking-widest">Scanning...</span>
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* Contractor Intelligence Hub (Moved here) */}
-                                    <div className="mb-8 p-5 bg-gray-50/50 rounded-lg border border-gray-100 group shadow-inner">
-                                        <div className="flex items-center justify-between mb-5">
-                                            <h4 className="text-[11px] font-extrabold text-shell-darkText uppercase tracking-tight flex items-center gap-2">
-                                                <Briefcase className="w-3.5 h-3.5 text-shell-yellow" /> Contractor Intelligence
+                                    {/* Contractor Intelligence Hub */}
+                                    <div className={`${embedded ? 'mb-2 p-2' : 'mb-8 p-5'} bg-gray-50/50 rounded-lg border border-gray-100 shadow-inner mt-auto`}>
+                                        <div className={`flex items-center justify-between ${embedded ? 'mb-1.5' : 'mb-5'}`}>
+                                            <h4 className={`${embedded ? 'text-[9px]' : 'text-[11px]'} font-extrabold text-shell-darkText uppercase tracking-tight flex items-center gap-2`}>
+                                                Contractor Intel
                                             </h4>
-                                            <span className="font-mono text-[8px] px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded uppercase font-bold tracking-widest">Verified</span>
                                         </div>
                                         
-                                        <div className="space-y-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 bg-white rounded flex items-center justify-center border border-gray-100 group-hover:border-shell-yellow transition-colors shadow-sm">
-                                                    <Globe className="w-6 h-6 text-gray-300 group-hover:text-shell-yellow transition-colors" />
-                                                </div>
+                                        <div className={`${embedded ? 'flex justify-between items-center' : 'space-y-4'}`}>
+                                            <div className="flex items-center gap-2">
+                                                {!embedded && (
+                                                    <div className="w-10 h-10 bg-white rounded flex items-center justify-center border border-gray-100 bg-white">
+                                                        <Globe className="w-6 h-6 text-gray-300" />
+                                                    </div>
+                                                )}
                                                 <div>
-                                                    <div className="text-[13px] font-extrabold text-shell-darkText tracking-tight uppercase leading-none">{scenario.contractor.name}</div>
-                                                    <div className="font-mono text-[9px] text-gray-400 uppercase tracking-widest mt-1">Status: <span className="text-green-600">{scenario.contractor.status}</span></div>
+                                                    <div className={`${embedded ? 'text-[10px]' : 'text-[13px]'} font-extrabold text-shell-darkText tracking-tight uppercase leading-none`}>{scenario.contractor.name}</div>
+                                                    <div className={`font-mono ${embedded ? 'text-[7.5px]' : 'text-[9px]'} text-gray-400 uppercase tracking-widest mt-1`}>Status: <span className="text-green-600">{scenario.contractor.status}</span></div>
                                                 </div>
                                             </div>
                                             
-                                            <div className="flex items-center justify-between pt-3 border-t border-gray-100/50">
-                                                <div className="font-mono text-[9px] text-gray-400 uppercase tracking-widest">Neural Match Score</div>
-                                                <div className="text-[18px] font-extrabold text-shell-darkText leading-none font-mono tracking-tighter">
-                                                    {scenario.contractor.score}<span className="text-[10px] opacity-40">/10</span>
+                                            <div className={`${embedded ? '' : 'flex items-center justify-between pt-3 border-t border-gray-100/50'}`}>
+                                                {!embedded && <div className="font-mono text-[9px] text-gray-400 uppercase tracking-widest">Neural Match Score</div>}
+                                                <div className={`${embedded ? 'text-[14px]' : 'text-[18px]'} font-extrabold text-shell-darkText leading-none font-mono tracking-tighter`}>
+                                                    {scenario.contractor.score}<span className={`${embedded ? 'text-[8px]' : 'text-[10px]'} opacity-40`}>/10</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <div className="pt-8 border-t border-gray-100 shrink-0">
-                                        <div className="flex items-center justify-between font-mono text-[10px] text-gray-400 uppercase tracking-widest mb-3">
-                                            <span>AI Skill-Match Confidence</span>
+                                    <div className={`${embedded ? 'pt-1.5' : 'pt-8 border-t border-gray-100'} shrink-0`}>
+                                        <div className={`flex items-center justify-between font-mono ${embedded ? 'text-[8px] mb-1' : 'text-[10px] mb-3'} text-gray-400 uppercase tracking-widest`}>
+                                            <span>Match Confidence</span>
                                             <span className="text-shell-darkText font-extrabold">98.4%</span>
                                         </div>
-                                        <div className="w-full h-1.5 bg-gray-50 rounded-full overflow-hidden border border-gray-100">
+                                        <div className={`w-full ${embedded ? 'h-1' : 'h-1.5'} bg-gray-50 rounded-full overflow-hidden border border-gray-100`}>
                                             <div className="h-full bg-shell-yellow w-[98%] rounded-full transition-all duration-1000 shadow-[0_0_8px_rgba(251,206,7,0.4)]"></div>
                                         </div>
                                     </div>
