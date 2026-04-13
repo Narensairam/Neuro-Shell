@@ -2,7 +2,7 @@ export const mockNodes = [
   {
     id: 'node-1',
     type: 'equipment',
-    position: { x: 100, y: 250 },
+    position: { x: 0, y: 250 },
     data: {
       label: 'Crude Storage Tank A',
       type: 'tank',
@@ -12,7 +12,7 @@ export const mockNodes = [
   {
     id: 'node-2',
     type: 'equipment',
-    position: { x: 300, y: 250 },
+    position: { x: 200, y: 250 },
     data: {
       label: 'Main Feed Pump',
       type: 'pump',
@@ -22,7 +22,7 @@ export const mockNodes = [
   {
     id: 'node-3',
     type: 'equipment',
-    position: { x: 500, y: 250 },
+    position: { x: 400, y: 250 },
     data: {
       label: 'Pre-Heater Train',
       type: 'heater',
@@ -32,7 +32,7 @@ export const mockNodes = [
   {
     id: 'node-4',
     type: 'equipment',
-    position: { x: 700, y: 250 },
+    position: { x: 600, y: 250 },
     data: {
       label: 'Atmospheric Distillation',
       type: 'reactor',
@@ -42,27 +42,27 @@ export const mockNodes = [
   {
     id: 'node-5',
     type: 'equipment',
-    position: { x: 950, y: 50 },
+    position: { x: 800, y: -50 },
     data: {
-      label: 'Light Naphtha Line',
-      type: 'pipeline',
-      metadata: { flowRate: 25000, pressure: 20, temperature: 80, status: 'online' }
+      label: 'Gas Turbine Generator',
+      type: 'generator',
+      metadata: { flowRate: 25000, pressure: 20, temperature: 480, status: 'online' }
     }
   },
   {
     id: 'node-6',
     type: 'equipment',
-    position: { x: 950, y: 150 },
+    position: { x: 800, y: 50 },
     data: {
-      label: 'Heavy Naphtha Line',
-      type: 'pipeline',
-      metadata: { flowRate: 30000, pressure: 22, temperature: 120, status: 'online' }
+      label: 'Naphtha Storage',
+      type: 'horizontal_tank',
+      metadata: { capacity: 30000, pressure: 22, temperature: 40, status: 'online' }
     }
   },
   {
     id: 'node-7',
     type: 'equipment',
-    position: { x: 950, y: 250 },
+    position: { x: 800, y: 250 },
     data: {
       label: 'Kerosene Stripper',
       type: 'separator',
@@ -72,7 +72,7 @@ export const mockNodes = [
   {
     id: 'node-8',
     type: 'equipment',
-    position: { x: 950, y: 350 },
+    position: { x: 800, y: 450 },
     data: {
       label: 'Diesel Stripper',
       type: 'separator',
@@ -82,7 +82,7 @@ export const mockNodes = [
   {
     id: 'node-9',
     type: 'equipment',
-    position: { x: 950, y: 450 },
+    position: { x: 800, y: 650 },
     data: {
       label: 'Residue Pump',
       type: 'pump',
@@ -92,27 +92,27 @@ export const mockNodes = [
   {
     id: 'node-10',
     type: 'equipment',
-    position: { x: 1150, y: 250 },
+    position: { x: 1000, y: 250 },
     data: {
       label: 'Kerosene Storage',
-      type: 'tank',
+      type: 'horizontal_tank',
       metadata: { capacity: 100000, pressure: 14.7, temperature: 40, status: 'online' }
     }
   },
   {
     id: 'node-11',
     type: 'equipment',
-    position: { x: 1150, y: 350 },
+    position: { x: 1000, y: 450 },
     data: {
       label: 'Diesel Storage',
-      type: 'tank',
+      type: 'horizontal_tank',
       metadata: { capacity: 150000, pressure: 14.7, temperature: 45, status: 'offline' }
     }
   },
   {
     id: 'node-12',
     type: 'equipment',
-    position: { x: 400, y: 150 },
+    position: { x: 200, y: 150 },
     data: {
       label: 'Bypass Valve A',
       type: 'valve',
