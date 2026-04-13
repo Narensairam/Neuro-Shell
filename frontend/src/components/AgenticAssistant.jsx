@@ -11,9 +11,7 @@ import { cn } from './Sidebar';
 const OPENROUTER_API_KEY = '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';
 const MODEL = 'deepseek/deepseek-chat';
 
-// ElevenLabs TTS configuration
-const ELEVENLABS_API_KEY = 'sk_8041ed035be065e72f316745cff450da122329ccdee15f08';
-const ELEVENLABS_VOICE_ID = 'zGjIP4SZlMnY9m93k97r';
+// Microsoft Edge TTS targeting JennyNeural or GuyNeural
 
 // All navigable views in the Neuro Shell ERP
 const VIEWS = {
@@ -261,6 +259,9 @@ export function AgenticAssistant({ setCurrentView }) {
     const scrollBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => { scrollBottom(); }, [messages, isThinking]);
     useEffect(() => { if (isOpen) setTimeout(() => inputRef.current?.focus(), 200); }, [isOpen]);
+    useEffect(() => { return () => { window.speechSynthesis?.cancel(); clearTimeout(demoTimeoutRef.current); }; }, []);
+
+    // Load voices eagerly and cache them
     useEffect(() => {
         const loadVoices = () => {
             voicesRef.current = window.speechSynthesis.getVoices();
@@ -295,31 +296,16 @@ export function AgenticAssistant({ setCurrentView }) {
         const voices = voicesRef.current;
         if (!voices.length) return null;
 
-        const femalePreferences = [
-            // Priority 1: High-quality Neural "Online" voices (Edge/Windows 11)
-            v => v.name.includes('Aria Online (Natural)'),
-            v => v.name.includes('Jenny Online (Natural)'),
-            v => v.name.includes('Sonia Online (Natural)'),
-            v => v.name.includes('Natasha Online (Natural)'),
-            // Priority 2: Google Chrome Premium Voices
-            v => v.name === 'Google UK English Female',
-            v => v.name === 'Google US English' && v.name.toLowerCase().includes('female'),
-            // Priority 3: Standard macOS/iOS high-quality voices
-            v => v.name.includes('Samantha'),
-            v => v.name.includes('Karen'),
-            v => v.name.includes('Moira'),
-            v => v.name.includes('Tessa'),
-            // Priority 4: Fallbacks
-            v => v.name.includes('Aria'),
-            v => v.name.includes('Zira'),
-            v => v.name.includes('Susan'),
-            v => v.name.includes('Victoria'),
-            v => v.name.includes('Microsoft') && v.lang.startsWith('en') && !v.name.includes('David') && !v.name.includes('Mark') && !v.name.includes('George') && !v.name.includes('James'),
+        const preferences = [
+            v => v.name.includes('Jenny') && (v.name.includes('Neural') || v.name.includes('Natural') || v.name.includes('Online')),
+            v => v.name.includes('en-US-JennyNeural'),
+            v => v.name.includes('Jenny'),
+            v => v.name.includes('Microsoft') && v.name.includes('Online'),
             v => v.lang.startsWith('en-US'),
             v => v.lang.startsWith('en'),
         ];
 
-        for (const test of femalePreferences) {
+        for (const test of preferences) {
             const found = voices.find(test);
             if (found) return found;
         }
@@ -329,7 +315,7 @@ export function AgenticAssistant({ setCurrentView }) {
     // Speech Output with female voice
     const speakText = useCallback(async (text, onFinished) => {
         if (isMuted) return;
-        
+
         stopSpeech();
         const cleanText = String(text || '').replace(/[*#_`~\[\]]/g, '').replace(/<[^>]+>/g, '').trim();
         if (!cleanText) {
@@ -448,7 +434,7 @@ export function AgenticAssistant({ setCurrentView }) {
     // Demo tour runner
     const runDemoTour = useCallback((startStep = 0) => {
         if (isDemoRunning) return; // Prevent double trigger
-        
+
         setIsDemoRunning(true);
         setDemoStep(startStep);
 
@@ -471,8 +457,8 @@ export function AgenticAssistant({ setCurrentView }) {
             if (stop.tab) {
                 // Wait slightly longer for module to mount before firing tab change
                 setTimeout(() => {
-                    window.dispatchEvent(new CustomEvent('DEMO_GOTO_TAB', { 
-                        detail: { view: stop.view, tab: stop.tab } 
+                    window.dispatchEvent(new CustomEvent('DEMO_GOTO_TAB', {
+                        detail: { view: stop.view, tab: stop.tab }
                     }));
                 }, 600);
             }
@@ -498,10 +484,7 @@ export function AgenticAssistant({ setCurrentView }) {
 
     const skipDemo = useCallback(() => {
         clearTimeout(demoTimeoutRef.current);
-        if (currentAudioRef.current) {
-            currentAudioRef.current.pause();
-            currentAudioRef.current = null;
-        }
+        window.speechSynthesis?.cancel();
         setIsDemoRunning(false);
         setIsDemoPaused(false);
         setDemoStep(0);
@@ -992,7 +975,7 @@ export function AgenticAssistant({ setCurrentView }) {
                                 >
                                     {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                                 </button>
-                                
+
                                 {isSpeaking && (
                                     <button
                                         onClick={stopSpeech}

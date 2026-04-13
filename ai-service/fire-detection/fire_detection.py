@@ -25,35 +25,38 @@ class FireDetector:
                 conf = float(box.conf[0])
                 class_name = names[cls_id].lower() if cls_id in names else ""
                 
-                # Setup specific filtering to ONLY identify fire or cell phones representing fire demo
-                # This prevents watches, TVs, and other dark/black objects from mistakenly validating
+                # Accept FIRE/FLAME/SMOKE classes AND cell phones showing fire content.
+                # NOTE: cell phones are included because a phone *displaying* a fire image/gif
+                # is a valid demo scenario. However, the phone MUST also pass all 7 visual
+                # validation layers – a blank, black, or static-colored phone screen is rejected.
                 is_ai_fire = class_name in AppConfig.FIRE_CLASSES
-                is_demo_phone = (class_name == 'cell phone')
-                
-                if not (is_ai_fire or is_demo_phone):
+                is_candidate = is_ai_fire or (class_name == 'cell phone')
+
+                if not is_candidate:
                     continue
-                
+
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
-                
-                # 2. RUN HYBRID VALIDATION
-                # Requirement: color_pattern_valid AND detected_in_multiple_frames
-                passes_visual, passes_temporal = self.validator.validate_yolo_box(frame, x1, y1, x2, y2)
-                
-                # CORE FILTERING LOGIC
-                # Logic: if (AI_detects_fire AND color_pattern_valid AND detected_in_multiple_frames): fire_detected = True
-                # For `yolov8n.pt` lacking fire class, we bend 'is_ai_fire' if visual & temporal strictly match to allow the demo.
-                fire_detected = False
-                if is_ai_fire:
-                    if passes_visual and passes_temporal:
-                        fire_detected = True
-                elif is_demo_phone:
-                    # Bypassing HSV visual/temporal tests for demo videos on phone screens
-                    fire_detected = True
-                        
+
+                # 2. RUN STRICT 7-LAYER HYBRID VALIDATION
+                # Both gates must pass:
+                #   passes_visual  → HSV color + luminance + uniformity + edge density
+                #                    + shape irregularity + inter-frame flicker
+                #   passes_temporal → fire-colored region persists across N frames
+                passes_visual, passes_temporal = self.validator.validate_yolo_box(
+                    frame, x1, y1, x2, y2
+                )
+
+                # CORE DECISION
+                # For phones: the SAME strict visual+temporal gate applies.
+                # A black screen, a paused still image, a TV bezel, or a watch
+                # will fail luminance / uniformity / flicker — and be blocked here.
+                fire_detected = passes_visual and passes_temporal
+
                 if not fire_detected:
-                    # Show visual indicator that system intelligently blocked a false positive
+                    # Visualise blocked false-positives for operator awareness
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (100, 100, 100), 1)
-                    cv2.putText(frame, "FILTERED_FP", (x1, y1-5), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (150, 150, 150), 1)
+                    cv2.putText(frame, "FILTERED_FP", (x1, y1 - 5),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (150, 150, 150), 1)
                     continue
                 
                 # 3. PASSED VALIDATION -> ASSESS SEVERITY

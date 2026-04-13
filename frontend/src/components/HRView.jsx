@@ -5,6 +5,7 @@ import {
     ShieldCheck, Search, Activity 
 } from 'lucide-react';
 import { HRWorkforceAgent } from './HRWorkforceAgent';
+import { crisisEventBus } from '../context/CrisisEventBus';
 
 const EMPTY_HR = {
     incidentReduction: 0,
@@ -15,7 +16,10 @@ const EMPTY_HR = {
 
 export function HRView() {
     const [data, setData] = useState(EMPTY_HR);
-    const [activeTab, setActiveTab] = useState('overview');
+    // If navigated here due to a fire crisis, open directly on the Workforce AI Agent tab
+    const [activeTab, setActiveTab] = useState(
+        () => crisisEventBus.getLast('CRISIS_FIRE_DETECTED') ? 'agent' : 'overview'
+    );
 
     useEffect(() => {
         let isMounted = true;
