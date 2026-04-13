@@ -9,7 +9,7 @@
       "production_boe_day": 3400000
     },
     "health_index": 98.4,
-    "last_sync": "2026-04-13T11:51:16.651Z",
+    "last_sync": "2026-04-13T13:35:55.687Z",
     "process_heatmap": [
       {
         "id": "refining",
@@ -186,7 +186,73 @@
   },
   "fire_safety": {
     "active_alerts": [],
-    "history": []
+    "history": [],
+    "activeAlerts": [
+      {
+        "id": "evt-177608728334",
+        "timestamp": "13:34:43",
+        "camera_id": "CAM_01",
+        "confidence": 0.51,
+        "type": "FIRE",
+        "severity": "MEDIUM",
+        "validated": true,
+        "source": "visual_pattern + temporal_detection",
+        "recommended_action": "Initiate emergency response"
+      },
+      {
+        "id": "evt-177608725567",
+        "timestamp": "13:34:15",
+        "camera_id": "CAM_01",
+        "confidence": 0.63,
+        "type": "FIRE",
+        "severity": "MEDIUM",
+        "validated": true,
+        "source": "visual_pattern + temporal_detection",
+        "recommended_action": "Initiate emergency response"
+      },
+      {
+        "id": "evt-177608724498",
+        "timestamp": "13:34:04",
+        "camera_id": "CAM_01",
+        "confidence": 0.6,
+        "type": "FIRE",
+        "severity": "MEDIUM",
+        "validated": true,
+        "source": "visual_pattern + temporal_detection",
+        "recommended_action": "Initiate emergency response"
+      },
+      {
+        "id": "evt-177608723650",
+        "timestamp": "13:33:56",
+        "camera_id": "CAM_01",
+        "confidence": 0.8723675608634949,
+        "type": "PPE_VIOLATION",
+        "helmet": false,
+        "vest": false,
+        "status": "VIOLATION",
+        "severity": "MEDIUM",
+        "recommended_action": "Issue warning - Missing Helmet, Vest"
+      },
+      {
+        "id": "evt-177608720879",
+        "timestamp": "13:33:28",
+        "camera_id": "CAM_01",
+        "confidence": 0.59,
+        "type": "FIRE",
+        "severity": "MEDIUM",
+        "validated": true,
+        "source": "visual_pattern + temporal_detection",
+        "recommended_action": "Initiate emergency response"
+      }
+    ],
+    "stats": {
+      "total_incidents": 15,
+      "ppe_violations": 8,
+      "intrusions": 0,
+      "fire_hazards": 6,
+      "anomalies": 0,
+      "compliance_rate_pct": 39
+    }
   },
   "governance_compliance": {
     "enterprise_score": 97.2,
@@ -1137,8 +1203,8 @@
     }
   },
   "itops_stats": {
-    "total_tickets": 186,
-    "deflection_rate": 96.8,
+    "total_tickets": 213,
+    "deflection_rate": 97.2,
     "critical_alerts": 6,
     "ot_threats": 40,
     "shadow_devices": 2,
