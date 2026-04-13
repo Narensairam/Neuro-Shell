@@ -1,275 +1,558 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { usePlantStore } from '../../store/plantStore';
+import { Box as BoxIcon, X, Activity, Thermometer, Gauge, DatabaseIcon } from 'lucide-react';
 
+/* ── COLOR PALETTES ───────────────────────────────────────────── */
 const STATUS_COLORS = {
-  online: 0x10b981,
-  offline: 0x64748b,
-  warning: 0xf59e0b,
-  critical: 0xef4444
+  online:   0x10b981,
+  offline:  0x64748b,
+  warning:  0xf59e0b,
+  critical: 0xef4444,
+};
+const STATUS_HEX = {
+  online:   '#10b981',
+  offline:  '#64748b',
+  warning:  '#f59e0b',
+  critical: '#ef4444',
 };
 
+// Pipe colors based on content type (mapped from edge data)
+const PIPE_COLORS = {
+  'Crude':         0x475569, // Slate
+  'Heated Crude':  0xf97316, // Orange
+  'Light Naphtha': 0xeab308, // Yellow
+  'Heavy Naphtha': 0xd97706, // Amber
+  'Kerosene':      0x06b6d4, // Cyan
+  'Diesel':        0x3b82f6, // Blue
+  'Residue':       0x1e293b, // Dark
+  'default':       0x64748b,
+};
+
+/* ── SHARED GEOMETRY CACHE ──────────────────────────────────────── */
+const geoCache = {};
+function getCached(key, factory) {
+  if (!geoCache[key]) geoCache[key] = factory();
+  return geoCache[key];
+}
+
+/* ── MATERIAL FACTORY ───────────────────────────────────────────── */
+function makeMat(color, opts = {}) {
+  return new THREE.MeshStandardMaterial({
+    color,
+    roughness: opts.roughness ?? 0.2,
+    metalness: opts.metalness ?? 0.85,
+    ...opts,
+  });
+}
+
+function makeSteelMat() {
+  return makeMat(0x475569, { roughness: 0.1, metalness: 0.95 });
+}
+
+/* ── STRUCTURAL UTILITIES ───────────────────────────────────────── */
+
+/**
+ * Procedural Scaffolding Frame
+ */
+function createScaffolding(width, height, depth) {
+  const group = new THREE.Group();
+  const mat = makeSteelMat();
+  const beamSize = 2;
+
+  // Vertical corner posts
+  const posts = [
+    { x: -width/2, z: -depth/2 },
+    { x:  width/2, z: -depth/2 },
+    { x: -width/2, z:  depth/2 },
+    { x:  width/2, z:  depth/2 },
+  ];
+
+  posts.forEach(p => {
+    const post = new THREE.Mesh(
+      getCached(`beam_v_${height}`, () => new THREE.BoxGeometry(beamSize, height, beamSize)),
+      mat
+    );
+    post.position.set(p.x, height/2, p.z);
+    group.add(post);
+  });
+
+  // Horizontal rings at different heights
+  const levels = [height * 0.3, height * 0.6, height * 0.9];
+  levels.forEach(y => {
+    // Width beams
+    [depth/2, -depth/2].forEach(z => {
+      const b = new THREE.Mesh(getCached(`beam_h_w_${width}`, () => new THREE.BoxGeometry(width, beamSize, beamSize)), mat);
+      b.position.set(0, y, z);
+      group.add(b);
+    });
+    // Depth beams
+    [width/2, -width/2].forEach(x => {
+      const b = new THREE.Mesh(getCached(`beam_h_d_${depth}`, () => new THREE.BoxGeometry(beamSize, beamSize, depth)), mat);
+      b.position.set(x, y, 0);
+      group.add(b);
+    });
+  });
+
+  // X-bracing (diagonal)
+  const diag = new THREE.Mesh(getCached(`beam_diag_${width}_${height}`, () => new THREE.BoxGeometry(width * 1.4, beamSize * 0.5, beamSize * 0.5)), mat);
+  diag.position.set(0, height/2, depth/2);
+  diag.rotation.z = Math.atan2(height, width);
+  group.add(diag);
+
+  return group;
+}
+
+/* ── COMPONENT FACTORIES (HIGH DENSITY) ─────────────────────────── */
+
+function createTank(status) {
+  const group = new THREE.Group();
+  const mat = makeMat(STATUS_COLORS[status] || STATUS_COLORS.offline);
+  const scale = 2.4;
+
+  const body = new THREE.Mesh(
+    getCached('tank_body_hd', () => new THREE.CylinderGeometry(40, 40, 100, 32)),
+    mat
+  );
+  body.position.y = 50;
+  body.castShadow = true;
+  group.add(body);
+
+  const cap = new THREE.Mesh(
+    getCached('tank_cap_hd', () => new THREE.SphereGeometry(40, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2)),
+    mat
+  );
+  cap.position.y = 100;
+  group.add(cap);
+
+  // Ladder
+  const ladderGroup = new THREE.Group();
+  const ladderRailMat = makeSteelMat();
+  for(let i=0; i<30; i++) {
+    const rung = new THREE.Mesh(getCached('rung', () => new THREE.BoxGeometry(8, 0.5, 0.5)), ladderRailMat);
+    rung.position.y = i * 3.5;
+    ladderGroup.add(rung);
+  }
+  ladderGroup.position.set(41, 0, 0);
+  group.add(ladderGroup);
+
+  // Surround Scaffolding
+  group.add(createScaffolding(90, 110, 90));
+
+  group.scale.setScalar(scale);
+  group.userData._boundingHeight = 110 * scale;
+  return group;
+}
+
+function createReactor(status) {
+  const group = new THREE.Group();
+  const mat = makeMat(STATUS_COLORS[status] || STATUS_COLORS.offline);
+  const scale = 1.6;
+
+  const column = new THREE.Mesh(
+    getCached('reactor_body_hd', () => new THREE.CylinderGeometry(35, 35, 300, 24)),
+    mat
+  );
+  column.position.y = 150;
+  column.castShadow = true;
+  group.add(column);
+
+  // Multiple catwalks
+  [80, 160, 240].forEach(y => {
+    const plat = new THREE.Mesh(getCached('catwalk_torus', () => new THREE.TorusGeometry(50, 6, 4, 32)), makeMat(0x64748b));
+    plat.rotation.x = Math.PI / 2;
+    plat.position.y = y;
+    group.add(plat);
+
+    // Railing
+    const rail = new THREE.Mesh(getCached('catwalk_rail', () => new THREE.TorusGeometry(50, 0.8, 8, 32)), makeSteelMat());
+    rail.rotation.x = Math.PI / 2;
+    rail.position.y = y + 10;
+    group.add(rail);
+  });
+
+  // Tall scaffolding frame
+  group.add(createScaffolding(110, 310, 110));
+
+  group.scale.setScalar(scale);
+  group.userData._boundingHeight = 310 * scale;
+  return group;
+}
+
+function createHeater(status) {
+  const group = new THREE.Group();
+  const mat = makeMat(STATUS_COLORS[status] || STATUS_COLORS.offline);
+  const scale = 2.0;
+
+  const body = new THREE.Mesh(getCached('heater_box_hd', () => new THREE.BoxGeometry(70, 90, 70)), mat);
+  body.position.y = 45;
+  group.add(body);
+
+  const stack = new THREE.Mesh(getCached('heater_cyl_hd', () => new THREE.CylinderGeometry(12, 14, 100, 16)), makeSteelMat());
+  stack.position.y = 140;
+  group.add(stack);
+
+  // Cage around the heater
+  group.add(createScaffolding(85, 95, 85));
+
+  group.scale.setScalar(scale);
+  group.userData._boundingHeight = 190 * scale;
+  return group;
+}
+
+/**
+ * Non-interactive filler unit to add density
+ */
+function createAmbientFiller() {
+  const group = new THREE.Group();
+  const mat = makeSteelMat();
+  
+  const base = new THREE.Mesh(getCached('ambient_box', () => new THREE.BoxGeometry(40, 60, 40)), mat);
+  base.position.y = 30;
+  group.add(base);
+
+  const pipes = new THREE.Group();
+  for(let i=0; i<3; i++) {
+    const p = new THREE.Mesh(getCached('ambient_pipe', () => new THREE.CylinderGeometry(4, 4, 100, 8)), makeMat(0x334155));
+    p.rotation.z = Math.PI / 2;
+    p.position.set(0, 10 + i * 20, 0);
+    pipes.add(p);
+  }
+  group.add(pipes);
+  group.userData.isPlantObject = true;
+  group.userData.isAmbient = true;
+  return group;
+}
+
+/* ── UI HELPERS ─────────────────────────────────────────────────── */
+
+function createCompactLabel(text, status, metadata = {}) {
+  const div = document.createElement('div');
+  div.style.cssText = `
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    background: rgba(15, 23, 42, 0.9);
+    border-left: 3px solid ${STATUS_HEX[status] || '#475569'};
+    border-radius: 4px;
+    padding: 6px 10px;
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 80px;
+  `;
+
+  const header = document.createElement('div');
+  header.style.cssText = 'font-size: 9px; opacity: 0.6; text-transform: uppercase; margin-bottom: 2px;';
+  header.innerText = text;
+  div.appendChild(header);
+
+  // Small metrics grit
+  const metrics = document.createElement('div');
+  metrics.style.cssText = 'display: flex; gap: 8px;';
+  
+  if(metadata.temperature) metrics.innerHTML += `<span style="color:#fb923c">T:${metadata.temperature}°</span>`;
+  if(metadata.pressure) metrics.innerHTML += `<span style="color:#38bdf8">P:${metadata.pressure}</span>`;
+  
+  div.appendChild(metrics);
+
+  const label = new CSS2DObject(div);
+  label.userData = { isLabel: true, isPlantObject: true };
+  return label;
+}
+
+/* ── PIPING LOGIC ────────────────────────────────────────────────── */
+
+function createPipeDetailed(start, end, materialType, isAnimated) {
+  const group = new THREE.Group();
+  group.userData = { isPlantObject: true, isPipe: true };
+
+  // Layered elevation for pipe crossing
+  const elevationOffset = (Math.random() - 0.5) * 40;
+  const midY = Math.max(start.y, end.y) + 60 + elevationOffset;
+
+  const points = [
+    start.clone(),
+    new THREE.Vector3(start.x, midY, start.z),
+    new THREE.Vector3(end.x, midY, end.z),
+    end.clone(),
+  ];
+  const curve = new THREE.CatmullRomCurve3(points);
+
+  const pipeColor = PIPE_COLORS[materialType] || PIPE_COLORS.default;
+  const pipeMat = makeMat(pipeColor, { roughness: 0.1, metalness: 0.9 });
+
+  const pipeGeo = new THREE.TubeGeometry(curve, 64, 5, 12, false);
+  const pipe = new THREE.Mesh(pipeGeo, pipeMat);
+  pipe.castShadow = true;
+  group.add(pipe);
+
+  // Glow beads for flow
+  if (isAnimated) {
+    const beadGeo = new THREE.SphereGeometry(4, 8, 8);
+    const beadMat = new THREE.MeshStandardMaterial({ color: pipeColor, emissive: pipeColor, emissiveIntensity: 3 });
+    for(let i=0; i<4; i++) {
+      const b = new THREE.Mesh(beadGeo, beadMat);
+      b.userData = { isFlowBead: true, curve, offset: i/4 };
+      group.add(b);
+    }
+  }
+
+  return group;
+}
+
+/* ════════════════════════════════════════════════════════════════ */
+/* ── MAIN COMPONENT ─────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════ */
 export function PlantView3D() {
   const mountRef = useRef(null);
-  const { nodes, edges } = usePlantStore();
+  const { nodes, edges, setSelectedNode, selectedNodeId } = usePlantStore();
   const sceneRef = useRef(null);
-  const controlsRef = useRef(null);
   const cameraRef = useRef(null);
+  const rendererRef = useRef(null);
+  const controlsRef = useRef(null);
+  const labelRendererRef = useRef(null);
+  const clockRef = useRef(new THREE.Clock());
+  const meshMapRef = useRef(new Map());
+  const raycasterRef = useRef(new THREE.Raycaster());
+  const mouseRef = useRef(new THREE.Vector2());
+
+  const [infoPanelData, setInfoPanelData] = useState(null);
+
+  const handleCanvasClick = useCallback((e) => {
+    if (!mountRef.current || !cameraRef.current || !sceneRef.current) return;
+    const rect = mountRef.current.getBoundingClientRect();
+    mouseRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
+    const intersects = raycasterRef.current.intersectObjects(sceneRef.current.children, true);
+
+    let clickedNodeId = null;
+    for (const hit of intersects) {
+      let obj = hit.object;
+      while (obj) {
+        if (obj.userData?.nodeId) { clickedNodeId = obj.userData.nodeId; break; }
+        obj = obj.parent;
+      }
+      if (clickedNodeId) break;
+    }
+
+    if (clickedNodeId) {
+      setSelectedNode(clickedNodeId);
+      const node = nodes.find(n => n.id === clickedNodeId);
+      if (node) setInfoPanelData({ ...node.data, id: node.id, ...node.data.metadata });
+    } else {
+      setSelectedNode(null);
+      setInfoPanelData(null);
+    }
+  }, [nodes, setSelectedNode]);
 
   useEffect(() => {
     if (!mountRef.current) return;
-    
-    // Setup
+
     const width = mountRef.current.clientWidth;
     const height = mountRef.current.clientHeight;
-    
+
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x020617); // slate-950
-    scene.fog = new THREE.FogExp2(0x020617, 0.001);
+    scene.background = new THREE.Color(0x020617);
+    scene.fog = new THREE.FogExp2(0x0a1120, 0.0003);
     sceneRef.current = scene;
 
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 3000);
-    camera.position.set(500, 400, 800);
+    const camera = new THREE.PerspectiveCamera(40, width / height, 1, 10000);
+    camera.position.set(600, 400, 800);
     cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.4;
     mountRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+
+    const labelRenderer = new CSS2DRenderer();
+    labelRenderer.setSize(width, height);
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.top = '0';
+    labelRenderer.domElement.style.pointerEvents = 'none';
+    mountRef.current.appendChild(labelRenderer.domElement);
+    labelRendererRef.current = labelRenderer;
 
     const controls = new OrbitControls(camera, renderer.domElement);
-    controlsRef.current = controls;
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.maxPolarAngle = Math.PI / 2 - 0.05; // Don't go below ground
+    controls.maxPolarAngle = Math.PI / 2.1;
+    controlsRef.current = controls;
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-    scene.add(ambientLight);
+    /* ── DENSE INDUSTRIAL LIGHTING ────────────────────────────── */
+    scene.add(new THREE.AmbientLight(0x1e293b, 0.4));
+    
+    // Golden Hour Sun
+    const sun = new THREE.DirectionalLight(0xffedd5, 2.5);
+    sun.position.set(2000, 1200, 1000);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    scene.add(sun);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    dirLight.position.set(200, 600, 300);
-    dirLight.castShadow = true;
-    dirLight.shadow.camera.top = 1000;
-    dirLight.shadow.camera.bottom = -1000;
-    dirLight.shadow.camera.left = -1000;
-    dirLight.shadow.camera.right = 1000;
-    scene.add(dirLight);
+    // Deep blue fill from opposite side
+    const fill = new THREE.DirectionalLight(0x1e1b4b, 1.2);
+    fill.position.set(-800, 500, -800);
+    scene.add(fill);
 
-    const pointLight = new THREE.PointLight(0x06b6d4, 1.5, 1500);
-    pointLight.position.set(0, 200, 0);
-    scene.add(pointLight);
+    // Warm base foundation
+    const platform = new THREE.Mesh(
+      new THREE.BoxGeometry(10000, 40, 10000),
+      new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.8, metalness: 0.1 })
+    );
+    platform.position.y = -21;
+    platform.receiveShadow = true;
+    scene.add(platform);
 
-    // Components
-    const axesHelper = new THREE.AxesHelper( 50 );
-    axesHelper.visible = false; // Hide by default to resolve the "green line" dominance
-    scene.add( axesHelper );
+    const grid = new THREE.GridHelper(10000, 80, 0x1e293b, 0x0f172a);
+    grid.material.opacity = 0.2;
+    grid.material.transparent = true;
+    scene.add(grid);
 
-    // Ground
-    const gridHelper = new THREE.GridHelper(2000, 40, 0x1e293b, 0x0f172a);
-    scene.add(gridHelper);
-
-    const groundGeo = new THREE.PlaneGeometry(2000, 2000);
-    const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x0f172a,
-      roughness: 0.8,
-      metalness: 0.2
-    });
-    const ground = new THREE.Mesh(groundGeo, groundMat);
-    ground.rotation.x = -Math.PI / 2;
-    ground.receiveShadow = true;
-    scene.add(ground);
-
-    // Render loop
-    let animationFrameId;
+    let frameId;
     const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
+      const elapsed = clockRef.current.getElapsedTime();
+      scene.traverse(c => {
+        if (c.userData?.isFlowBead) {
+          const t = (c.userData.offset + elapsed * 0.1) % 1;
+          c.position.copy(c.userData.curve.getPointAt(t));
+        }
+      });
       controls.update();
       renderer.render(scene, camera);
+      labelRenderer.render(scene, camera);
     };
     animate();
 
-    // Resize handler
-    const handleResize = () => {
-      if (!mountRef.current || !camera || !renderer) return;
-      const w = mountRef.current.clientWidth;
-      const h = mountRef.current.clientHeight;
-      if (w === 0 || h === 0) return;
-      
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-
-    const resizeObserver = new ResizeObserver(() => handleResize());
-    resizeObserver.observe(mountRef.current);
-    
-    // Initial resize to ensure correct canvas sizing, wait a frame for layout
-    setTimeout(handleResize, 10);
-
-    return () => {
-      resizeObserver.disconnect();
-      cancelAnimationFrame(animationFrameId);
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-      renderer.dispose();
-    };
+    return () => { cancelAnimationFrame(frameId); renderer.dispose(); };
   }, []);
 
-  // Update nodes when data changes
   useEffect(() => {
     if (!sceneRef.current) return;
     const scene = sceneRef.current;
-
-    // Clean up old objects
-    const objectsToRemove = [];
-    scene.traverse((child) => {
-      if (child.userData.isPlantObject) {
-        objectsToRemove.push(child);
-      }
-    });
-    objectsToRemove.forEach((obj) => scene.remove(obj));
-
-    // Create materials
-    const getMaterial = (status) => {
-      const color = STATUS_COLORS[status] || STATUS_COLORS.offline;
-      return new THREE.MeshStandardMaterial({
-        color,
-        roughness: 0.3,
-        metalness: 0.7
-      });
-    };
+    
+    // Cleanup
+    const toRemove = [];
+    scene.traverse(c => { if (c.userData?.isPlantObject) toRemove.push(c); });
+    toRemove.forEach(o => o.parent && o.parent.remove(o));
+    meshMapRef.current.clear();
 
     const nodePositions = new Map();
 
-    const lineMat = new THREE.LineBasicMaterial({
-      color: 0x475569,
-      linewidth: 2
-    });
-
-    // Add nodes
-    nodes.forEach((node) => {
+    nodes.forEach(node => {
       if (!node.data || !node.position) return;
-      const { type, metadata } = node.data;
-      let geometry;
-      let yOffset = 0;
+      let equip;
+      const { type } = node.data;
 
-      switch (type) {
-        case 'tank':
-          geometry = new THREE.CylinderGeometry(50, 50, 120, 32);
-          yOffset = 60;
-          break;
-        case 'reactor':
-          geometry = new THREE.CylinderGeometry(35, 35, 180, 16);
-          yOffset = 90;
-          break;
-        case 'heater':
-          geometry = new THREE.BoxGeometry(60, 90, 60);
-          yOffset = 45;
-          break;
-        case 'pump':
-        case 'valve':
-        case 'separator':
-          geometry = new THREE.SphereGeometry(35, 32, 16);
-          yOffset = 35;
-          break;
-        default:
-          geometry = new THREE.BoxGeometry(45, 45, 45);
-          yOffset = 22.5;
-      }
+      if(type === 'reactor') equip = createReactor(node.data.metadata?.status);
+      else if(type === 'heater') equip = createHeater(node.data.metadata?.status);
+      else equip = createTank(node.data.metadata?.status);
 
-      const material = getMaterial(metadata?.status || 'offline');
-      const mesh = new THREE.Mesh(geometry, material);
+      equip.userData.nodeId = node.id;
+      equip.traverse(c => c.userData.nodeId = node.id);
 
-      // Map 2D coordinates to 3D space (center around 0,0)
-      const x = (node.position.x - 600) * 1.5;
-      const z = (node.position.y - 250) * 1.5;
+      const x = (node.position.x - 600) * 3.5;
+      const z = (node.position.y - 250) * 3.5;
+      equip.position.set(x, 0, z);
+      scene.add(equip);
+      meshMapRef.current.set(node.id, equip);
 
-      mesh.position.set(x, yOffset, z);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      mesh.userData = {
-        isPlantObject: true,
-        id: node.id
-      };
+      const h = equip.userData._boundingHeight || 150;
+      nodePositions.set(node.id, new THREE.Vector3(x, h * 0.5, z));
 
-      nodePositions.set(node.id, new THREE.Vector3(x, yOffset, z));
-      scene.add(mesh);
+      // Compact Lables
+      const label = createCompactLabel(node.data.label, node.data.metadata?.status, node.data.metadata);
+      label.position.set(0, h + 40, 0);
+      equip.add(label);
 
-      // Add status glow for online/critical nodes
-      if (metadata?.status === 'online' || metadata?.status === 'critical') {
-        const glowColor = STATUS_COLORS[metadata.status];
-        const statusLight = new THREE.PointLight(glowColor, 20, 200);
-        statusLight.position.set(x, yOffset + 50, z);
-        statusLight.userData = { isPlantObject: true };
-        scene.add(statusLight);
+      // Add "Filler" units near main equipment
+      for(let i=0; i<2; i++) {
+        const filler = createAmbientFiller();
+        filler.position.set(x + (Math.random()-0.5)*200, 0, z + (Math.random()-0.5)*200);
+        filler.rotation.y = Math.random() * Math.PI;
+        scene.add(filler);
       }
     });
 
-    const pipelineMaterial = new THREE.MeshStandardMaterial({
-        color: 0x475569,
-        metalness: 0.8,
-        roughness: 0.2
-    });
-
-    edges.forEach((edge) => {
-      const start = nodePositions.get(edge.source);
-      const end = nodePositions.get(edge.target);
-
-      if (start && end) {
-        // Create 3D pipe geometry instead of lines for visibility
-        const path = new THREE.CatmullRomCurve3([
-            start,
-            new THREE.Vector3(end.x, start.y, start.z),
-            end
-        ]);
-        const pipeGeo = new THREE.TubeGeometry(path, 20, 8, 8, false);
-        const pipe = new THREE.Mesh(pipeGeo, pipelineMaterial);
-        pipe.userData = { isPlantObject: true };
-        pipe.castShadow = true;
-        pipe.receiveShadow = true;
-        scene.add(pipe);
+    edges.forEach(edge => {
+      const s = nodePositions.get(edge.source);
+      const e = nodePositions.get(edge.target);
+      if (s && e) {
+        // Main pipe
+        scene.add(createPipeDetailed(s, e, edge.data?.material, edge.animated));
+        // Layered secondary pipes for density
+        if(Math.random() > 0.5) {
+          scene.add(createPipeDetailed(s, e, 'default', false));
+        }
       }
     });
 
-    // AUTO-TARGET CAMERA
     if (nodes.length > 0 && controlsRef.current) {
-      const center = new THREE.Vector3(0, 0, 0);
-      nodes.forEach((node) => {
-        const x = (node.position.x - 600) * 1.5;
-        const z = (node.position.y - 250) * 1.5;
-        center.x += x;
-        center.z += z;
-      });
-      center.x /= nodes.length;
-      center.z /= nodes.length;
-      center.y = 100; 
-
-      controlsRef.current.target.copy(center);
+      const b = new THREE.Box3();
+      meshMapRef.current.forEach(g => b.expandByObject(g));
+      const c = new THREE.Vector3();
+      b.getCenter(c);
+      controlsRef.current.target.copy(c);
       controlsRef.current.update();
-      
-      const camera = cameraRef.current;
-      if (camera) {
-        camera.position.set(center.x + 800, 600, center.z + 1000);
-        camera.lookAt(center);
-      }
     }
   }, [nodes, edges]);
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <div ref={mountRef} className="w-full h-full" />
-      <div className="absolute top-4 left-4 bg-slate-900/80 p-2 rounded-md border border-slate-800 backdrop-blur-sm text-xs text-slate-400 pointer-events-none">
-        3D View • Left Click to Rotate • Right Click to Pan • Scroll to Zoom
+    <div className="absolute inset-0 overflow-hidden bg-slate-950">
+      <div ref={mountRef} className="w-full h-full" onClick={handleCanvasClick} />
+      
+      {/* Mini Legend HUD */}
+      <div className="absolute bottom-8 right-8 bg-slate-900/40 backdrop-blur-md p-5 rounded-3xl border border-white/5 pointer-events-none">
+        <div className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mb-3">Refinery Status</div>
+        <div className="space-y-2">
+          {Object.entries(STATUS_HEX).map(([k, c]) => (
+            <div key={k} className="flex items-center gap-3">
+              <div className="w-2.5 h-2.5 rounded-full" style={{ background: c, boxShadow: `0 0 10px ${c}` }} />
+              <span className="text-xs text-slate-300 font-bold capitalize">{k}</span>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="absolute bottom-4 left-4 bg-slate-900/80 p-2 rounded-md border border-slate-800 backdrop-blur-sm text-xs text-emerald-400 pointer-events-none">
-        Debug Info: Nodes in state = {nodes.length} | Edges in state = {edges.length} | 
-        Scene children = {sceneRef.current?.children.length || 0}
-      </div>
+
+      {infoPanelData && (
+        <div className="absolute top-8 right-8 w-[380px] animate-in fade-in slide-in-from-right-10 duration-500">
+           <div className="bg-slate-900/90 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl p-6">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-white text-xl font-black tracking-tight">{infoPanelData.label}</h2>
+                  <div className="text-slate-500 text-[9px] uppercase tracking-widest mt-1 font-bold">Production Unit • {infoPanelData.status}</div>
+                </div>
+                <button onClick={() => { setInfoPanelData(null); setSelectedNode(null); }} className="text-slate-400 hover:text-white"><X size={20}/></button>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: 'Temperature', val: `${infoPanelData.temperature}°C`, icon: Thermometer, color: 'text-orange-400' },
+                  { label: 'Pressure', val: `${infoPanelData.pressure} PSI`, icon: Gauge, color: 'text-cyan-400' },
+                  { label: 'Flow Rate', val: infoPanelData.flowRate?.toLocaleString(), icon: Activity, color: 'text-emerald-400' },
+                  { label: 'Capacity', val: infoPanelData.capacity?.toLocaleString(), icon: DatabaseIcon, color: 'text-indigo-400' }
+                ].map(s => s.val && (
+                  <div key={s.label} className="bg-white/5 p-4 rounded-2xl border border-white/[0.03]">
+                    <div className="flex items-center gap-2 text-slate-500 text-[8px] uppercase font-bold tracking-widest mb-1"><s.icon size={12} className={s.color} /> {s.label}</div>
+                    <div className="text-white text-base font-bold tabular-nums">{s.val}</div>
+                  </div>
+                ))}
+              </div>
+           </div>
+        </div>
+      )}
     </div>
   );
 }
