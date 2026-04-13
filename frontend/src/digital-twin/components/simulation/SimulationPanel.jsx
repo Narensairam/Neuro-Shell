@@ -50,7 +50,7 @@ export function SimulationPanel() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-950 overflow-y-auto custom-scrollbar p-6">
+    <div className="flex flex-col h-full w-full bg-slate-950 p-6 overflow-hidden">
       <div className="mb-6">
         <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
           <Settings2 size={24} className="text-cyan-500" />

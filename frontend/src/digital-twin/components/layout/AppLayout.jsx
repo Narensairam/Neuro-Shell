@@ -51,7 +51,7 @@ export function AppLayout() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden text-slate-200 rounded-lg border border-slate-800">
+    <div className="h-full w-full flex flex-col bg-slate-950 text-slate-200 overflow-hidden">
       {/* Top Bar */}
       <header className="h-14 border-b border-slate-800 bg-[#0b1120] flex items-center justify-between px-4 shrink-0 z-20">
         <div className="flex items-center gap-3">
@@ -66,7 +66,7 @@ export function AppLayout() {
       </header>
 
       {/* Main Layout */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-auto">
         {/* Navigation Sidebar */}
         <aside className="w-[200px] shrink-0 bg-[#0f172a] border-r border-slate-800 flex flex-col py-4 gap-1 z-20">
           {TABS.map(tab => {
@@ -100,8 +100,8 @@ export function AppLayout() {
         </aside>
 
         {/* Dynamic Content Area */}
-        <main className="flex-1 relative bg-slate-950 overflow-hidden flex flex-col">
-          <div className="flex-1 relative">
+        <main className="flex-1 relative bg-slate-950 overflow-hidden flex flex-col min-h-0">
+          <div className="flex-1 relative flex flex-col">
             {renderContent()}
           </div>
           {/* Node Details Overlay only for Topology view */}
