@@ -16,7 +16,7 @@ export function SupplyChainView() {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5000/api/supplychain')
+        fetch('http://localhost:5007/api/supplychain')
             .then(res => res.json())
             .then(d => { 
                 if (isMounted) {

@@ -55,7 +55,7 @@ export function CommandCenterView({ setCurrentView }) {
     useEffect(() => {
         const fetchUnified = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/unified');
+                const res = await fetch('http://localhost:5007/api/dashboard');
                 if (res.ok) {
                     const data = await res.json();
                     console.log('[DEBUG] CommandCenter received unified data:', data);

@@ -8,7 +8,7 @@ export function UnifiedDashboard() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/dashboard')
+        fetch('http://localhost:5007/api/dashboard')
             .then(res => res.json())
             .then(setData)
             .catch(console.error);

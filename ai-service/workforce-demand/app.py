@@ -38,7 +38,7 @@ def scenario_maintenance():
 @app.route("/api/scenario/live", methods=["GET"])
 def scenario_live():
     try:
-        response = requests.get('http://127.0.0.1:5000/fire', timeout=2)
+        response = requests.get('http://127.0.0.1:5007/fire', timeout=2)
         if response.status_code == 200:
             api_data = response.json()
             if api_data.get("event") == "fire":

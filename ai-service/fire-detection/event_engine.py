@@ -22,7 +22,7 @@ def sync_to_core(domain, data):
     """Offloads synchronization to a background thread to prevent CV stutter."""
     def _do_sync():
         try:
-            requests.post("http://localhost:5000/api/sync", json={"domain": domain, "data": data}, timeout=1)
+            requests.post("http://localhost:5007/api/sync", json={"domain": domain, "data": data}, timeout=1)
         except:
             pass
     threading.Thread(target=_do_sync, daemon=True).start()

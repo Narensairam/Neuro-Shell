@@ -16,26 +16,25 @@ The Neuro Shell platform is deployed in alignment with the SHL-EOS-2026 Strategi
 
 To initialize the Neuro Shell EOS, the following services must be activated in sequence:
 
-### 1. Unified Intelligence Backend (Port 5000)
+### 1. Unified Intelligence Backend (Port 5007)
 The core data fabric and repository for the Shell Knowledge Graph (SKG).
 ```bash
-cd backend
-node server.js
+# Run from root
+node backend/server.js
 ```
 
 ### 2. Neural Reasoning Service (Port 5001)
-Orchestrates APEX agent logic, real-time fire detection telemetry, and multi-agent negotiation.
+Orchestrates 5 specialized Agents (Governance, Workforce, ITOps, Commercial, Fire).
 ```bash
-cd ai-service
-node server.js
+# Run from root
+npm start --prefix ai-service
 ```
 
 ### 3. Control Tower Frontend (Port 5173)
 The strategic command-and-control dashboard.
 ```bash
-cd frontend
-npm install
-npm run dev
+# Run from root
+npm run dev --prefix frontend
 ```
 
 ## 🤖 APEX: Agentic Neural Intelligence

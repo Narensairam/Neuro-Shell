@@ -29,7 +29,7 @@ export function ITOpsView({ setCurrentView }) {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5000/api/itops')
+        fetch('http://localhost:5007/api/itops')
             .then(res => res.json())
             .then(d => { if (isMounted) setData(d); })
             .catch(() => { if (isMounted) setData(EMPTY_ITOPS); });

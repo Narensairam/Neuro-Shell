@@ -17,7 +17,7 @@ export function ManufacturingView({ setCurrentView }) {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5000/api/manufacturing')
+        fetch('http://localhost:5007/api/manufacturing')
             .then(res => res.json())
             .then(resData => {
                 console.log('[DEBUG] ManufacturingView received data:', resData);

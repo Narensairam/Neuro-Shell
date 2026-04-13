@@ -600,7 +600,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'get_platform_status': {
                 try {
-                    const res = await fetch('http://localhost:5000/api/dashboard');
+                    const res = await fetch('http://localhost:5007/api/dashboard');
                     if (res.ok) return JSON.stringify(await res.json());
                     return JSON.stringify({ error: 'Core offline' });
                 } catch (e) {

@@ -15,7 +15,7 @@ export function FinanceView() {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5000/api/finance')
+        fetch('http://localhost:5007/api/finance')
             .then(res => res.json())
             .then(d => { if (isMounted) setData(d); })
             .catch(() => { if (isMounted) setData(EMPTY_FINANCE); });

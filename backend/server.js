@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const port = 5000;
+const port = 5007;
 const DB_PATH = path.join(__dirname, 'unified_core.json');
 const DB_GRAPH_PATH = path.join(__dirname, 'agent_graph.json');
 
@@ -174,7 +174,14 @@ app.post('/api/sync', (req, res) => {
   res.json({ success: true, domain });
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Unified Core Logic listening on port ${port}`);
+});
+
+server.on('error', (err) => {
+  console.error('[CRITICAL ERROR] Server failed:', err.message);
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is already in use by another process.`);
+  }
 });
 

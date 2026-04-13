@@ -128,6 +128,7 @@ function initVesselState() {
     TRACKED_VESSELS.forEach((v, i) => {
         const totalWps = v.optimizedWaypoints.length;
         const progress = [0.15, 0.4, 0.6, 0.25, 0.75][i];
+        const SYNC_URL = 'http://localhost:5007/api/sync';
         const wpIdx = Math.floor(progress * totalWps);
         const pos = v.optimizedWaypoints[Math.min(wpIdx, totalWps - 1)];
         const trail = v.optimizedWaypoints.slice(0, Math.max(2, wpIdx + 1));

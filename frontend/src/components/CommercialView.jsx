@@ -18,7 +18,7 @@ export function CommercialView({ setCurrentView }) {
     const [activeTab, setActiveTab] = useState('overview');
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/commercial')
+        fetch('http://localhost:5007/api/commercial')
             .then(res => res.json())
             .then(setData)
             .catch(() => setData(MOCK_COMMERCIAL));

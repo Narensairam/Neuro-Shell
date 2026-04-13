@@ -19,7 +19,7 @@ import {
     Globe
 } from 'lucide-react';
 
-const UNIFIED_API_URL = 'http://localhost:5000/api/unified';
+const UNIFIED_API_URL = 'http://localhost:5007/api/unified';
 
 // Fallback data if backend is unreachable
 const ENTRPRISE_FALLBACK = {

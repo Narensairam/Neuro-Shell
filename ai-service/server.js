@@ -17,7 +17,7 @@ app.use('/api/routes', routeAgent);
 
 // ─── AI Governance Agent (auto-start on app load) ────────────────────────────
 const governanceDir = path.join(__dirname, 'governance');
-console.log('[Neuro Shell] Starting AI Governance Agent...');
+console.log('[Neuro Shell] Starting AI Governance Agent on 5006...');
 const governanceAgent = spawn('python', ['app.py'], {
     cwd: governanceDir,
     stdio: ['ignore', 'pipe', 'pipe'],

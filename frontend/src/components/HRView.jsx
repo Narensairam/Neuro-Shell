@@ -25,7 +25,7 @@ export function HRView() {
         let isMounted = true;
         const fetchData = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/hr');
+                const res = await fetch('http://localhost:5007/api/hr');
                 if (res.ok && isMounted) {
                     const json = await res.json();
                     setData(json);

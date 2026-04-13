@@ -31,7 +31,7 @@ import threading
 def sync_to_core(domain, data):
     def _do_sync():
         try:
-            requests.post("http://localhost:5000/api/sync", json={"domain": domain, "data": data}, timeout=2)
+            requests.post("http://localhost:5007/api/sync", json={"domain": domain, "data": data}, timeout=2)
         except Exception as e:
             print(f"Sync failed: {e}")
     threading.Thread(target=_do_sync, daemon=True).start()

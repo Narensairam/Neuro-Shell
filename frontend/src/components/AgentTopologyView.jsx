@@ -46,7 +46,7 @@ export function AgentTopologyView() {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5000/api/kg/agents')
+        fetch('http://localhost:5007/api/kg/agents')
             .then(res => res.json())
             .then(data => {
                 if (isMounted && data && data.nodes && data.nodes.length > 0) {
