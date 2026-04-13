@@ -11,9 +11,7 @@ import { cn } from './Sidebar';
 const OPENROUTER_API_KEY = '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';
 const MODEL = 'deepseek/deepseek-chat';
 
-// ElevenLabs TTS configuration
-const ELEVENLABS_API_KEY = 'sk_8041ed035be065e72f316745cff450da122329ccdee15f08';
-const ELEVENLABS_VOICE_ID = 'zGjIP4SZlMnY9m93k97r';
+// Microsoft Edge TTS targeting JennyNeural or GuyNeural
 
 // All navigable views in the Neuro Shell ERP
 const VIEWS = {
@@ -254,82 +252,61 @@ export function AgenticAssistant({ setCurrentView }) {
     const chatHistoryRef = useRef([]);
     const recognitionRef = useRef(null);
     const demoTimeoutRef = useRef(null);
-    const currentAudioRef = useRef(null);
+    const voicesRef = useRef([]);
 
     const scrollBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     useEffect(() => { scrollBottom(); }, [messages, isThinking]);
     useEffect(() => { if (isOpen) setTimeout(() => inputRef.current?.focus(), 200); }, [isOpen]);
+    useEffect(() => { return () => { window.speechSynthesis?.cancel(); clearTimeout(demoTimeoutRef.current); }; }, []);
+
+    // Load voices eagerly and cache them
     useEffect(() => {
-        return () => {
-            if (currentAudioRef.current) {
-                currentAudioRef.current.pause();
-                currentAudioRef.current = null;
-            }
-            clearTimeout(demoTimeoutRef.current);
+        const loadVoices = () => {
+            voicesRef.current = window.speechSynthesis?.getVoices() || [];
         };
+        loadVoices();
+        window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
+        return () => window.speechSynthesis?.removeEventListener('voiceschanged', loadVoices);
     }, []);
 
-    // ElevenLabs TTS — streams MP3 and plays via Audio API
-    const speakText = useCallback(async (text) => {
-        if (isMuted) return;
+    // Microsoft Edge TTS voice selector
+    const getEdgeVoice = useCallback(() => {
+        const voices = voicesRef.current;
+        if (!voices.length) return null;
 
-        // Stop any audio currently playing
-        if (currentAudioRef.current) {
-            currentAudioRef.current.pause();
-            currentAudioRef.current = null;
+        const preferences = [
+            v => v.name.includes('Jenny') && (v.name.includes('Neural') || v.name.includes('Natural') || v.name.includes('Online')),
+            v => v.name.includes('en-US-JennyNeural'),
+            v => v.name.includes('Jenny'),
+            v => v.name.includes('Microsoft') && v.name.includes('Online'),
+            v => v.lang.startsWith('en-US'),
+            v => v.lang.startsWith('en'),
+        ];
+
+        for (const test of preferences) {
+            const found = voices.find(test);
+            if (found) return found;
         }
+        return voices[0];
+    }, []);
 
+    // Speech Output using Edge TTS native voices
+    const speakText = useCallback((text) => {
+        if (isMuted || !('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
         const cleanText = String(text || '').replace(/[*#_`~\[\]]/g, '').trim();
         if (!cleanText) return;
 
-        try {
-            const response = await fetch(
-                `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'xi-api-key': ELEVENLABS_API_KEY,
-                        'Content-Type': 'application/json',
-                        'Accept': 'audio/mpeg',
-                    },
-                    body: JSON.stringify({
-                        text: cleanText,
-                        model_id: 'eleven_multilingual_v2',
-                        voice_settings: {
-                            stability: 0.45,
-                            similarity_boost: 0.80,
-                            style: 0.15,
-                            use_speaker_boost: true,
-                        },
-                    }),
-                }
-            );
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
 
-            if (!response.ok) {
-                console.error('ElevenLabs TTS error:', response.status, await response.text());
-                return;
-            }
+        const voice = getEdgeVoice();
+        if (voice) utterance.voice = voice;
 
-            const audioBlob = await response.blob();
-            const audioUrl = URL.createObjectURL(audioBlob);
-            const audio = new Audio(audioUrl);
-            currentAudioRef.current = audio;
-
-            audio.onended = () => {
-                URL.revokeObjectURL(audioUrl);
-                if (currentAudioRef.current === audio) currentAudioRef.current = null;
-            };
-
-            audio.onerror = () => {
-                URL.revokeObjectURL(audioUrl);
-                if (currentAudioRef.current === audio) currentAudioRef.current = null;
-            };
-
-            await audio.play();
-        } catch (err) {
-            console.error('ElevenLabs TTS exception:', err);
-        }
-    }, [isMuted]);
+        window.speechSynthesis.speak(utterance);
+    }, [isMuted, getEdgeVoice]);
 
     // Speech Input — auto-sends when done speaking
     const toggleListen = () => {
@@ -423,10 +400,7 @@ export function AgenticAssistant({ setCurrentView }) {
 
     const skipDemo = useCallback(() => {
         clearTimeout(demoTimeoutRef.current);
-        if (currentAudioRef.current) {
-            currentAudioRef.current.pause();
-            currentAudioRef.current = null;
-        }
+        window.speechSynthesis?.cancel();
         setIsDemoRunning(false);
         setDemoStep(0);
         const skipMsg = "Demo paused. I'm back online — what would you like to do next?";
