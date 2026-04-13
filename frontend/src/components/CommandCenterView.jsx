@@ -415,6 +415,90 @@ export function CommandCenterView({ setCurrentView }) {
                          </div>
                     </div>
                 </div>
+                </div>
+            </div>
+
+            {/* AI ADOPTION & METRICS ROW */}
+            <div className="grid grid-cols-2 gap-4">
+                 {/* 1. ENTERPRISE AI ADOPTION HEATMAP */}
+                 <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col min-h-[260px]">
+                     <div className="flex items-center justify-between mb-4">
+                         <div className="flex items-center gap-2">
+                             <Cpu className="text-blue-600 w-4 h-4" />
+                             <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Enterprise AI Heatmap</h2>
+                         </div>
+                         <div className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[9px] font-bold uppercase tracking-wider">Live Inference</div>
+                     </div>
+                     <div className="grid grid-cols-4 gap-2 flex-1 relative z-10">
+                         {heatmap.map((item, i) => (
+                             <div key={i} className={`p-3 rounded-lg border flex flex-col justify-between transition-transform hover:scale-[1.02] cursor-default ${getHeatmapColor(item.health) === 'bg-green-500' ? 'bg-green-50 border-green-100' : getHeatmapColor(item.health) === 'bg-shell-yellow' ? 'bg-amber-50 border-amber-100' : 'bg-red-50 border-red-100'}`}>
+                                 <div className="text-[10px] font-black text-gray-800 uppercase tracking-tighter leading-[1.1] mb-2">{item.label}</div>
+                                 <div className="flex items-end justify-between mt-auto">
+                                     <div>
+                                         <div className={`text-[16px] font-black leading-none ${getHeatmapColor(item.health) === 'bg-green-500' ? 'text-green-700' : getHeatmapColor(item.health) === 'bg-shell-yellow' ? 'text-amber-700' : 'text-red-700'}`}>{item.health}%</div>
+                                         <div className="text-[8px] font-mono text-gray-500 uppercase font-bold tracking-widest mt-0.5">Health</div>
+                                     </div>
+                                     <div className="text-right">
+                                         <div className="text-[12px] font-bold text-gray-600 leading-none">{item.load}%</div>
+                                         <div className="text-[7px] font-mono text-gray-400 uppercase font-bold tracking-widest mt-0.5">Load</div>
+                                     </div>
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                 </div>
+
+                 {/* 2. AI ADOPTION METRICS & AGENT STATUS */}
+                 <div className="bg-[#0f172a] border border-gray-800 rounded-xl p-4 shadow-sm flex flex-col min-h-[260px] relative overflow-hidden">
+                     {/* decorative grid background */}
+                     <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                     
+                     <div className="flex items-center justify-between mb-5 relative z-10">
+                         <div className="flex items-center gap-2">
+                             <Activity className="text-shell-yellow w-4 h-4" />
+                             <h2 className="text-[14px] font-black text-white uppercase tracking-tight">Adoptive Agent Topology</h2>
+                         </div>
+                         <div className="flex items-center gap-1.5 px-2 py-1 bg-green-500/10 rounded-sm border border-green-500/20">
+                             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                             <span className="text-[9px] font-black text-green-400 uppercase tracking-widest">Mesh Active</span>
+                         </div>
+                     </div>
+
+                     <div className="flex gap-4 mb-4 border-b border-gray-800 pb-4 relative z-10 shrink-0">
+                         <div className="flex-1">
+                             <div className="text-[9px] font-mono text-gray-400 uppercase tracking-widest mb-1 font-bold">Network Latency</div>
+                             <div className="text-[20px] font-black text-white leading-none flex items-end gap-1">
+                                {agentSummary?.avg_latency || '142ms'}
+                                <span className="text-[10px] text-green-400 font-mono mb-0.5">optimal</span>
+                             </div>
+                         </div>
+                         <div className="flex-1">
+                             <div className="text-[9px] font-mono text-gray-400 uppercase tracking-widest mb-1 font-bold">Inference Success</div>
+                             <div className="text-[20px] font-black text-green-400 leading-none">{agentSummary?.success_rate || '99.8%'}</div>
+                         </div>
+                         <div className="flex-1">
+                             <div className="text-[9px] font-mono text-gray-400 uppercase tracking-widest mb-1 font-bold">Active Cores</div>
+                             <div className="text-[20px] font-black text-white leading-none">1,024</div>
+                         </div>
+                     </div>
+
+                     <div className="flex-1 overflow-y-auto pr-1 space-y-2 custom-scrollbar relative z-10">
+                         {agents.map((agent, i) => (
+                             <div key={i} className="flex items-center justify-between p-2.5 rounded bg-gray-800/40 border border-gray-700/50 hover:bg-gray-800 transition-colors cursor-pointer" onClick={() => setCurrentView('topology')}>
+                                 <div className="flex items-center gap-3">
+                                     <div className={`w-2 h-2 rounded-full ${agent.status === 'Online' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                                     <div>
+                                         <div className="text-[11px] font-bold text-gray-200 tracking-tight">{agent.name}</div>
+                                         <div className="text-[9px] font-mono text-shell-yellow uppercase mt-0.5 tracking-tighter">Port: {agent.port} · {agent.capabilities?.length || 0} Skills</div>
+                                     </div>
+                                 </div>
+                                 <div className="text-[9px] font-mono bg-gray-900 border border-gray-700 text-gray-400 px-2 py-1 rounded uppercase font-bold tracking-widest shadow-inner">
+                                     {agent.type}
+                                 </div>
+                             </div>
+                         ))}
+                     </div>
+                 </div>
             </div>
         </div>
     );

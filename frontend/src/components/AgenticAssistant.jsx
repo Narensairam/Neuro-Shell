@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, X, Send, ChevronDown, Loader2, CornerDownLeft,
     Terminal, CheckCircle2, AlertCircle, Navigation, BarChart3,
-    Mic, MicOff, Volume2, VolumeX, Play, SkipForward, Ticket
+    Mic, MicOff, Volume2, VolumeX, Play, SkipForward, Ticket, Pause
 } from 'lucide-react';
 import { cn } from './Sidebar';
 
@@ -25,6 +25,9 @@ const VIEWS = {
     finance: 'Group Finance & Strategy',
     hr: 'Workforce & HSE Safety',
     itops: 'System Ops & Cyber',
+    commercial_agent: 'Commercial Intelligence Agent',
+    hr_agent: 'HR Workforce Agent',
+    itops_agent: 'AIOps Engine',
     erp: 'ERP Master (S/4HANA)',
     models: 'Model Registry',
     alerts: 'Alert Center',
@@ -38,56 +41,57 @@ const VIEWS = {
 };
 
 // Demo tour script — each stop has a view, dwell time (ms), and spoken pitch
+// Demo tour script — 4-minute high-impact jury presentation
 const DEMO_TOUR = [
     {
         view: 'command',
-        dwell: 6000,
-        pitch: "Welcome to the Strategic Steering Hub — your executive command centre. Here, the APEX neural engine synthesises data across all 18 Shell domains in real time. You can see transformation wave progress, AI model counts, and financial operations metrics, all at a glance."
+        dwell: 24000,
+        pitch: "Hi, welcome to Neuro Shell. You are looking at the Strategic Steering Hub, the executive brain of the enterprise. Here, the APEX agent synthesizes millions of data points across 18 distinct global domains into a single pane of glass. Unlike traditional ERPs that look backward, APEX acts as a proactive operating system, continuously calculating risk, optimizing resources, and surfacing critical insights before they become business bottlenecks."
     },
     {
         view: 'digitaltwin',
-        dwell: 6000,
-        pitch: "This is the Asset Digital Twin — a live, three-dimensional replica of Shell's physical infrastructure. Every compressor, vessel, and pipeline is mirrored here. Our AI agents monitor sensor feeds and predict failures up to 72 hours in advance, preventing unplanned downtime."
+        dwell: 24000,
+        pitch: "Next, we enter the Asset Digital Twin. What makes Neuro Shell unique is its direct connection to the physical world. This is a live, 3D spatial replica of our global infrastructure. Specialized AI agents continuously ingest telemetry from thousands of IoT sensors. They don't just monitor — they predict. By identifying harmonic anomalies in a physical compressor, the agent can predict a mechanical failure up to 72 hours in advance, completely eliminating unplanned industrial downtime."
     },
     {
         view: 'manufacturing',
-        dwell: 6000,
-        pitch: "The Industrial Operations module gives you a full view of Shell's refinery performance. Real-time OEE, energy consumption, and quality metrics are tracked autonomously. The Guardian Eye agent monitors safety zones and flags PPE violations the moment they occur."
+        dwell: 23000,
+        pitch: "Moving to Industrial Operations and Refining. Here, operational efficiency meets uncompromised safety. Watch how the Guardian Eye agent operates: it autonomously scans live CCTV feeds across all active safety zones. If it detects a worker missing critical PPE, it immediately flags the hazard, recalculates the site's overall safety compliance score, and logs an immutable audit trail without any human intervention."
     },
     {
         view: 'supplychain',
-        dwell: 6000,
-        pitch: "Global Logistics and Marine operations are managed here. Our AI continuously optimises vessel routing, reduces LNG demurrage, and tracks 50 active shipments across all ocean corridors. Supply chain disruptions are predicted and rerouted before they impact delivery."
+        dwell: 24000,
+        pitch: "In Global Logistics and Marine, we redefine supply chain resilience. The Logistics Agent actively tracks 50 active shipments across volatile ocean corridors. But its true power lies in predictive routing. If a geopolitical event or weather anomaly threatens a shipping lane, the agent autonomously simulates alternative routes, calculates the exact impact on LNG demurrage, and restructures the supply chain to protect margins."
     },
     {
-        view: 'commercial',
-        dwell: 6000,
-        pitch: "The Energy Trading and Risk module is where Shell's commercial intelligence lives. AI agents monitor Brent Crude, TTF Gas, and LNG spot prices, generating trade recommendations and flagging sanctions risks autonomously through OFAC and REMIT screening."
+        view: 'commercial_agent',
+        dwell: 24000,
+        pitch: "Welcome to the Energy Trading and Risk terminal. This is where market intelligence is weaponized. The Commercial Agent ingests real-time pricing for Brent Crude, TTF Gas, and LNG spots. It doesn't just display data; it actively screens counterparties against live OFAC and REMIT sanctions databases. It prevents non-compliant trades in milliseconds, offering a level of proactive regulatory shielding that human compliance teams simply cannot match."
     },
     {
         view: 'finance',
-        dwell: 6000,
-        pitch: "Group Finance and Strategy brings full financial intelligence into a single pane. SOX reconciliation, intercompany settlements, and hedging positions are all tracked with AI-powered anomaly detection. Our financial close cycle is being accelerated from nine days to five."
+        dwell: 24000,
+        pitch: "In Group Finance and Strategy, we are fundamentally accelerating corporate velocity. The Finance Agent oversees SOX reconciliations, intercompany settlements, and global hedging positions. By deploying machine learning to instantly flag accounting anomalies and automate reconciliations, Neuro Shell is actively compressing the financial close cycle from an industry-standard nine days, down to an unprecedented five days."
     },
     {
-        view: 'hr',
-        dwell: 6000,
-        pitch: "Workforce and HSE Safety is where people intelligence meets operational safety. AI models forecast talent demand, track reskilling initiatives, and monitor incident-free hours across all global sites. The Safety Feed provides real-time PPE compliance from every active zone."
+        view: 'hr_agent',
+        dwell: 22000,
+        pitch: "Workforce and HSE Safety is where we manage our most critical asset — our people. The HR Workforce Agent doesn't just track headcount. It correlates operational safety data with talent demand, forecasting exact workforce needs for the next quarter. It ensures that critical sites have the right certified personnel, seamlessly connecting human capital management directly to on-the-ground operational realities."
     },
     {
-        view: 'itops',
-        dwell: 6000,
-        pitch: "System Operations and Cyber is Shell's autonomous IT command centre. The AIOps engine deflects 67 percent of service desk tickets, monitors 492,000 sensor tags, and triggers incident response within seconds of a breach. All of this, without a single human touch."
+        view: 'itops_agent',
+        dwell: 24000,
+        pitch: "This is the System Operations and Cyber command center. Watch what happens when IT support becomes fully agentic. The AIOps engine monitors 492,000 sensor tags globally. When an anomaly occurs, it doesn't wait for a user to complain. It autonomously triages the alert, deflects up to 67 percent of routine service desk tickets, and automatically dispatches L3 engineers for critical failures — shrinking incident response times from hours to mere seconds."
     },
     {
         view: 'governance',
-        dwell: 6000,
-        pitch: "Governance and Compliance provides a single, unified view of Shell's entire regulatory posture. EU AI Act readiness, ISO 27001 certification status, GDPR erasure SLAs, and sanctions clearance logs are all tracked here in real time, across every global domain."
+        dwell: 25000,
+        pitch: "In the Governance and Compliance module, we address the boardroom's highest priority: risk elimination. Neuro Shell provides a unified, continuous audit feed. The compliance agent tracks EU AI Act readiness, ISO 27001 validation, and GDPR erasure SLAs simultaneously. It proves that within Neuro Shell, compliance is not an annual retrospective audit — it is an active, continuous, and automated state of business."
     },
     {
         view: 'topology',
-        dwell: 6000,
-        pitch: "Finally, the Agentic Neural Topology — the brain of Neuro Shell. This is the live knowledge graph of every AI agent in the system. APEX, Guardian Eye, the Commercial Agent, the HR Workforce Agent — all connected, all communicating, all acting autonomously on your behalf. This is the future of enterprise intelligence."
+        dwell: 26000,
+        pitch: "Finally, the Agentic Neural Topology. This is the architectural marvel binding it all together — the live knowledge graph. You are seeing the actual neural pathways connecting APEX, Guardian Eye, the Commercial Agent, and the IT Ops engine. They communicate seamlessly, sharing context across silos to execute complex, multi-step actions on behalf of the enterprise. Thank you, jury, for experiencing Neuro Shell — the definitive blueprint for the autonomous enterprise."
     },
 ];
 
@@ -246,6 +250,7 @@ export function AgenticAssistant({ setCurrentView }) {
     const [isThinking, setIsThinking] = useState(false);
     const [toolAction, setToolAction] = useState(null);
     const [isDemoRunning, setIsDemoRunning] = useState(false);
+    const [isDemoPaused, setIsDemoPaused] = useState(false);
     const [demoStep, setDemoStep] = useState(0);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
@@ -269,16 +274,46 @@ export function AgenticAssistant({ setCurrentView }) {
         };
     }, []);
 
-    // ElevenLabs TTS — streams MP3 and plays via Audio API
-    const speakText = useCallback(async (text) => {
-        if (isMuted) return;
+    // Female voice selector — prioritises named female voices
+    const getFemaleVoice = useCallback(() => {
+        const voices = voicesRef.current;
+        if (!voices.length) return null;
 
-        // Stop any audio currently playing
-        if (currentAudioRef.current) {
-            currentAudioRef.current.pause();
-            currentAudioRef.current = null;
+        const femalePreferences = [
+            // Priority 1: High-quality Neural "Online" voices (Edge/Windows 11)
+            v => v.name.includes('Aria Online (Natural)'),
+            v => v.name.includes('Jenny Online (Natural)'),
+            v => v.name.includes('Sonia Online (Natural)'),
+            v => v.name.includes('Natasha Online (Natural)'),
+            // Priority 2: Google Chrome Premium Voices
+            v => v.name === 'Google UK English Female',
+            v => v.name === 'Google US English' && v.name.toLowerCase().includes('female'),
+            // Priority 3: Standard macOS/iOS high-quality voices
+            v => v.name.includes('Samantha'),
+            v => v.name.includes('Karen'),
+            v => v.name.includes('Moira'),
+            v => v.name.includes('Tessa'),
+            // Priority 4: Fallbacks
+            v => v.name.includes('Aria'),
+            v => v.name.includes('Zira'),
+            v => v.name.includes('Susan'),
+            v => v.name.includes('Victoria'),
+            v => v.name.includes('Microsoft') && v.lang.startsWith('en') && !v.name.includes('David') && !v.name.includes('Mark') && !v.name.includes('George') && !v.name.includes('James'),
+            v => v.lang.startsWith('en-US'),
+            v => v.lang.startsWith('en'),
+        ];
+
+        for (const test of femalePreferences) {
+            const found = voices.find(test);
+            if (found) return found;
         }
+        return voices[0];
+    }, []);
 
+    // Speech Output with female voice
+    const speakText = useCallback((text) => {
+        if (isMuted || !('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
         const cleanText = String(text || '').replace(/[*#_`~\[\]]/g, '').trim();
         if (!cleanText) return;
 
@@ -428,11 +463,32 @@ export function AgenticAssistant({ setCurrentView }) {
             currentAudioRef.current = null;
         }
         setIsDemoRunning(false);
+        setIsDemoPaused(false);
         setDemoStep(0);
-        const skipMsg = "Demo paused. I'm back online — what would you like to do next?";
+        const skipMsg = "Demo stopped. I'm back online — what would you like to do next?";
         setMessages(prev => [...prev, { role: 'assistant', content: skipMsg, type: 'text' }]);
         speakText(skipMsg);
     }, [speakText]);
+
+    const pauseDemo = useCallback(() => {
+        clearTimeout(demoTimeoutRef.current);
+        window.speechSynthesis?.cancel();
+        setIsDemoPaused(true);
+    }, []);
+
+    const resumeDemo = useCallback(() => {
+        setIsDemoPaused(false);
+        // Restart the current step exactly from the beginning
+        runDemoTour(demoStep);
+    }, [demoStep, runDemoTour]);
+
+    const toggleMute = () => {
+        const nextMuted = !isMuted;
+        setIsMuted(nextMuted);
+        if (nextMuted && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+    };
 
     // Execute a tool call and return result string
     const executeTool = useCallback(async (toolName, args) => {
@@ -775,15 +831,26 @@ export function AgenticAssistant({ setCurrentView }) {
                                         <Play className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
                                         <span className="text-[11px] font-black text-amber-800 uppercase tracking-widest">Demo Mode</span>
                                         <span className="text-[10px] text-amber-600 font-mono">
-                                            Stop {demoStep + 1}/{DEMO_TOUR.length} — {VIEWS[DEMO_TOUR[demoStep]?.view]}
+                                            Stop {demoStep + 1}/{DEMO_TOUR.length} — {VIEWS[DEMO_TOUR[demoStep]?.view] || 'Module'}
                                         </span>
                                     </div>
-                                    <button
-                                        onClick={skipDemo}
-                                        className="flex items-center gap-1 px-2 py-1 text-[10px] font-black text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-md uppercase tracking-widest transition-all"
-                                    >
-                                        <SkipForward className="w-3 h-3" /> Skip
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        {isDemoPaused ? (
+                                            <button onClick={resumeDemo} className="flex items-center gap-1 px-2 py-1 text-[10px] font-black text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-md uppercase tracking-widest transition-all">
+                                                <Play className="w-3 h-3" /> Resume
+                                            </button>
+                                        ) : (
+                                            <button onClick={pauseDemo} className="flex items-center gap-1 px-2 py-1 text-[10px] font-black text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-md uppercase tracking-widest transition-all">
+                                                <Pause className="w-3 h-3" /> Pause
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={skipDemo}
+                                            className="flex items-center gap-1 px-2 py-1 text-[10px] font-black text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-md uppercase tracking-widest transition-all"
+                                        >
+                                            <SkipForward className="w-3 h-3" /> Stop
+                                        </button>
+                                    </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -879,7 +946,7 @@ export function AgenticAssistant({ setCurrentView }) {
                         <div className="p-3 bg-white border-t border-gray-100 shrink-0">
                             <div className="flex items-center gap-1.5 mb-2 px-1">
                                 <button
-                                    onClick={() => setIsMuted(!isMuted)}
+                                    onClick={toggleMute}
                                     className={`p-1.5 rounded-md hover:bg-gray-100 transition-colors ${isMuted ? 'text-red-500' : 'text-gray-500'}`}
                                     title={isMuted ? "Unmute APEX Voice" : "Mute APEX Voice"}
                                 >

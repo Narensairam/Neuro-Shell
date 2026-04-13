@@ -15,6 +15,11 @@ import { FinanceView } from './components/FinanceView';
 import { HRView } from './components/HRView';
 import { ITOpsView } from './components/ITOpsView';
 
+// Dedicated Agent Views
+import { CommercialAgent } from './components/CommercialAgent';
+import { HRWorkforceAgent } from './components/HRWorkforceAgent';
+import { ITOpsAgent } from './components/ITOpsAgent';
+
 // Transformation & Intelligence Modules
 import { ERPMasterView } from './components/ERPMasterView';
 import { ModelRegistryView } from './components/ModelRegistryView';
@@ -43,6 +48,11 @@ function App() {
       case 'finance': return <FinanceView setCurrentView={setCurrentView} />;
       case 'hr': return <HRView setCurrentView={setCurrentView} />;
       case 'itops': return <ITOpsView setCurrentView={setCurrentView} />;
+
+      // Focused Agent Views
+      case 'commercial_agent': return <CommercialAgent />;
+      case 'hr_agent': return <HRWorkforceAgent />;
+      case 'itops_agent': return <ITOpsAgent setCurrentView={setCurrentView} />;
 
       // New Modules
       case 'erp': return <ERPMasterView setCurrentView={setCurrentView} />;
