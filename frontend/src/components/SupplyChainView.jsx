@@ -85,11 +85,21 @@ export function SupplyChainView() {
                 </div>
             ) : (
                 <div className="flex-1 overflow-y-auto custom-scrollbar px-1 pb-4 pt-4">
-                    <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="grid grid-cols-5 gap-4 mb-4">
                         <div className="bg-white border border-gray-200 rounded-lg p-5">
                             <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Fleet Cost Reduction</div>
                             <div className="text-[31px] font-extrabold text-green-600 leading-none">8.2<span className="text-[15px] text-green-400 font-normal ml-1">%</span></div>
                             <div className="font-mono text-[10px] text-green-600 mt-1 flex items-center gap-1"><TrendingUp className="w-3 h-3" /> AI optimized</div>
+                        </div>
+                        <div className="bg-white border border-gray-200 rounded-lg p-5">
+                            <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">On-Time Shipment</div>
+                            <div className="text-[31px] font-extrabold text-blue-600 leading-none">94.2<span className="text-[15px] font-normal ml-1">%</span></div>
+                            <div className="font-mono text-[10px] text-blue-500 mt-1 uppercase font-bold tracking-tighter">↑ Target Achieved</div>
+                        </div>
+                        <div className="bg-white border border-gray-200 rounded-lg p-5">
+                            <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Contractor Adherence</div>
+                            <div className="text-[31px] font-extrabold text-shell-darkText leading-none">88.5<span className="text-[15px] text-gray-400 font-normal ml-1">%</span></div>
+                            <div className="font-mono text-[10px] text-amber-600 mt-1 uppercase font-bold tracking-tighter">! Audit Needed</div>
                         </div>
                         <div className="bg-white border border-gray-200 rounded-lg p-5">
                             <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Route Adoption Rate</div>
@@ -157,7 +167,55 @@ export function SupplyChainView() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
+                        <div className="bg-white border border-gray-200 rounded-lg p-5 lg:col-span-2">
+                             <div className="flex justify-between items-center mb-6">
+                                <h4 className="text-[13px] font-extrabold text-shell-darkText uppercase tracking-tight">Operational Adherence & Contractor Sync</h4>
+                                <div className="font-mono text-[10px] text-blue-600 font-bold uppercase py-1 px-3 bg-blue-50 rounded border border-blue-100 italic">Neural Adherence Enabled</div>
+                             </div>
+
+                             <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-4">
+                                    {[
+                                        { label: 'Maersk Global Fleet', adherence: '96%', items: '42 assets en route', color: 'bg-green-500' },
+                                        { label: 'Shell Maritime (Self)', adherence: '98%', items: '24 assets en route', color: 'bg-green-500' },
+                                        { label: 'Independent Contractors', adherence: '74%', items: '36 assets en route', color: 'bg-amber-500' }
+                                    ].map((fleet, i) => (
+                                        <div key={i} className="flex flex-col gap-1.5">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-[11px] font-black text-slate-700 uppercase">{fleet.label}</span>
+                                                <span className={`text-[11px] font-black font-mono ${parseInt(fleet.adherence) > 90 ? 'text-green-600' : 'text-amber-600'}`}>{fleet.adherence}</span>
+                                            </div>
+                                            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                <div className={`h-full ${fleet.color} transition-all duration-1000`} style={{ width: fleet.adherence }}></div>
+                                            </div>
+                                            <div className="text-[9px] text-slate-400 font-mono uppercase tracking-widest">{fleet.items}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="bg-slate-50 border border-slate-100 rounded-lg p-4 flex flex-col justify-center">
+                                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 text-center">Average Fleet Adherence</div>
+                                    <div className="flex justify-center items-end gap-2 mb-4">
+                                        <div className="text-[42px] font-black text-slate-800 leading-none tracking-tighter">88.5<span className="text-[18px] text-slate-400 ml-1 font-normal">%</span></div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-[10px] font-bold uppercase border-b border-white/50 pb-1.5">
+                                            <span className="text-slate-400">Total Shipments (MT)</span>
+                                            <span className="text-slate-800">1.2M</span>
+                                        </div>
+                                        <div className="flex justify-between text-[10px] font-bold uppercase border-b border-white/50 pb-1.5">
+                                            <span className="text-slate-400">Target Sync Rate</span>
+                                            <span className="text-slate-800">92.0%</span>
+                                        </div>
+                                        <div className="flex justify-between text-[10px] font-bold uppercase">
+                                            <span className="text-slate-400">Neural Confidence</span>
+                                            <span className="text-green-600 font-mono">High (99%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+
                         <div className="bg-white border border-gray-200 rounded-lg p-5">
                             <h4 className="text-[11px] font-extrabold text-shell-darkText uppercase tracking-widest mb-4">Port Operations MTTR</h4>
                             <div className="space-y-3">
@@ -165,21 +223,19 @@ export function SupplyChainView() {
                                     <div key={i} className="flex items-center justify-between">
                                         <span className="text-[11px] font-medium text-gray-500">{port}</span>
                                         <div className="flex items-center gap-3">
-                                            <div className="w-32 bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                            <div className="w-20 bg-gray-100 h-1 rounded-full overflow-hidden">
                                                 <div className="bg-shell-yellow h-full" style={{ width: `${Math.random() * 40 + 60}%` }}></div>
                                             </div>
-                                            <span className="text-[11px] font-bold text-shell-darkText">2.4h</span>
+                                            <span className="text-[10px] font-bold text-shell-darkText font-mono">2.4h</span>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                        </div>
-                        <div className="bg-white border border-gray-200 rounded-lg p-5">
-                            <h4 className="text-[11px] font-extrabold text-shell-darkText uppercase tracking-widest mb-4">Supply Resilience</h4>
-                            <div className="flex items-center justify-center h-[80px]">
+                            <div className="mt-6 pt-5 border-t border-gray-100">
+                                <h4 className="text-[11px] font-extrabold text-shell-darkText uppercase tracking-widest mb-4 text-center">Marine Supply Resilience</h4>
                                 <div className="text-center">
-                                    <div className="text-[25px] font-black text-green-600">99.9%</div>
-                                    <div className="text-[9px] font-mono text-gray-400 uppercase tracking-tighter">Availability across zones</div>
+                                    <div className="text-[31px] font-black text-green-600 leading-none">99.9<span className="text-[14px] text-green-400 font-normal ml-1">%</span></div>
+                                    <div className="text-[9px] font-mono text-gray-400 uppercase tracking-tighter mt-1">Cross-Fleet Availability</div>
                                 </div>
                             </div>
                         </div>
