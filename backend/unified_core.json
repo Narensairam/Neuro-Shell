@@ -9,7 +9,7 @@
       "production_boe_day": 3400000
     },
     "health_index": 98.4,
-    "last_sync": "2026-04-14T08:06:21.523Z",
+    "last_sync": "2026-04-14T08:16:43.505Z",
     "process_heatmap": [
       {
         "id": "refining",
@@ -189,6 +189,18 @@
     "history": [],
     "activeAlerts": [
       {
+        "id": "evt-177615439209",
+        "timestamp": "08:13:12",
+        "camera_id": "CAM_01",
+        "confidence": 0.5632584691047668,
+        "type": "PPE_VIOLATION",
+        "helmet": true,
+        "vest": false,
+        "status": "VIOLATION",
+        "severity": "MEDIUM",
+        "recommended_action": "Issue warning - Missing Vest"
+      },
+      {
         "id": "evt-177615395269",
         "timestamp": "08:05:52",
         "camera_id": "CAM_01",
@@ -213,8 +225,8 @@
       }
     ],
     "stats": {
-      "total_incidents": 2,
-      "ppe_violations": 1,
+      "total_incidents": 3,
+      "ppe_violations": 2,
       "intrusions": 0,
       "fire_hazards": 1,
       "anomalies": 0,
@@ -1170,8 +1182,8 @@
     }
   },
   "itops_stats": {
-    "total_tickets": 339,
-    "deflection_rate": 98.5,
+    "total_tickets": 349,
+    "deflection_rate": 98.6,
     "critical_alerts": 5,
     "ot_threats": 40,
     "shadow_devices": 2,

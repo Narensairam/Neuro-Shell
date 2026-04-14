@@ -93,7 +93,7 @@ export function AgentTopologyView() {
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#f8fafc] p-8 animate-in fade-in duration-700">
+        <div className="flex flex-col h-full bg-[#f8fafc] p-8 animate-in fade-in duration-700 overflow-y-auto custom-scrollbar">
             <header className="mb-8 shrink-0">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center shadow-lg">
