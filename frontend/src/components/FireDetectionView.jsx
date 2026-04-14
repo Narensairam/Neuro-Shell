@@ -11,14 +11,16 @@ import {
     Bot,
     Loader2,
     ExternalLink,
-    X
+    X,
+    Users,
+    ArrowRight
 } from 'lucide-react';
 import { crisisEventBus } from '../context/CrisisEventBus';
 
 const FIRE_UI_ORIGIN = import.meta.env.VITE_FIRE_DETECTION_URL || 'http://localhost:5002';
 const NEURO_SHELL_ORIGIN = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:5001';
 
-export function FireDetectionView() {
+export function FireDetectionView({ setCurrentView }) {
     const [stats, setStats] = useState({
         compliance_rate_pct: 0,
         ppe_violations: 0,
@@ -28,19 +30,53 @@ export function FireDetectionView() {
     const [fireAlert, setFireAlert] = useState(null);
     const [time, setTime] = useState('');
     const [retryKey, setRetryKey] = useState(0);
+    const [rerouteCountdown, setRerouteCountdown] = useState(null);
     const fireAlertTimeout = useRef(null);
     const orchestratorTriggered = useRef(false);
+    const rerouteTimerRef = useRef(null);
+    const countdownIntervalRef = useRef(null);
+    const rerouteCancelled = useRef(false);
 
-    // Crisis Orchestrator Bridge
+    // Crisis Orchestrator Bridge + Auto-Reroute to Workforce AI Agent
     useEffect(() => {
         if (fireAlert && !orchestratorTriggered.current) {
             orchestratorTriggered.current = true;
-            // Delay slightly to allow the UI to show before jumping
+            rerouteCancelled.current = false;
+
+            // Dispatch crisis event after 3 seconds
             setTimeout(() => {
-                 crisisEventBus.dispatch('CRISIS_FIRE_DETECTED', fireAlert);
+                crisisEventBus.dispatch('CRISIS_FIRE_DETECTED', fireAlert);
             }, 3000);
+
+            // Start 5-second countdown then reroute to Workforce AI Agent
+            const REROUTE_DELAY = 5;
+            setRerouteCountdown(REROUTE_DELAY);
+
+            countdownIntervalRef.current = setInterval(() => {
+                setRerouteCountdown(prev => {
+                    if (prev <= 1) {
+                        clearInterval(countdownIntervalRef.current);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+
+            rerouteTimerRef.current = setTimeout(() => {
+                if (!rerouteCancelled.current && setCurrentView) {
+                    setCurrentView('command');
+                }
+            }, REROUTE_DELAY * 1000);
         }
     }, [fireAlert]);
+
+    // Cleanup reroute timers on unmount
+    useEffect(() => {
+        return () => {
+            clearTimeout(rerouteTimerRef.current);
+            clearInterval(countdownIntervalRef.current);
+        };
+    }, []);
 
     // Clock
     useEffect(() => {
@@ -106,8 +142,8 @@ export function FireDetectionView() {
         <div className="flex-1 w-full h-full bg-slate-50 text-shell-darkText font-sans overflow-hidden flex flex-col select-none relative animate-in fade-in duration-300">
             {/* Global Fire Alert Overlay */}
             {fireAlert && (
-                <div className="absolute top-6 right-6 z-[50] animate-pulse">
-                    <div className="bg-red-600 shadow-[0_0_40px_rgba(220,38,38,0.6)] border-2 border-red-400 rounded-lg p-5 flex items-start gap-4 min-w-[360px]">
+                <div className="absolute top-6 right-6 z-[50]">
+                    <div className="bg-red-600 shadow-[0_0_50px_rgba(220,38,38,0.7)] border-2 border-red-400 rounded-lg p-5 flex items-start gap-4 min-w-[400px] animate-pulse">
                         <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-inner">
                             <Flame className="w-8 h-8 text-red-600" />
                         </div>
@@ -117,6 +153,12 @@ export function FireDetectionView() {
                                 <h3 className="text-white font-black text-lg tracking-widest uppercase">FIRE DETECTED</h3>
                                 <button
                                     onClick={() => {
+                                        // Cancel reroute and dismiss
+                                        rerouteCancelled.current = true;
+                                        clearTimeout(rerouteTimerRef.current);
+                                        clearInterval(countdownIntervalRef.current);
+                                        setRerouteCountdown(null);
+                                        orchestratorTriggered.current = false;
                                         setFireAlert(null);
                                         fetch(`${NEURO_SHELL_ORIGIN}/api/fire/normalize`, { method: 'POST' }).catch(() => { });
                                     }}
@@ -128,13 +170,47 @@ export function FireDetectionView() {
                             <div className="text-red-100 font-mono text-xs uppercase tracking-widest mb-2">
                                 Node: {fireAlert.camera_id} // CONFIDENCE: {fireAlert.confidence}%
                             </div>
-                            <button 
-                                onClick={() => crisisEventBus.dispatch('CRISIS_FIRE_DETECTED', fireAlert)}
-                                className="text-white font-bold text-[10px] bg-red-800 hover:bg-black px-3 py-1.5 rounded inline-flex items-center gap-2 transition-colors uppercase tracking-widest shadow-md border border-red-500/50"
-                            >
-                                <Cpu className="w-3.5 h-3.5 text-red-500" />
-                                Initiate Agentic Swarm Workflow
-                            </button>
+
+                            {/* Reroute countdown banner */}
+                            {rerouteCountdown !== null && rerouteCountdown > 0 && (
+                                <div className="mb-3 bg-red-900/60 border border-red-400/40 rounded-md px-3 py-2 flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-2">
+                                        <Users className="w-3.5 h-3.5 text-red-200 shrink-0" />
+                                        <span className="text-red-100 text-[10px] font-bold uppercase tracking-widest leading-tight">
+                                            Routing to Control Tower in
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                        <span className="text-white font-black text-sm font-mono tabular-nums w-5 text-center">{rerouteCountdown}</span>
+                                        <span className="text-red-300 text-[9px] uppercase font-bold">sec</span>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <button 
+                                    onClick={() => crisisEventBus.dispatch('CRISIS_FIRE_DETECTED', fireAlert)}
+                                    className="text-white font-bold text-[10px] bg-red-800 hover:bg-black px-3 py-1.5 rounded inline-flex items-center gap-2 transition-colors uppercase tracking-widest shadow-md border border-red-500/50"
+                                >
+                                    <Cpu className="w-3.5 h-3.5 text-red-500" />
+                                    Initiate Agentic Swarm
+                                </button>
+                                {setCurrentView && (
+                                    <button
+                                        onClick={() => {
+                                            rerouteCancelled.current = true;
+                                            clearTimeout(rerouteTimerRef.current);
+                                            clearInterval(countdownIntervalRef.current);
+                                            setRerouteCountdown(null);
+                                            setCurrentView('command');
+                                        }}
+                                        className="text-white font-bold text-[10px] bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded inline-flex items-center gap-2 transition-colors uppercase tracking-widest shadow-md border border-white/30"
+                                    >
+                                        <ArrowRight className="w-3.5 h-3.5" />
+                                        Go Now
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -18,28 +18,26 @@ class FireValidator:
     """
 
     # ── HSV fire band (tightened vs. default) ──────────────────────────────────
-    # Hue  10–35  → orange-yellow fire tones only  (no red UI, no green vegetation)
-    # Sat  140+   → reject washed-out / desaturated colors (grey smoke, tan walls)
-    # Val  180+   → reject dark objects masquerading (black screens, shadows)
-    _HSV_LOWER = np.array([10, 140, 180], dtype=np.uint8)
-    _HSV_UPPER = np.array([35, 255, 255], dtype=np.uint8)
+    # Hue  0–45  → relaxed to accept phone screen color distortion
+    # Sat  50+   → phone screens often appear desaturated on webcam
+    # Val  100+  → lower brightness threshold for screen glare
+    _HSV_LOWER = np.array([0, 50, 100], dtype=np.uint8)
+    _HSV_UPPER = np.array([45, 255, 255], dtype=np.uint8)
 
     # ── Minimum fire-pixel ratio inside the bounding box ──────────────────────
-    _MIN_FIRE_PIXEL_RATIO = 0.12          # ≥12 % of bbox must be fire-colored
+    _MIN_FIRE_PIXEL_RATIO = 0.05          # lowered from 0.12 to 0.05
 
     # ── Luminance threshold: reject boxes whose mean brightness is too low ─────
-    _MIN_MEAN_LUMINANCE = 60              # 0-255; black/dark screens typically < 40
+    _MIN_MEAN_LUMINANCE = 30              # lowered from 60
 
     # ── Uniformity: reject regions with very low std-dev (flat solid color) ────
-    #    A phone's black screen has near-zero std. Real fire has high variance.
-    _MIN_STDDEV_LUMA = 18.0
+    _MIN_STDDEV_LUMA = 5.0                # lowered from 18.0
 
     # ── Shape irregularity: reject boxes where fire-mask fills too much of bbox ─
-    #    A solid screen lights up uniformly → ratio close to 1.0 → rejected
-    _MAX_FILL_RATIO = 0.82                # above this = too uniform = screen
+    _MAX_FILL_RATIO = 1.0                 # allow up to 1.0 to support full screen images
 
     # ── Edge density: fire has many edges internally; dark slabs have very few ──
-    _MIN_EDGE_DENSITY = 0.04             # fraction of pixels that are edges
+    _MIN_EDGE_DENSITY = 0.005             # lowered from 0.04
 
     # ── Temporal: how many consecutive frames fire must persist ────────────────
     _MIN_PERSISTENCE = AppConfig.MIN_FIRE_PERSISTENCE_FRAMES
@@ -147,36 +145,8 @@ class FireValidator:
             return False
 
         # ── Layer 7: Flicker dynamics (inter-frame pixel change) ───────────────
-        #    Real fire pixels change between frames. A static image/GIF on pause
-        #    or a solid background does not.
+        #    Disabled to support static images/GIFs on phone screens for demos
         prev_gray = self._prev_roi_gray.get(spatial_id)
-
-        if prev_gray is not None:
-            try:
-                # Resize to common shape if camera jitter shifted bbox slightly
-                h, w = gray.shape
-                prev_resized = cv2.resize(prev_gray, (w, h))
-                diff = cv2.absdiff(gray, prev_resized)
-                # Only look at diff within the fire mask region
-                fire_mask_resized = cv2.resize(fire_mask, (w, h))
-                fire_diff = cv2.bitwise_and(diff, diff, mask=fire_mask_resized)
-                _, motion_mask = cv2.threshold(fire_diff, 15, 255, cv2.THRESH_BINARY)
-                motion_ratio = float(cv2.countNonZero(motion_mask)) / max(1, rect_area)
-
-                scores = self._flicker_scores.setdefault(spatial_id, [])
-                scores.append(motion_ratio)
-                if len(scores) > 6:
-                    scores.pop(0)
-
-                avg_flicker = sum(scores) / len(scores)
-                # If motion has been recorded for at least 3 frames and
-                # the average flicker is very low, it's a static image → reject
-                if len(scores) >= 3 and avg_flicker < 0.005:
-                    self._prev_roi_gray[spatial_id] = gray.copy()
-                    return False
-            except Exception:
-                # Shape mismatch or other transient error – be permissive
-                pass
 
         self._prev_roi_gray[spatial_id] = gray.copy()
 

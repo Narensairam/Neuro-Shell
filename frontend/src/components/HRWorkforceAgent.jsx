@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { crisisEventBus } from '../context/CrisisEventBus';
 
-export function HRWorkforceAgent({ embedded = false }) {
+export function HRWorkforceAgent({ embedded = false, fireAlertActive = false }) {
     const [scenario, setScenario] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -41,14 +41,14 @@ export function HRWorkforceAgent({ embedded = false }) {
         }
     };
 
-    // Auto-initialize
+    // Auto-initialize based on external prop or internal event
     useEffect(() => {
-        if (crisisEventBus.getLast('CRISIS_FIRE_DETECTED')) {
+        if (fireAlertActive || crisisEventBus.getLast('CRISIS_FIRE_DETECTED')) {
             runScenario('fire');
         } else {
             runScenario('default');
         }
-    }, []);
+    }, [fireAlertActive]);
 
     const SkillChip = ({ name }) => (
         <span className="px-2.5 py-1 bg-gray-50 text-shell-darkText border border-gray-200 rounded font-mono text-[9px] uppercase font-bold tracking-widest hover:border-shell-yellow transition-colors">

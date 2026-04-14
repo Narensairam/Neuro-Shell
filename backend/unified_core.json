@@ -9,7 +9,7 @@
       "production_boe_day": 3400000
     },
     "health_index": 98.4,
-    "last_sync": "2026-04-13T20:13:34.556Z",
+    "last_sync": "2026-04-14T08:38:10.824Z",
     "process_heatmap": [
       {
         "id": "refining",
@@ -189,10 +189,10 @@
     "history": [],
     "activeAlerts": [
       {
-        "id": "evt-177610738436",
-        "timestamp": "19:09:44",
+        "id": "evt-177615584574",
+        "timestamp": "08:37:25",
         "camera_id": "CAM_01",
-        "confidence": 0.903982400894165,
+        "confidence": 0.8910872340202332,
         "type": "PPE_VIOLATION",
         "helmet": false,
         "vest": true,
@@ -201,10 +201,10 @@
         "recommended_action": "Issue warning - Missing Helmet"
       },
       {
-        "id": "evt-177610736589",
-        "timestamp": "19:09:25",
+        "id": "evt-177615550935",
+        "timestamp": "08:31:49",
         "camera_id": "CAM_01",
-        "confidence": 0.901452898979187,
+        "confidence": 0.7700185775756836,
         "type": "PPE_VIOLATION",
         "helmet": false,
         "vest": true,
@@ -213,49 +213,49 @@
         "recommended_action": "Issue warning - Missing Helmet"
       },
       {
-        "id": "evt-177610732993",
-        "timestamp": "19:08:49",
+        "id": "evt-177615548583",
+        "timestamp": "08:31:25",
         "camera_id": "CAM_01",
-        "confidence": 0.8717507123947144,
+        "confidence": 0.8615989089012146,
+        "type": "PPE_VIOLATION",
+        "helmet": false,
+        "vest": true,
+        "status": "VIOLATION",
+        "severity": "MEDIUM",
+        "recommended_action": "Issue warning - Missing Helmet"
+      },
+      {
+        "id": "evt-177615536982",
+        "timestamp": "08:29:29",
+        "camera_id": "CAM_01",
+        "confidence": 0.505505383014679,
+        "type": "PPE_VIOLATION",
+        "helmet": false,
+        "vest": false,
+        "status": "VIOLATION",
+        "severity": "MEDIUM",
+        "recommended_action": "Issue warning - Missing Helmet, Vest"
+      },
+      {
+        "id": "evt-177615439209",
+        "timestamp": "08:13:12",
+        "camera_id": "CAM_01",
+        "confidence": 0.5632584691047668,
         "type": "PPE_VIOLATION",
         "helmet": true,
         "vest": false,
         "status": "VIOLATION",
         "severity": "MEDIUM",
         "recommended_action": "Issue warning - Missing Vest"
-      },
-      {
-        "id": "evt-177610728283",
-        "timestamp": "19:08:02",
-        "camera_id": "CAM_01",
-        "confidence": 0.8470832705497742,
-        "type": "PPE_VIOLATION",
-        "helmet": false,
-        "vest": true,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Helmet"
-      },
-      {
-        "id": "evt-177610722694",
-        "timestamp": "19:07:06",
-        "camera_id": "CAM_01",
-        "confidence": 0.8940652012825012,
-        "type": "PPE_VIOLATION",
-        "helmet": false,
-        "vest": true,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Helmet"
       }
     ],
     "stats": {
-      "total_incidents": 39,
-      "ppe_violations": 34,
+      "total_incidents": 7,
+      "ppe_violations": 6,
       "intrusions": 0,
-      "fire_hazards": 2,
+      "fire_hazards": 1,
       "anomalies": 0,
-      "compliance_rate_pct": 15
+      "compliance_rate_pct": 25
     }
   },
   "governance_compliance": {
@@ -1207,8 +1207,8 @@
     }
   },
   "itops_stats": {
-    "total_tickets": 265,
-    "deflection_rate": 98.1,
+    "total_tickets": 378,
+    "deflection_rate": 98.7,
     "critical_alerts": 5,
     "ot_threats": 40,
     "shadow_devices": 2,

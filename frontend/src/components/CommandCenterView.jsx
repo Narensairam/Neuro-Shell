@@ -141,7 +141,7 @@ export function CommandCenterView({ setCurrentView }) {
                         setFireAlert(prev => {
                             if (!prev) {
                                 setIsNewAlert(true);
-                                setTimeout(() => setIsNewAlert(false), 60000);
+                                setTimeout(() => setIsNewAlert(false), 8000);
                             }
                             return fire;
                         });
@@ -383,19 +383,21 @@ export function CommandCenterView({ setCurrentView }) {
                 <div className="flex flex-col gap-4">
 
                     {/* Demand Planning Agent (Workforce AI) */}
-                    <div className="bg-white border border-gray-100 rounded-xl shadow-sm flex flex-col overflow-hidden shrink-0" style={{ height: '420px' }}>
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
+                    <div className={`border rounded-xl shadow-sm flex flex-col overflow-hidden shrink-0 transition-all duration-500 ${isNewAlert ? 'bg-red-50/30 border-red-500 shadow-[0_0_20px_rgba(220,38,38,0.4)]' : 'bg-white border-gray-100'}`} style={{ height: '420px' }}>
+                        <div className={`flex items-center justify-between px-4 py-3 border-b shrink-0 ${isNewAlert ? 'border-red-200 bg-red-100/50' : 'border-gray-100'}`}>
                             <div className="flex items-center gap-2">
-                                <Users className="text-amber-500 w-4 h-4" />
-                                <h2 className="text-[14px] font-black text-shell-darkText uppercase tracking-tight">Workforce Management</h2>
+                                <Users className={`w-4 h-4 ${isNewAlert ? 'text-red-600 animate-pulse' : 'text-amber-500'}`} />
+                                <h2 className={`text-[14px] font-black uppercase tracking-tight ${isNewAlert ? 'text-red-700' : 'text-shell-darkText'}`}>
+                                    {isNewAlert ? 'EMERGENCY WORKFORCE DEMAND' : 'Workforce Management'}
+                                </h2>
                             </div>
-                            <div className="flex items-center gap-1.5 px-2 py-1 bg-amber-50 text-amber-700 rounded-sm border border-amber-100">
-                                <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
-                                <span className="text-[9px] font-black uppercase tracking-widest">Wave 1</span>
+                            <div className={`flex items-center gap-1.5 px-2 py-1 rounded-sm border ${isNewAlert ? 'bg-red-600 text-white border-red-700' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
+                                <div className={`w-1.5 h-1.5 rounded-full ${isNewAlert ? 'bg-white animate-pulse' : 'bg-amber-500 animate-pulse'}`}></div>
+                                <span className="text-[9px] font-black uppercase tracking-widest">{isNewAlert ? 'CRITICAL RESPONSE' : 'Wave 1'}</span>
                             </div>
                         </div>
                         <div className="flex-1 overflow-y-auto">
-                            <HRWorkforceAgent embedded={true} />
+                            <HRWorkforceAgent embedded={true} fireAlertActive={isNewAlert} />
                         </div>
                     </div>
 
