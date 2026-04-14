@@ -9,7 +9,7 @@
       "production_boe_day": 3400000
     },
     "health_index": 98.4,
-    "last_sync": "2026-04-13T20:01:17.299Z",
+    "last_sync": "2026-04-14T08:06:21.523Z",
     "process_heatmap": [
       {
         "id": "refining",
@@ -189,58 +189,21 @@
     "history": [],
     "activeAlerts": [
       {
-        "id": "evt-177610738436",
-        "timestamp": "19:09:44",
+        "id": "evt-177615395269",
+        "timestamp": "08:05:52",
         "camera_id": "CAM_01",
-        "confidence": 0.903982400894165,
-        "type": "PPE_VIOLATION",
-        "helmet": false,
-        "vest": true,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Helmet"
+        "confidence": 0.77,
+        "type": "FIRE",
+        "severity": "HIGH",
+        "validated": true,
+        "source": "visual_pattern + temporal_detection",
+        "recommended_action": "Initiate emergency response"
       },
       {
-        "id": "evt-177610736589",
-        "timestamp": "19:09:25",
+        "id": "evt-177615373890",
+        "timestamp": "08:02:18",
         "camera_id": "CAM_01",
-        "confidence": 0.901452898979187,
-        "type": "PPE_VIOLATION",
-        "helmet": false,
-        "vest": true,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Helmet"
-      },
-      {
-        "id": "evt-177610732993",
-        "timestamp": "19:08:49",
-        "camera_id": "CAM_01",
-        "confidence": 0.8717507123947144,
-        "type": "PPE_VIOLATION",
-        "helmet": true,
-        "vest": false,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Vest"
-      },
-      {
-        "id": "evt-177610728283",
-        "timestamp": "19:08:02",
-        "camera_id": "CAM_01",
-        "confidence": 0.8470832705497742,
-        "type": "PPE_VIOLATION",
-        "helmet": false,
-        "vest": true,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Helmet"
-      },
-      {
-        "id": "evt-177610722694",
-        "timestamp": "19:07:06",
-        "camera_id": "CAM_01",
-        "confidence": 0.8940652012825012,
+        "confidence": 0.8944261074066162,
         "type": "PPE_VIOLATION",
         "helmet": false,
         "vest": true,
@@ -250,12 +213,12 @@
       }
     ],
     "stats": {
-      "total_incidents": 39,
-      "ppe_violations": 34,
+      "total_incidents": 2,
+      "ppe_violations": 1,
       "intrusions": 0,
-      "fire_hazards": 2,
+      "fire_hazards": 1,
       "anomalies": 0,
-      "compliance_rate_pct": 15
+      "compliance_rate_pct": 50
     }
   },
   "governance_compliance": {
@@ -1207,8 +1170,8 @@
     }
   },
   "itops_stats": {
-    "total_tickets": 256,
-    "deflection_rate": 98,
+    "total_tickets": 339,
+    "deflection_rate": 98.5,
     "critical_alerts": 5,
     "ot_threats": 40,
     "shadow_devices": 2,

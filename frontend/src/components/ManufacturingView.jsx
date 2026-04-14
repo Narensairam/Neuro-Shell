@@ -205,7 +205,7 @@ export function ManufacturingView({ setCurrentView }) {
                     </div>
                 ) : (
                     <div className="h-full animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <FireDetectionView />
+                        <FireDetectionView setCurrentView={setCurrentView} />
                     </div>
                 )}
             </div>
