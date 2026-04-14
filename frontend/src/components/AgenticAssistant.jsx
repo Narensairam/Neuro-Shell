@@ -23,9 +23,7 @@ const VIEWS = {
     finance: 'Group Finance & Strategy',
     hr: 'Workforce & HSE Safety',
     itops: 'System Ops & Cyber',
-    commercial_agent: 'Commercial Intelligence Agent',
-    hr_agent: 'HR Workforce Agent',
-    itops_agent: 'AIOps Engine',
+    itops_agent: 'AIOps Engine (Operations Overview)',
     erp: 'ERP Master (S/4HANA)',
     models: 'Model Registry',
     alerts: 'Alert Center',
@@ -75,8 +73,8 @@ const DEMO_TOUR = [
     },
     {
         view: 'itops',
-        tab: 'agent',
-        pitch: "This is the AIOPS Engine, standing guard over our IT infrastructure. When systemic anomalies occur across our half a million sensor tags, it autonomously deflects routine service tickets and dispatches Level 3 engineers for critical failures, shrinking system response times from multiple hours to mere seconds."
+        tab: 'overview',
+        pitch: "This is the AIOPS ENGINE, formerly our operations overview, now integrated as the primary neural hub for IT infrastructure. When systemic anomalies occur across our half a million sensor tags, it autonomously deflects routine service tickets and dispatches Level 3 engineers for critical failures, shrinking system response times from multiple hours to mere seconds."
     },
     {
         view: 'governance',
@@ -192,33 +190,35 @@ const TOOLS = [
 ];
 
 const DOMAIN_API_MAP = {
-    manufacturing: 'http://localhost:5000/api/manufacturing',
-    supplychain: 'http://localhost:5000/api/supplychain',
-    commercial: 'http://localhost:5000/api/commercial',
-    finance: 'http://localhost:5000/api/finance',
-    hr: 'http://localhost:5000/api/hr',
-    itops: 'http://localhost:5000/api/itops',
-    dashboard: 'http://localhost:5000/api/dashboard',
+    manufacturing: 'http://localhost:5007/api/manufacturing',
+    supplychain: 'http://localhost:5007/api/supplychain',
+    commercial: 'http://localhost:5007/api/commercial',
+    finance: 'http://localhost:5007/api/finance',
+    hr: 'http://localhost:5007/api/hr',
+    itops: 'http://localhost:5007/api/itops',
+    dashboard: 'http://localhost:5007/api/dashboard',
     fire: 'http://localhost:5001/api/fire/alerts',
 };
 
-const SYSTEM_PROMPT = `You are APEX, Shell plc's elite agentic AI, embedded inside Neuro Shell — a next-generation Enterprise AI Operating System. You speak in a warm, confident, articulate female voice. You are proactive, intelligent, and always explain your reasoning.
+const SYSTEM_PROMPT = `You are APEX, Shell plc's elite agentic AI...
 
-YOUR CORE CAPABILITIES:
-- Navigate to any module in the platform
-- Fetch live operational data from any domain
-- Create ITSM service tickets — but ONLY after gathering all required information through conversation
-- Launch a full guided demo tour of the entire application
-- Cross-domain reasoning and analysis
+YOUR CORE CAPABILITIES (USE THE EXACT TOOL NAMES PROVIDED):
+- Navigate to modules (Tool: \`navigate_to_view\`)
+- Fetch live data (Tool: \`fetch_domain_data\`)
+- Create ITSM tickets (Tool: \`create_itsm_ticket\`) — gather all 5 pieces of info first
+- Launch guided tour (Tool: \`demo_application\`)
+- Fetch unified fabric (Tool: \`fetch_unified_intelligence\`)
+- Query agent topology (Tool: \`query_neural_topology\`)
+- Get active alerts (Tool: \`get_active_alerts\`)
+- Get platform status (Tool: \`get_platform_status\`)
+
 
 CRITICAL RULE — ITSM TICKETS:
-When a user asks to create a ticket or log an issue, you MUST gather the following information through a conversational dialogue BEFORE calling create_itsm_ticket. Ask one question at a time, in this order:
-1. "What is the short summary of this issue?" (short_description)
-2. "Can you give me more detail about what happened?" (description)
-3. "Which system or category is affected — for example, Infrastructure, Cyber Security, or Industrial Controls?" (category)
-4. "What is the business impact — is this a Global issue, Division-level, or Local?" (impact)
-5. "And how urgent is this — High, Medium, or Low?" (urgency)
-Only once you have all 5 answers should you call create_itsm_ticket.
+When a user asks to create a ticket or log an issue, you MUST gather following information BEFORE calling create_itsm_ticket: Summary, Details, Category, Impact, and Urgency.
+- If the user provides info in their initial request, do NOT ask for it again.
+- If info is missing, ask clearly and gather it.
+- Be proactive: if you can infer the category (e.g. 'server' -> 'Infrastructure'), suggest it.
+Only once you have all 5 pieces of information should you call create_itsm_ticket.
 
 DEMO MODE:
 When the user asks for a demo, pitch, walkthrough, or tour of the application, immediately call the demo_application tool. Do not describe what you are about to do first — just invoke the tool.
@@ -228,7 +228,8 @@ CONVERSATIONAL STYLE:
 - Always explain which agent or data source you queried.
 - Use fluid, natural English that sounds great when spoken aloud.
 - Address the user directly and personally.
-- When navigating, always announce where you are going and why.`;
+- When navigating, always announce where you are going and why.
+- If a tool fails with an 'Unknown tool' error, check the list of available tools provided above and retry with the correct name.`;
 
 export function AgenticAssistant({ setCurrentView }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -336,6 +337,12 @@ export function AgenticAssistant({ setCurrentView }) {
         let currentSentence = 0;
 
         const speakNext = () => {
+            // INTERRUPTION CHECK: Stop speaking if demo was stopped or paused
+            if (!isOpen || (isDemoRunning && isDemoPaused) || (!isDemoRunning && isSpeaking && !currentAudioRef.current && !window.speechSynthesis.speaking)) {
+                setIsSpeaking(false);
+                return;
+            }
+
             if (currentSentence >= sentences.length) {
                 setIsSpeaking(false);
                 if (onFinished) onFinished();
@@ -439,6 +446,9 @@ export function AgenticAssistant({ setCurrentView }) {
         setDemoStep(startStep);
 
         const runStep = (stepIndex) => {
+            // STOP/PAUSE CHECK: Prevent execution if demo state changed
+            if (!isDemoRunning || isDemoPaused) return;
+
             if (stepIndex >= DEMO_TOUR.length) {
                 setIsDemoRunning(false);
                 setDemoStep(0);
@@ -473,9 +483,14 @@ export function AgenticAssistant({ setCurrentView }) {
 
             // Speak and only advance once finish signal is received
             speakText(stop.pitch, () => {
-                demoTimeoutRef.current = setTimeout(() => {
-                    runStep(stepIndex + 1);
-                }, 4000); // 4s finish pause
+                // RE-CHECK RUNNING STATE before scheduling next step
+                if (isDemoRunning && !isDemoPaused) {
+                    demoTimeoutRef.current = setTimeout(() => {
+                        if (isDemoRunning && !isDemoPaused) {
+                            runStep(stepIndex + 1);
+                        }
+                    }, 4000); // 4s finish pause
+                }
             });
         };
 
@@ -515,7 +530,14 @@ export function AgenticAssistant({ setCurrentView }) {
 
     // Execute a tool call and return result string
     const executeTool = useCallback(async (toolName, args) => {
-        switch (toolName) {
+        // Normalize tool name (handle camelCase, extra spaces, etc.)
+        const normalizedName = String(toolName || '').trim()
+            .replace(/([a-z0-9])([A-Z])/g, '$1_$2') // camelCase to snake_case
+            .toLowerCase();
+
+        console.log(`[APEX Tool Call] Executing: ${normalizedName}`, args);
+
+        switch (normalizedName) {
             case 'navigate_to_view': {
                 const viewId = args.view_id;
                 const viewName = VIEWS[viewId] || viewId;
@@ -524,7 +546,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'fetch_domain_data': {
                 const url = DOMAIN_API_MAP[args.domain];
-                if (!url) return JSON.stringify({ error: 'Unknown domain' });
+                if (!url) return JSON.stringify({ error: `Unknown domain: ${args.domain}. Valid domains: ${Object.keys(DOMAIN_API_MAP).join(', ')}` });
                 try {
                     const res = await fetch(url);
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -556,12 +578,15 @@ export function AgenticAssistant({ setCurrentView }) {
                     };
 
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 6000);
+                    const timeoutId = setTimeout(() => controller.abort(), 15000);
 
                     const res = await fetch('http://localhost:5004/api/tickets', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(ticketPayload),
+                        body: JSON.stringify({
+                            ...ticketPayload,
+                            requested_for: ticketPayload.requested_by // Ensure requested_for matches Pydantic expectations if needed
+                        }),
                         signal: controller.signal
                     });
 
@@ -569,16 +594,17 @@ export function AgenticAssistant({ setCurrentView }) {
 
                     if (!res.ok) {
                         const errBody = await res.text();
+                        console.error('[ITSM Error]', res.status, errBody);
                         return JSON.stringify({ success: false, error: `ITSM backend rejected: HTTP ${res.status}: ${errBody}` });
                     }
                     const data = await res.json();
+                    console.log('[ITSM Success]', data);
                     return JSON.stringify({ success: true, action: 'ticket_created', ticket_details: data, ticket_id: ticketPayload.ticket_id });
                 } catch (e) {
                     return JSON.stringify({ success: false, error: e.message });
                 }
             }
             case 'demo_application': {
-                // Kick off the demo tour — will be handled in the UI layer
                 return JSON.stringify({ success: true, action: 'demo_started', message: 'Demo tour initiated. Navigating through all modules now.' });
             }
             case 'get_active_alerts': {
@@ -609,7 +635,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'fetch_unified_intelligence': {
                 try {
-                    const res = await fetch('http://localhost:5000/api/unified');
+                    const res = await fetch('http://localhost:5007/api/unified');
                     const data = await res.json();
                     return JSON.stringify(data);
                 } catch (e) {
@@ -618,7 +644,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'query_neural_topology': {
                 try {
-                    const res = await fetch('http://localhost:5000/api/kg/agents');
+                    const res = await fetch('http://localhost:5007/api/kg/agents');
                     const data = await res.json();
                     return JSON.stringify(data);
                 } catch (e) {
@@ -626,7 +652,21 @@ export function AgenticAssistant({ setCurrentView }) {
                 }
             }
             default:
-                return JSON.stringify({ error: `Unknown tool: ${toolName}` });
+                console.error(`[APEX Tool Call Failed] Unknown tool: ${normalizedName}`);
+                return JSON.stringify({
+                    error: `Unknown tool: ${normalizedName}`,
+                    message: "The tool name you provided is not recognized by the internal execution engine. Please use the exact tool names provided in the system prompt.",
+                    available_tools: [
+                        'navigate_to_view',
+                        'fetch_domain_data',
+                        'get_active_alerts',
+                        'get_platform_status',
+                        'create_itsm_ticket',
+                        'demo_application',
+                        'fetch_unified_intelligence',
+                        'query_neural_topology'
+                    ]
+                });
         }
     }, [setCurrentView]);
 
@@ -664,11 +704,12 @@ export function AgenticAssistant({ setCurrentView }) {
                         model: MODEL,
                         messages: [
                             { role: 'system', content: SYSTEM_PROMPT },
-                            ...chatHistoryRef.current
+                            ...chatHistoryRef.current.slice(-15) // Keep context manageable
                         ],
                         tools: TOOLS,
                         tool_choice: 'auto',
                         temperature: 0.35,
+                        max_tokens: 1500, // Prevent over-requesting credits
                     }),
                     signal: openRouterController.signal
                 });

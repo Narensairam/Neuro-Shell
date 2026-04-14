@@ -15,50 +15,55 @@ const routeAgent = require('./routeAgent');
 app.use('/api/routes', routeAgent);
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ─── AI Governance Agent (auto-start on app load) ────────────────────────────
-const governanceDir = path.join(__dirname, 'governance');
-console.log('[Neuro Shell] Starting AI Governance Agent on 5006...');
-const governanceAgent = spawn('python', ['app.py'], {
-    cwd: governanceDir,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    detached: false,
-});
-governanceAgent.stdout.on('data', (d) => process.stdout.write(`[Governance] ${d}`));
-governanceAgent.stderr.on('data', (d) => process.stdout.write(`[Governance] ${d}`));
+// ─── Agent Process Management ────────────────────────────────────────────────
+const agents = {};
 
-// ─── Workforce Demand Agent ────────────────────────────────────────────────────
-const workforceDir = path.join(__dirname, 'workforce-demand');
-console.log('[Neuro Shell] Starting Workforce Demand Agent on 5003...');
-const workforceAgent = spawn('python', ['app.py'], {
-    cwd: workforceDir,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    detached: false,
-});
-workforceAgent.stdout.on('data', (d) => process.stdout.write(`[Workforce] ${d}`));
-workforceAgent.stderr.on('data', (d) => process.stdout.write(`[Workforce] ${d}`));
+const startAgent = (name, dir, script, port, command = 'python') => {
+    console.log(`[Neuro Shell] Starting ${name} Agent on port ${port}...`);
+    const agentProcess = spawn(command, [script], {
+        cwd: dir,
+        stdio: ['ignore', 'pipe', 'pipe'],
+        detached: false,
+    });
 
-// ─── ITOps Ticket Deflection Agent ─────────────────────────────────────────────
-const itopsDir = path.join(__dirname, 'itops-ticket-deflection', 'backend');
-console.log('[Neuro Shell] Starting ITOps Agent on 5004...');
-const itopsAgent = spawn('python', ['main.py'], {
-    cwd: itopsDir,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    detached: false,
-});
-itopsAgent.stdout.on('data', (d) => process.stdout.write(`[ITOps] ${d}`));
-itopsAgent.stderr.on('data', (d) => process.stdout.write(`[ITOps] ${d}`));
+    agentProcess.stdout.on('data', (d) => {
+        const msg = d.toString().trim();
+        if (msg) console.log(`[${name}] ${msg}`);
+    });
 
-// ─── Commercial Trading Agent ──────────────────────────────────────────────────
-const commercialDir = path.join(__dirname, 'commercial-agents');
-console.log('[Neuro Shell] Starting Commercial Agent on 5005...');
-const commercialAgent = spawn('python', ['main.py'], {
-    cwd: commercialDir,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    detached: false,
+    agentProcess.stderr.on('data', (d) => {
+        const msg = d.toString().trim();
+        if (msg) console.error(`[${name} ERROR] ${msg}`);
+    });
+
+    agentProcess.on('error', (err) => {
+        console.error(`[${name} FAILED TO START] ${err.message}`);
+    });
+
+    agentProcess.on('exit', (code) => {
+        console.warn(`[${name} EXITED] Code: ${code}`);
+        agents[name] = null;
+    });
+
+    agents[name] = { process: agentProcess, port };
+    return agentProcess;
+};
+
+// Start default agents
+const governanceAgent = startAgent('Governance', path.join(__dirname, 'governance'), 'app.py', 5006);
+const workforceAgent = startAgent('Workforce', path.join(__dirname, 'workforce-demand'), 'app.py', 5003);
+const itopsAgent = startAgent('ITOps', path.join(__dirname, 'itops-ticket-deflection', 'backend'), 'main.py', 5004);
+const commercialAgent = startAgent('Commercial', path.join(__dirname, 'commercial-agents'), 'main.py', 5005);
+
+// ─── Health Check ────────────────────────────────────────────────────────────
+app.get('/api/health', (req, res) => {
+    const status = {};
+    for (const [name, data] of Object.entries(agents)) {
+        status[name] = data ? 'online' : 'offline';
+    }
+    status['FireDetection'] = (fireAgent && fireAgent.exitCode === null) ? 'online' : 'offline';
+    res.json(status);
 });
-commercialAgent.stdout.on('data', (d) => process.stdout.write(`[Commercial] ${d}`));
-commercialAgent.stderr.on('data', (d) => process.stdout.write(`[Commercial] ${d}`));
-// ─────────────────────────────────────────────────────────────────────────────
 
 // ─── Fire Detection Agent (on-demand via API) ─────────────────────────────────
 let fireAgent = null;
@@ -182,10 +187,11 @@ app.post('/api/chat', (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 process.on('exit', () => {
-    try { if (governanceAgent) governanceAgent.kill(); } catch { }
-    try { if (workforceAgent) workforceAgent.kill(); } catch { }
-    try { if (itopsAgent) itopsAgent.kill(); } catch { }
-    try { if (commercialAgent) commercialAgent.kill(); } catch { }
+    for (const [name, data] of Object.entries(agents)) {
+        if (data && data.process) {
+            try { data.process.kill(); } catch { }
+        }
+    }
     try { if (fireAgent) fireAgent.kill(); } catch { }
 });
 

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, List, Optional
 from dataclasses import asdict
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -45,6 +45,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Global lock for thread-safe disk writes
+persistence_lock = threading.Lock()
+
+def safe_persist(tickets_data):
+    """Worker function for BackgroundTasks to ensure thread-safe persistence."""
+    with persistence_lock:
+        persist_tickets(tickets_data)
 
 engine = ITSMOrchestrator()
 # Seed demo tickets if disk is empty
@@ -90,9 +98,14 @@ def auto_create_preventive_ticket(server_id: str, risk_score: int, metrics: dict
         "assignment_group": "IT-AIOPS-L3"
     }
     
+    # Generate ID before creating ticket
+    if not payload.get("ticket_id"):
+        payload["ticket_id"] = next_ticket_id([t.get("ticket_id") for t in tickets])
+
     new_ticket = engine.create_ticket(payload)
     tickets.insert(0, new_ticket)
-    persist_tickets(tickets)
+    # Background persistence with thread safety
+    threading.Thread(target=safe_persist, args=(tickets,), daemon=True).start()
     return new_ticket
 
 def auto_create_ot_ticket(device_id: str, threat_type: str, severity: str):
@@ -123,9 +136,13 @@ def auto_create_ot_ticket(device_id: str, threat_type: str, severity: str):
         "configuration_item": device_id,
         "channel": "SOC-Automation"
     }
+    # Generate ID before creating ticket
+    if not payload.get("ticket_id"):
+        payload["ticket_id"] = next_ticket_id([t.get("ticket_id") for t in tickets])
+        
     new_ticket = engine.create_ticket(payload)
     tickets.insert(0, new_ticket)
-    persist_tickets(tickets)
+    threading.Thread(target=safe_persist, args=(tickets,), daemon=True).start()
     return new_ticket
 
 class TicketPayload(BaseModel):
@@ -165,21 +182,28 @@ class TicketPayload(BaseModel):
     channel: str = "Portal"
     assignment_group: str = "IT-OT-L3"
 
+    class Config:
+        extra = "allow"
+
 @app.get("/api/tickets")
 async def get_tickets():
     return load_persisted_tickets()
 
 @app.post("/api/tickets")
-async def create_ticket(payload: TicketPayload):
+async def create_ticket(payload: TicketPayload, background_tasks: BackgroundTasks):
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] Incoming Ticket Request: {payload.short_description}")
     tickets = load_persisted_tickets()
     if not payload.ticket_id:
-        payload.ticket_id = next_ticket_id([t["ticket_id"] for t in tickets])
+        payload.ticket_id = next_ticket_id([t.get("ticket_id") for t in tickets])
     
     ticket = engine.create_ticket(payload.dict())
     tickets.insert(0, ticket)
-    persist_tickets(tickets)
+    
+    # Use BackgroundTasks for thread-safe persistence
+    background_tasks.add_task(safe_persist, tickets)
     
     # Sync to Core
+
     sync_to_core("itops", {
         "tickets": tickets[:20],
         "stats": { "total_tickets": len(tickets) }
@@ -277,12 +301,15 @@ async def get_infra_health():
         results = []
         for srv_id in df["server_id"].unique():
             srv_data = df[df["server_id"] == srv_id].tail(60)
+            if srv_data.empty:
+                continue
+                
             mm_df = srv_data[["cpu_usage", "memory_usage", "error_count"]].rename(columns={
                 "cpu_usage": "cpu", "memory_usage": "memory", "error_count": "errors"
             })
             # Simple prediction + risk
             pred = predict_multi_metric(mm_df, future_steps=10)
-            risk = calculate_failure_probability(pred)
+            risk = calculate_failure_probability(pred) if pred is not None else 0
             
             last_row = srv_data.iloc[-1]
             latest = last_row.to_dict()
