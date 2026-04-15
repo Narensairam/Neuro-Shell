@@ -8,7 +8,7 @@ import {
 import { cn } from './Sidebar';
 
 // OpenRouter configuration
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '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';
 const MODEL = 'deepseek/deepseek-chat';
 
 // Microsoft Edge TTS targeting JennyNeural or GuyNeural

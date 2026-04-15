@@ -149,21 +149,21 @@ class TicketPayload(BaseModel):
     ticket_id: Optional[str] = None
     # User Details
     emp_id: str = "EMP-00123"
-    requested_by: str
-    email: str = "j.dash@shell.com"
+    requested_by: str = "Agentic Copilot"
+    email: str = "apex@shell.com"
     dept: str = "Hydrocarbons Operations"
     requested_for: Optional[str] = None
     
     # Location Details
-    location: str
+    location: str = "Agentic Request"
     location_type: str = "On-Prem"
     floor: Optional[str] = ""
     cubicle: Optional[str] = ""
-    shift_timings: str
+    shift_timings: str = "N/A"
     
     # Classification
     category: str
-    subcategory1: str
+    subcategory1: str = "AI Action"
     subcategory2: Optional[str] = ""
     subcategory3: Optional[str] = ""
     
@@ -171,16 +171,16 @@ class TicketPayload(BaseModel):
     configuration_item: Optional[str] = ""
     impact: str
     urgency: str
-    priority: str
-    severity: str
+    priority: str = "3 - Moderate"
+    severity: str = "Medium"
     
     # Description
     short_description: str
     description: str
     
     # Meta
-    channel: str = "Portal"
-    assignment_group: str = "IT-OT-L3"
+    channel: str = "Agentic Copilot"
+    assignment_group: str = "IT-AIOPS-L3"
 
     class Config:
         extra = "allow"
