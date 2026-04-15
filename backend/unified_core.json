@@ -9,7 +9,7 @@
       "production_boe_day": 3400000
     },
     "health_index": 98.4,
-    "last_sync": "2026-04-14T11:12:29.966Z",
+    "last_sync": "2026-04-14T11:50:43.786Z",
     "process_heatmap": [
       {
         "id": "refining",
@@ -189,10 +189,10 @@
     "history": [],
     "activeAlerts": [
       {
-        "id": "evt-177616085219",
-        "timestamp": "10:00:52",
+        "id": "evt-177616673653",
+        "timestamp": "11:38:56",
         "camera_id": "CAM_01",
-        "confidence": 0.7161838412284851,
+        "confidence": 0.8937181830406189,
         "type": "PPE_VIOLATION",
         "helmet": false,
         "vest": true,
@@ -201,46 +201,10 @@
         "recommended_action": "Issue warning - Missing Helmet"
       },
       {
-        "id": "evt-177616078381",
-        "timestamp": "09:59:43",
+        "id": "evt-177616659731",
+        "timestamp": "11:36:37",
         "camera_id": "CAM_01",
-        "confidence": 0.7487014532089233,
-        "type": "PPE_VIOLATION",
-        "helmet": false,
-        "vest": true,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Helmet"
-      },
-      {
-        "id": "evt-177616064508",
-        "timestamp": "09:57:25",
-        "camera_id": "CAM_01",
-        "confidence": 0.7455875277519226,
-        "type": "PPE_VIOLATION",
-        "helmet": true,
-        "vest": false,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Vest"
-      },
-      {
-        "id": "evt-177616059416",
-        "timestamp": "09:56:34",
-        "camera_id": "CAM_01",
-        "confidence": 0.7521350979804993,
-        "type": "PPE_VIOLATION",
-        "helmet": true,
-        "vest": false,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Vest"
-      },
-      {
-        "id": "evt-177616031132",
-        "timestamp": "09:51:51",
-        "camera_id": "CAM_01",
-        "confidence": 0.7857516407966614,
+        "confidence": 0.9107702970504761,
         "type": "PPE_VIOLATION",
         "helmet": true,
         "vest": false,
@@ -250,12 +214,12 @@
       }
     ],
     "stats": {
-      "total_incidents": 23,
-      "ppe_violations": 22,
+      "total_incidents": 2,
+      "ppe_violations": 2,
       "intrusions": 0,
-      "fire_hazards": 1,
+      "fire_hazards": 0,
       "anomalies": 0,
-      "compliance_rate_pct": 9
+      "compliance_rate_pct": 34
     }
   },
   "governance_compliance": {
@@ -1166,9 +1130,9 @@
     }
   },
   "itops_stats": {
-    "total_tickets": 85,
-    "deflection_rate": 52.9,
-    "critical_alerts": 40,
+    "total_tickets": 10,
+    "deflection_rate": 40,
+    "critical_alerts": 6,
     "ot_threats": 40,
     "shadow_devices": 2,
     "avg_resolution_time_hrs": 4.2
