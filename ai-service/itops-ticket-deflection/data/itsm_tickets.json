@@ -1,5 +1,383 @@
 [
   {
+    "ticket_id": "IM0835248",
+    "created_at": "2026-04-15 10:23:32",
+    "requested_by": "Shell AI EOS Monitoring",
+    "requested_for": "Predictive Maintenance Hub",
+    "location": "Global / Cloud Explorer",
+    "floor": "",
+    "cubicle": "",
+    "shift_timings": "",
+    "configuration_item": "srv_111",
+    "ou": "",
+    "category": "Infrastructure",
+    "subcategory1": "Automated Prediction",
+    "subcategory2": "Resource Exhaustion",
+    "subcategory3": "",
+    "channel": "API/AIOps",
+    "assignment_group": "IT-AIOPS-L3",
+    "impact": "2 - Medium",
+    "urgency": "2 - Medium",
+    "priority": "2 - High",
+    "severity": "Medium",
+    "alert_flag": "Yes",
+    "service_request_flag": "Yes",
+    "task_flag": "Yes",
+    "title": "[PREVENTIVE] High failure risk detected on srv_111",
+    "short_description": "[PREVENTIVE] High failure risk detected on srv_111",
+    "description": "AI Forecast detected a 70% probability of failure for srv_111.\nTelemetry: CPU 92.2%, Mem 78.8%, ERR 18.\nAutomation: Proactive ticket generated for deflection/assignment.",
+    "issue_type": "Software",
+    "business_unit": "",
+    "site": "Global / Cloud Explorer",
+    "service": "",
+    "status": "Deflected",
+    "incident_state": "Resolved",
+    "assigned_to": "",
+    "assigned_role": "",
+    "assignment_agent": "",
+    "resolution": "Validate against the knowledge base; if unresolved, reopen with more detail.",
+    "matched_issue": "",
+    "confidence": 0.16,
+    "notification": "AI Self-Service resolved None using historical tickets + KB. Confidence 0.16.",
+    "is_severe": false
+  },
+  {
+    "ticket_id": "IM0835247",
+    "created_at": "2026-04-15 10:23:12",
+    "requested_by": "Shell AI EOS Monitoring",
+    "requested_for": "Predictive Maintenance Hub",
+    "location": "Global / Cloud Explorer",
+    "floor": "",
+    "cubicle": "",
+    "shift_timings": "",
+    "configuration_item": "srv_108",
+    "ou": "",
+    "category": "Infrastructure",
+    "subcategory1": "Automated Prediction",
+    "subcategory2": "Resource Exhaustion",
+    "subcategory3": "",
+    "channel": "API/AIOps",
+    "assignment_group": "IT-AIOPS-L3",
+    "impact": "2 - Medium",
+    "urgency": "2 - Medium",
+    "priority": "2 - High",
+    "severity": "Low",
+    "alert_flag": "Yes",
+    "service_request_flag": "Yes",
+    "task_flag": "Yes",
+    "title": "[PREVENTIVE] High failure risk detected on srv_108",
+    "short_description": "[PREVENTIVE] High failure risk detected on srv_108",
+    "description": "AI Forecast detected a 30% probability of failure for srv_108.\nTelemetry: CPU 45.3%, Mem 87.8%, ERR 7.\nAutomation: Proactive ticket generated for deflection/assignment.",
+    "issue_type": "Software",
+    "business_unit": "",
+    "site": "Global / Cloud Explorer",
+    "service": "",
+    "status": "Deflected",
+    "incident_state": "Resolved",
+    "assigned_to": "",
+    "assigned_role": "",
+    "assignment_agent": "",
+    "resolution": "Validate against the knowledge base; if unresolved, reopen with more detail.",
+    "matched_issue": "",
+    "confidence": 0.16,
+    "notification": "AI Self-Service resolved None using historical tickets + KB. Confidence 0.16.",
+    "is_severe": false
+  },
+  {
+    "ticket_id": "IM0835246",
+    "created_at": "2026-04-15 10:23:12",
+    "requested_by": "Shell AI EOS Monitoring",
+    "requested_for": "Predictive Maintenance Hub",
+    "location": "Global / Cloud Explorer",
+    "floor": "",
+    "cubicle": "",
+    "shift_timings": "",
+    "configuration_item": "srv_103",
+    "ou": "",
+    "category": "Infrastructure",
+    "subcategory1": "Automated Prediction",
+    "subcategory2": "Resource Exhaustion",
+    "subcategory3": "",
+    "channel": "API/AIOps",
+    "assignment_group": "IT-AIOPS-L3",
+    "impact": "2 - Medium",
+    "urgency": "2 - Medium",
+    "priority": "2 - High",
+    "severity": "Low",
+    "alert_flag": "Yes",
+    "service_request_flag": "Yes",
+    "task_flag": "Yes",
+    "title": "[PREVENTIVE] High failure risk detected on srv_103",
+    "short_description": "[PREVENTIVE] High failure risk detected on srv_103",
+    "description": "AI Forecast detected a 0% probability of failure for srv_103.\nTelemetry: CPU 58.3%, Mem 54.0%, ERR 26.\nAutomation: Proactive ticket generated for deflection/assignment.",
+    "issue_type": "Software",
+    "business_unit": "",
+    "site": "Global / Cloud Explorer",
+    "service": "",
+    "status": "Deflected",
+    "incident_state": "Resolved",
+    "assigned_to": "",
+    "assigned_role": "",
+    "assignment_agent": "",
+    "resolution": "Validate against the knowledge base; if unresolved, reopen with more detail.",
+    "matched_issue": "",
+    "confidence": 0.16,
+    "notification": "AI Self-Service resolved None using historical tickets + KB. Confidence 0.16.",
+    "is_severe": false
+  },
+  {
+    "ticket_id": "IM0835245",
+    "created_at": "2026-04-15 10:23:01",
+    "requested_by": "Shell AI EOS Monitoring",
+    "requested_for": "Predictive Maintenance Hub",
+    "location": "Global / Cloud Explorer",
+    "floor": "",
+    "cubicle": "",
+    "shift_timings": "",
+    "configuration_item": "srv_102",
+    "ou": "",
+    "category": "Infrastructure",
+    "subcategory1": "Automated Prediction",
+    "subcategory2": "Resource Exhaustion",
+    "subcategory3": "",
+    "channel": "API/AIOps",
+    "assignment_group": "IT-AIOPS-L3",
+    "impact": "2 - Medium",
+    "urgency": "2 - Medium",
+    "priority": "2 - High",
+    "severity": "Low",
+    "alert_flag": "Yes",
+    "service_request_flag": "Yes",
+    "task_flag": "Yes",
+    "title": "[PREVENTIVE] High failure risk detected on srv_102",
+    "short_description": "[PREVENTIVE] High failure risk detected on srv_102",
+    "description": "AI Forecast detected a 0% probability of failure for srv_102.\nTelemetry: CPU 43.0%, Mem 90.1%, ERR 38.\nAutomation: Proactive ticket generated for deflection/assignment.",
+    "issue_type": "Software",
+    "business_unit": "",
+    "site": "Global / Cloud Explorer",
+    "service": "",
+    "status": "Deflected",
+    "incident_state": "Resolved",
+    "assigned_to": "",
+    "assigned_role": "",
+    "assignment_agent": "",
+    "resolution": "Validate against the knowledge base; if unresolved, reopen with more detail.",
+    "matched_issue": "",
+    "confidence": 0.16,
+    "notification": "AI Self-Service resolved None using historical tickets + KB. Confidence 0.16.",
+    "is_severe": false
+  },
+  {
+    "ticket_id": "IM0835244",
+    "created_at": "2026-04-15 10:22:42",
+    "requested_by": "Shell AI EOS Monitoring",
+    "requested_for": "Predictive Maintenance Hub",
+    "location": "Global / Cloud Explorer",
+    "floor": "",
+    "cubicle": "",
+    "shift_timings": "",
+    "configuration_item": "srv_105",
+    "ou": "",
+    "category": "Infrastructure",
+    "subcategory1": "Automated Prediction",
+    "subcategory2": "Resource Exhaustion",
+    "subcategory3": "",
+    "channel": "API/AIOps",
+    "assignment_group": "IT-AIOPS-L3",
+    "impact": "2 - Medium",
+    "urgency": "2 - Medium",
+    "priority": "2 - High",
+    "severity": "Low",
+    "alert_flag": "Yes",
+    "service_request_flag": "Yes",
+    "task_flag": "Yes",
+    "title": "[PREVENTIVE] High failure risk detected on srv_105",
+    "short_description": "[PREVENTIVE] High failure risk detected on srv_105",
+    "description": "AI Forecast detected a 0% probability of failure for srv_105.\nTelemetry: CPU 59.2%, Mem 76.3%, ERR 11.\nAutomation: Proactive ticket generated for deflection/assignment.",
+    "issue_type": "Software",
+    "business_unit": "",
+    "site": "Global / Cloud Explorer",
+    "service": "",
+    "status": "Deflected",
+    "incident_state": "Resolved",
+    "assigned_to": "",
+    "assigned_role": "",
+    "assignment_agent": "",
+    "resolution": "Validate against the knowledge base; if unresolved, reopen with more detail.",
+    "matched_issue": "",
+    "confidence": 0.16,
+    "notification": "AI Self-Service resolved None using historical tickets + KB. Confidence 0.16.",
+    "is_severe": false
+  },
+  {
+    "ticket_id": "IM0835243",
+    "created_at": "2026-04-15 10:22:35",
+    "requested_by": "Shell AI EOS Monitoring",
+    "requested_for": "Predictive Maintenance Hub",
+    "location": "Global / Cloud Explorer",
+    "floor": "",
+    "cubicle": "",
+    "shift_timings": "",
+    "configuration_item": "srv_104",
+    "ou": "",
+    "category": "Infrastructure",
+    "subcategory1": "Automated Prediction",
+    "subcategory2": "Resource Exhaustion",
+    "subcategory3": "",
+    "channel": "API/AIOps",
+    "assignment_group": "IT-AIOPS-L3",
+    "impact": "2 - Medium",
+    "urgency": "2 - Medium",
+    "priority": "2 - High",
+    "severity": "Low",
+    "alert_flag": "Yes",
+    "service_request_flag": "Yes",
+    "task_flag": "Yes",
+    "title": "[PREVENTIVE] High failure risk detected on srv_104",
+    "short_description": "[PREVENTIVE] High failure risk detected on srv_104",
+    "description": "AI Forecast detected a 0% probability of failure for srv_104.\nTelemetry: CPU 94.8%, Mem 88.7%, ERR 0.\nAutomation: Proactive ticket generated for deflection/assignment.",
+    "issue_type": "Software",
+    "business_unit": "",
+    "site": "Global / Cloud Explorer",
+    "service": "",
+    "status": "Deflected",
+    "incident_state": "Resolved",
+    "assigned_to": "",
+    "assigned_role": "",
+    "assignment_agent": "",
+    "resolution": "Validate against the knowledge base; if unresolved, reopen with more detail.",
+    "matched_issue": "",
+    "confidence": 0.16,
+    "notification": "AI Self-Service resolved None using historical tickets + KB. Confidence 0.16.",
+    "is_severe": false
+  },
+  {
+    "ticket_id": "IM0835242",
+    "created_at": "2026-04-15 10:21:40",
+    "requested_by": "Shell AI EOS Monitoring",
+    "requested_for": "Predictive Maintenance Hub",
+    "location": "Global / Cloud Explorer",
+    "floor": "",
+    "cubicle": "",
+    "shift_timings": "",
+    "configuration_item": "srv_110",
+    "ou": "",
+    "category": "Infrastructure",
+    "subcategory1": "Automated Prediction",
+    "subcategory2": "Resource Exhaustion",
+    "subcategory3": "",
+    "channel": "API/AIOps",
+    "assignment_group": "IT-AIOPS-L3",
+    "impact": "2 - Medium",
+    "urgency": "2 - Medium",
+    "priority": "2 - High",
+    "severity": "Medium",
+    "alert_flag": "Yes",
+    "service_request_flag": "Yes",
+    "task_flag": "Yes",
+    "title": "[PREVENTIVE] High failure risk detected on srv_110",
+    "short_description": "[PREVENTIVE] High failure risk detected on srv_110",
+    "description": "AI Forecast detected a 70% probability of failure for srv_110.\nTelemetry: CPU 86.4%, Mem 89.6%, ERR 5.\nAutomation: Proactive ticket generated for deflection/assignment.",
+    "issue_type": "Software",
+    "business_unit": "",
+    "site": "Global / Cloud Explorer",
+    "service": "",
+    "status": "Deflected",
+    "incident_state": "Resolved",
+    "assigned_to": "",
+    "assigned_role": "",
+    "assignment_agent": "",
+    "resolution": "Validate against the knowledge base; if unresolved, reopen with more detail.",
+    "matched_issue": "",
+    "confidence": 0.16,
+    "notification": "AI Self-Service resolved None using historical tickets + KB. Confidence 0.16.",
+    "is_severe": false
+  },
+  {
+    "ticket_id": "IM0835241",
+    "created_at": "2026-04-15 10:21:40",
+    "requested_by": "Shell AI EOS Monitoring",
+    "requested_for": "Predictive Maintenance Hub",
+    "location": "Global / Cloud Explorer",
+    "floor": "",
+    "cubicle": "",
+    "shift_timings": "",
+    "configuration_item": "srv_109",
+    "ou": "",
+    "category": "Infrastructure",
+    "subcategory1": "Automated Prediction",
+    "subcategory2": "Resource Exhaustion",
+    "subcategory3": "",
+    "channel": "API/AIOps",
+    "assignment_group": "IT-AIOPS-L3",
+    "impact": "2 - Medium",
+    "urgency": "2 - Medium",
+    "priority": "2 - High",
+    "severity": "Medium",
+    "alert_flag": "Yes",
+    "service_request_flag": "Yes",
+    "task_flag": "Yes",
+    "title": "[PREVENTIVE] High failure risk detected on srv_109",
+    "short_description": "[PREVENTIVE] High failure risk detected on srv_109",
+    "description": "AI Forecast detected a 70% probability of failure for srv_109.\nTelemetry: CPU 78.9%, Mem 89.7%, ERR 9.\nAutomation: Proactive ticket generated for deflection/assignment.",
+    "issue_type": "Software",
+    "business_unit": "",
+    "site": "Global / Cloud Explorer",
+    "service": "",
+    "status": "Deflected",
+    "incident_state": "Resolved",
+    "assigned_to": "",
+    "assigned_role": "",
+    "assignment_agent": "",
+    "resolution": "Validate against the knowledge base; if unresolved, reopen with more detail.",
+    "matched_issue": "",
+    "confidence": 0.16,
+    "notification": "AI Self-Service resolved None using historical tickets + KB. Confidence 0.16.",
+    "is_severe": false
+  },
+  {
+    "ticket_id": "IM0835240",
+    "created_at": "2026-04-15 10:21:40",
+    "requested_by": "Shell AI EOS Monitoring",
+    "requested_for": "Predictive Maintenance Hub",
+    "location": "Global / Cloud Explorer",
+    "floor": "",
+    "cubicle": "",
+    "shift_timings": "",
+    "configuration_item": "srv_107",
+    "ou": "",
+    "category": "Infrastructure",
+    "subcategory1": "Automated Prediction",
+    "subcategory2": "Resource Exhaustion",
+    "subcategory3": "",
+    "channel": "API/AIOps",
+    "assignment_group": "IT-AIOPS-L3",
+    "impact": "2 - Medium",
+    "urgency": "2 - Medium",
+    "priority": "2 - High",
+    "severity": "Low",
+    "alert_flag": "Yes",
+    "service_request_flag": "Yes",
+    "task_flag": "Yes",
+    "title": "[PREVENTIVE] High failure risk detected on srv_107",
+    "short_description": "[PREVENTIVE] High failure risk detected on srv_107",
+    "description": "AI Forecast detected a 0% probability of failure for srv_107.\nTelemetry: CPU 28.7%, Mem 85.8%, ERR 41.\nAutomation: Proactive ticket generated for deflection/assignment.",
+    "issue_type": "Software",
+    "business_unit": "",
+    "site": "Global / Cloud Explorer",
+    "service": "",
+    "status": "Deflected",
+    "incident_state": "Resolved",
+    "assigned_to": "",
+    "assigned_role": "",
+    "assignment_agent": "",
+    "resolution": "Validate against the knowledge base; if unresolved, reopen with more detail.",
+    "matched_issue": "",
+    "confidence": 0.16,
+    "notification": "AI Self-Service resolved None using historical tickets + KB. Confidence 0.16.",
+    "is_severe": false
+  },
+  {
     "ticket_id": "INC644147",
     "created_at": "2026-04-15 10:17:10",
     "requested_by": "Sarah Chen",
@@ -42,7 +420,7 @@
     "is_severe": true
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835239",
     "created_at": "2026-04-15 10:15:30",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -84,7 +462,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835238",
     "created_at": "2026-04-15 10:12:20",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -126,7 +504,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835237",
     "created_at": "2026-04-15 10:12:20",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -168,7 +546,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835236",
     "created_at": "2026-04-15 10:11:32",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -210,7 +588,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835235",
     "created_at": "2026-04-15 10:11:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -252,7 +630,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835234",
     "created_at": "2026-04-15 10:11:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -294,7 +672,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835233",
     "created_at": "2026-04-15 10:11:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -336,7 +714,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835232",
     "created_at": "2026-04-15 10:11:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -378,7 +756,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835231",
     "created_at": "2026-04-15 10:11:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -420,7 +798,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835230",
     "created_at": "2026-04-15 10:11:25",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -462,7 +840,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835229",
     "created_at": "2026-04-15 10:11:25",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -504,7 +882,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835228",
     "created_at": "2026-04-15 10:11:25",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -546,7 +924,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835227",
     "created_at": "2026-04-14 14:08:07",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -588,7 +966,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835226",
     "created_at": "2026-04-14 14:07:54",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -630,7 +1008,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835225",
     "created_at": "2026-04-14 14:07:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -672,7 +1050,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835224",
     "created_at": "2026-04-14 14:07:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -714,7 +1092,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835223",
     "created_at": "2026-04-14 14:07:14",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -756,7 +1134,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835222",
     "created_at": "2026-04-14 14:00:45",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -798,7 +1176,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835221",
     "created_at": "2026-04-14 14:00:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -840,7 +1218,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835220",
     "created_at": "2026-04-14 13:59:56",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -882,7 +1260,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835219",
     "created_at": "2026-04-14 13:58:20",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -924,7 +1302,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835218",
     "created_at": "2026-04-14 13:58:20",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -966,7 +1344,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835217",
     "created_at": "2026-04-14 13:58:05",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1008,7 +1386,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835216",
     "created_at": "2026-04-14 13:58:05",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1050,7 +1428,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835215",
     "created_at": "2026-04-14 13:57:57",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1092,7 +1470,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835214",
     "created_at": "2026-04-14 13:57:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1134,7 +1512,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835213",
     "created_at": "2026-04-14 13:57:10",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1176,7 +1554,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835212",
     "created_at": "2026-04-14 13:57:04",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1218,7 +1596,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835211",
     "created_at": "2026-04-14 13:57:03",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1260,7 +1638,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835210",
     "created_at": "2026-04-14 13:50:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1302,7 +1680,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835209",
     "created_at": "2026-04-14 13:49:48",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1344,7 +1722,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835208",
     "created_at": "2026-04-14 13:47:55",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1386,7 +1764,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835207",
     "created_at": "2026-04-14 13:47:55",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1428,7 +1806,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835206",
     "created_at": "2026-04-14 13:47:55",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1470,7 +1848,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835205",
     "created_at": "2026-04-14 13:47:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1512,7 +1890,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835204",
     "created_at": "2026-04-14 13:47:25",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1554,7 +1932,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835203",
     "created_at": "2026-04-14 13:47:19",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1596,7 +1974,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835202",
     "created_at": "2026-04-14 13:47:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1638,7 +2016,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835201",
     "created_at": "2026-04-14 13:47:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1680,7 +2058,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835200",
     "created_at": "2026-04-14 13:46:54",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1722,7 +2100,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835199",
     "created_at": "2026-04-14 13:46:54",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1764,7 +2142,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835198",
     "created_at": "2026-04-14 13:37:19",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1806,7 +2184,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835197",
     "created_at": "2026-04-14 13:37:07",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1848,7 +2226,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835196",
     "created_at": "2026-04-14 13:36:57",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1890,7 +2268,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835195",
     "created_at": "2026-04-14 13:36:57",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1932,7 +2310,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835194",
     "created_at": "2026-04-14 13:36:42",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -1974,7 +2352,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835193",
     "created_at": "2026-04-14 13:36:35",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2016,7 +2394,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835192",
     "created_at": "2026-04-14 13:36:35",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2058,7 +2436,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835191",
     "created_at": "2026-04-14 13:36:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2100,7 +2478,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835190",
     "created_at": "2026-04-14 13:36:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2142,7 +2520,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835189",
     "created_at": "2026-04-14 13:36:21",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2184,7 +2562,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835188",
     "created_at": "2026-04-14 13:31:14",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2226,7 +2604,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835187",
     "created_at": "2026-04-14 13:30:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2268,7 +2646,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835186",
     "created_at": "2026-04-14 13:27:02",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2310,7 +2688,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835185",
     "created_at": "2026-04-14 13:26:52",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2352,7 +2730,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835184",
     "created_at": "2026-04-14 13:26:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2394,7 +2772,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835183",
     "created_at": "2026-04-14 13:26:32",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2436,7 +2814,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835182",
     "created_at": "2026-04-14 13:26:32",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2478,7 +2856,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835181",
     "created_at": "2026-04-14 13:26:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2520,7 +2898,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835180",
     "created_at": "2026-04-14 13:26:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2562,7 +2940,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835179",
     "created_at": "2026-04-14 13:26:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2604,7 +2982,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835178",
     "created_at": "2026-04-14 13:26:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2646,7 +3024,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835177",
     "created_at": "2026-04-14 13:18:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2688,7 +3066,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835176",
     "created_at": "2026-04-14 13:18:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2730,7 +3108,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835175",
     "created_at": "2026-04-14 13:14:30",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2772,7 +3150,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835174",
     "created_at": "2026-04-14 13:14:10",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2814,7 +3192,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835173",
     "created_at": "2026-04-14 13:13:50",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2856,7 +3234,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835172",
     "created_at": "2026-04-14 13:13:50",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2898,7 +3276,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835171",
     "created_at": "2026-04-14 13:13:50",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2940,7 +3318,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835170",
     "created_at": "2026-04-14 13:13:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -2982,7 +3360,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835169",
     "created_at": "2026-04-14 12:44:45",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3024,7 +3402,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835168",
     "created_at": "2026-04-14 12:42:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3066,7 +3444,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835167",
     "created_at": "2026-04-14 12:41:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3108,7 +3486,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835166",
     "created_at": "2026-04-14 12:41:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3150,7 +3528,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835165",
     "created_at": "2026-04-14 12:41:04",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3192,7 +3570,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835164",
     "created_at": "2026-04-14 12:40:49",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3234,7 +3612,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835163",
     "created_at": "2026-04-14 12:40:14",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3276,7 +3654,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835162",
     "created_at": "2026-04-14 12:40:14",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3318,7 +3696,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835161",
     "created_at": "2026-04-14 12:35:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3360,7 +3738,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835160",
     "created_at": "2026-04-14 12:34:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3402,7 +3780,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835159",
     "created_at": "2026-04-14 12:33:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3444,7 +3822,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835158",
     "created_at": "2026-04-14 12:31:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3486,7 +3864,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835157",
     "created_at": "2026-04-14 12:31:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3528,7 +3906,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835156",
     "created_at": "2026-04-14 12:30:48",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3570,7 +3948,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835155",
     "created_at": "2026-04-14 12:30:48",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3612,7 +3990,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835154",
     "created_at": "2026-04-14 12:28:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3654,7 +4032,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835153",
     "created_at": "2026-04-14 12:28:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3696,7 +4074,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835152",
     "created_at": "2026-04-14 12:24:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3738,7 +4116,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835151",
     "created_at": "2026-04-14 12:23:51",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3780,7 +4158,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835150",
     "created_at": "2026-04-14 12:22:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3822,7 +4200,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835149",
     "created_at": "2026-04-14 12:21:27",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3864,7 +4242,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835148",
     "created_at": "2026-04-14 12:20:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3906,7 +4284,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835147",
     "created_at": "2026-04-14 12:20:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3948,7 +4326,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835146",
     "created_at": "2026-04-14 12:19:54",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -3990,7 +4368,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835145",
     "created_at": "2026-04-14 12:19:44",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4032,7 +4410,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835144",
     "created_at": "2026-04-14 12:19:24",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4074,7 +4452,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835143",
     "created_at": "2026-04-14 12:18:44",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4116,7 +4494,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835142",
     "created_at": "2026-04-14 12:18:44",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4158,7 +4536,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835141",
     "created_at": "2026-04-14 12:18:39",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4200,7 +4578,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835140",
     "created_at": "2026-04-14 12:12:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4242,7 +4620,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835139",
     "created_at": "2026-04-14 12:12:16",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4284,7 +4662,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835138",
     "created_at": "2026-04-14 12:11:30",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4326,7 +4704,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835137",
     "created_at": "2026-04-14 12:11:24",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4368,7 +4746,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835136",
     "created_at": "2026-04-14 12:10:14",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4410,7 +4788,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835135",
     "created_at": "2026-04-14 12:09:40",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4452,7 +4830,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835134",
     "created_at": "2026-04-14 12:09:40",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4494,7 +4872,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835133",
     "created_at": "2026-04-14 12:09:37",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4536,7 +4914,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835132",
     "created_at": "2026-04-14 12:08:43",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4578,7 +4956,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835131",
     "created_at": "2026-04-14 12:08:36",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4620,7 +4998,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835130",
     "created_at": "2026-04-14 12:08:36",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4662,7 +5040,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835129",
     "created_at": "2026-04-14 12:08:36",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4704,7 +5082,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835128",
     "created_at": "2026-04-14 12:00:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4746,7 +5124,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835127",
     "created_at": "2026-04-14 12:00:35",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4788,7 +5166,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835126",
     "created_at": "2026-04-14 12:00:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4830,7 +5208,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835125",
     "created_at": "2026-04-14 11:59:54",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4872,7 +5250,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835124",
     "created_at": "2026-04-14 11:56:54",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4914,7 +5292,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835123",
     "created_at": "2026-04-14 11:56:54",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4956,7 +5334,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835122",
     "created_at": "2026-04-14 11:56:54",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -4998,7 +5376,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835121",
     "created_at": "2026-04-14 11:56:45",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5040,7 +5418,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835120",
     "created_at": "2026-04-14 11:56:30",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5082,7 +5460,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835119",
     "created_at": "2026-04-14 11:56:30",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5124,7 +5502,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835118",
     "created_at": "2026-04-14 11:56:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5166,7 +5544,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835117",
     "created_at": "2026-04-14 11:56:14",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5208,7 +5586,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835116",
     "created_at": "2026-04-14 11:49:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5250,7 +5628,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835115",
     "created_at": "2026-04-14 11:46:51",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5292,7 +5670,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835114",
     "created_at": "2026-04-14 11:46:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5334,7 +5712,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835113",
     "created_at": "2026-04-14 11:46:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5376,7 +5754,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835112",
     "created_at": "2026-04-14 11:46:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5418,7 +5796,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835111",
     "created_at": "2026-04-14 11:46:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5460,7 +5838,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835110",
     "created_at": "2026-04-14 11:46:35",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5502,7 +5880,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835109",
     "created_at": "2026-04-14 11:46:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5544,7 +5922,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835108",
     "created_at": "2026-04-14 11:46:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5586,7 +5964,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835107",
     "created_at": "2026-04-14 11:46:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5628,7 +6006,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835106",
     "created_at": "2026-04-14 11:46:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5670,7 +6048,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835105",
     "created_at": "2026-04-14 01:30:58",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5712,7 +6090,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835104",
     "created_at": "2026-04-14 01:30:42",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5754,7 +6132,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835103",
     "created_at": "2026-04-14 01:29:56",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5796,7 +6174,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835102",
     "created_at": "2026-04-14 01:29:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5838,7 +6216,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835101",
     "created_at": "2026-04-14 01:29:09",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5880,7 +6258,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835100",
     "created_at": "2026-04-14 01:29:09",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5922,7 +6300,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835099",
     "created_at": "2026-04-14 01:29:09",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -5964,7 +6342,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835098",
     "created_at": "2026-04-14 01:28:57",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6006,7 +6384,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835097",
     "created_at": "2026-04-14 01:28:56",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6048,7 +6426,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835096",
     "created_at": "2026-04-14 01:28:56",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6090,7 +6468,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835095",
     "created_at": "2026-04-14 00:04:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6132,7 +6510,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835094",
     "created_at": "2026-04-14 00:04:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6174,7 +6552,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835093",
     "created_at": "2026-04-14 00:03:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6216,7 +6594,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835092",
     "created_at": "2026-04-14 00:03:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6258,7 +6636,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835091",
     "created_at": "2026-04-14 00:03:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6300,7 +6678,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835090",
     "created_at": "2026-04-14 00:03:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6342,7 +6720,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835089",
     "created_at": "2026-04-14 00:03:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6384,7 +6762,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835088",
     "created_at": "2026-04-14 00:03:07",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6426,7 +6804,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835087",
     "created_at": "2026-04-13 23:53:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6468,7 +6846,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835086",
     "created_at": "2026-04-13 23:53:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6510,7 +6888,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835085",
     "created_at": "2026-04-13 23:53:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6552,7 +6930,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835084",
     "created_at": "2026-04-13 23:53:08",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6594,7 +6972,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835083",
     "created_at": "2026-04-13 23:53:08",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6636,7 +7014,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835082",
     "created_at": "2026-04-13 23:53:08",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6678,7 +7056,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835081",
     "created_at": "2026-04-13 23:53:08",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6720,7 +7098,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835080",
     "created_at": "2026-04-13 23:53:07",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6762,7 +7140,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835079",
     "created_at": "2026-04-13 23:41:53",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6804,7 +7182,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835078",
     "created_at": "2026-04-13 23:41:53",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6846,7 +7224,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835077",
     "created_at": "2026-04-13 23:41:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6888,7 +7266,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835076",
     "created_at": "2026-04-13 23:41:21",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6930,7 +7308,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835075",
     "created_at": "2026-04-13 23:41:21",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -6972,7 +7350,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835074",
     "created_at": "2026-04-13 23:41:21",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7014,7 +7392,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835073",
     "created_at": "2026-04-13 23:41:21",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7056,7 +7434,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835072",
     "created_at": "2026-04-13 23:41:21",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7098,7 +7476,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835071",
     "created_at": "2026-04-13 23:10:02",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7140,7 +7518,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835070",
     "created_at": "2026-04-13 23:09:55",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7182,7 +7560,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835069",
     "created_at": "2026-04-13 23:09:55",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7224,7 +7602,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835068",
     "created_at": "2026-04-13 23:09:55",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7266,7 +7644,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835067",
     "created_at": "2026-04-13 23:09:55",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7308,7 +7686,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835066",
     "created_at": "2026-04-13 22:59:12",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7350,7 +7728,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835065",
     "created_at": "2026-04-13 22:59:06",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7392,7 +7770,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835064",
     "created_at": "2026-04-13 22:59:06",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7434,7 +7812,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835063",
     "created_at": "2026-04-13 22:59:06",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7476,7 +7854,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835062",
     "created_at": "2026-04-13 22:59:05",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7518,7 +7896,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835061",
     "created_at": "2026-04-13 19:05:33",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7560,7 +7938,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835060",
     "created_at": "2026-04-13 19:05:33",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7602,7 +7980,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835059",
     "created_at": "2026-04-13 19:05:17",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7644,7 +8022,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835058",
     "created_at": "2026-04-13 19:05:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7686,7 +8064,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835057",
     "created_at": "2026-04-13 19:05:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7728,7 +8106,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835056",
     "created_at": "2026-04-13 19:01:48",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7770,7 +8148,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835055",
     "created_at": "2026-04-13 19:01:47",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7812,7 +8190,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835054",
     "created_at": "2026-04-13 19:01:40",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7854,7 +8232,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835053",
     "created_at": "2026-04-13 19:01:28",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7896,7 +8274,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835052",
     "created_at": "2026-04-13 18:56:04",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7938,7 +8316,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835051",
     "created_at": "2026-04-13 18:55:34",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -7980,7 +8358,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835050",
     "created_at": "2026-04-13 18:55:34",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8022,7 +8400,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835049",
     "created_at": "2026-04-13 18:55:14",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8064,7 +8442,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835048",
     "created_at": "2026-04-13 18:55:14",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8106,7 +8484,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835047",
     "created_at": "2026-04-13 18:55:05",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8148,7 +8526,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835046",
     "created_at": "2026-04-13 18:54:55",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8190,7 +8568,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835045",
     "created_at": "2026-04-13 18:52:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8232,7 +8610,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835044",
     "created_at": "2026-04-13 18:51:27",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8274,7 +8652,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835043",
     "created_at": "2026-04-13 18:51:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8316,7 +8694,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835042",
     "created_at": "2026-04-13 18:51:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8358,7 +8736,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835041",
     "created_at": "2026-04-13 18:51:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8400,7 +8778,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835040",
     "created_at": "2026-04-13 18:45:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8442,7 +8820,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835039",
     "created_at": "2026-04-13 18:45:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8484,7 +8862,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835038",
     "created_at": "2026-04-13 18:44:44",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8526,7 +8904,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835037",
     "created_at": "2026-04-13 18:44:44",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8568,7 +8946,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835036",
     "created_at": "2026-04-13 18:44:44",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8610,7 +8988,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835035",
     "created_at": "2026-04-13 18:44:14",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8652,7 +9030,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835034",
     "created_at": "2026-04-13 17:18:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8694,7 +9072,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835033",
     "created_at": "2026-04-13 17:18:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8736,7 +9114,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835032",
     "created_at": "2026-04-13 17:17:51",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8778,7 +9156,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835031",
     "created_at": "2026-04-13 17:16:47",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8820,7 +9198,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835030",
     "created_at": "2026-04-13 17:16:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8862,7 +9240,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835029",
     "created_at": "2026-04-13 17:16:06",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8904,7 +9282,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835028",
     "created_at": "2026-04-13 17:15:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8946,7 +9324,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835027",
     "created_at": "2026-04-13 17:14:51",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -8988,7 +9366,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835026",
     "created_at": "2026-04-13 17:14:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9030,7 +9408,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835025",
     "created_at": "2026-04-13 17:13:56",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9072,7 +9450,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835024",
     "created_at": "2026-04-13 17:13:40",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9114,7 +9492,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835023",
     "created_at": "2026-04-13 17:13:40",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9156,7 +9534,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835022",
     "created_at": "2026-04-13 17:08:00",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9198,7 +9576,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835021",
     "created_at": "2026-04-13 17:08:00",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9240,7 +9618,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835020",
     "created_at": "2026-04-13 17:05:59",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9282,7 +9660,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835019",
     "created_at": "2026-04-13 17:05:59",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9324,7 +9702,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835018",
     "created_at": "2026-04-13 17:04:58",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9366,7 +9744,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835017",
     "created_at": "2026-04-13 17:03:43",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9408,7 +9786,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835016",
     "created_at": "2026-04-13 17:03:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9450,7 +9828,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835015",
     "created_at": "2026-04-13 17:02:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9492,7 +9870,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835014",
     "created_at": "2026-04-13 17:01:50",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9534,7 +9912,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835013",
     "created_at": "2026-04-13 17:01:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9576,7 +9954,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835012",
     "created_at": "2026-04-13 17:01:34",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9618,7 +9996,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835011",
     "created_at": "2026-04-13 16:56:56",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9660,7 +10038,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835010",
     "created_at": "2026-04-13 16:56:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9702,7 +10080,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835009",
     "created_at": "2026-04-13 16:55:50",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9744,7 +10122,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835008",
     "created_at": "2026-04-13 16:55:36",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9786,7 +10164,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835007",
     "created_at": "2026-04-13 16:55:10",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9828,7 +10206,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835006",
     "created_at": "2026-04-13 16:54:21",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9870,7 +10248,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835005",
     "created_at": "2026-04-13 16:52:42",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9912,7 +10290,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835004",
     "created_at": "2026-04-13 16:52:33",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9954,7 +10332,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835003",
     "created_at": "2026-04-13 16:52:05",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -9996,7 +10374,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835002",
     "created_at": "2026-04-13 16:51:30",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10038,7 +10416,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835001",
     "created_at": "2026-04-13 16:51:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10080,7 +10458,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0835000",
     "created_at": "2026-04-13 16:50:33",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10122,7 +10500,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834999",
     "created_at": "2026-04-13 16:45:42",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10164,7 +10542,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834998",
     "created_at": "2026-04-13 16:45:03",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10206,7 +10584,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834997",
     "created_at": "2026-04-13 16:43:34",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10248,7 +10626,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834996",
     "created_at": "2026-04-13 16:43:15",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10290,7 +10668,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834995",
     "created_at": "2026-04-13 16:43:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10332,7 +10710,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834994",
     "created_at": "2026-04-13 16:42:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10374,7 +10752,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834993",
     "created_at": "2026-04-13 16:42:34",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10416,7 +10794,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834992",
     "created_at": "2026-04-13 16:42:04",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10458,7 +10836,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834991",
     "created_at": "2026-04-13 16:42:04",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10500,7 +10878,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834990",
     "created_at": "2026-04-13 16:41:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10542,7 +10920,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834989",
     "created_at": "2026-04-13 16:41:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10584,7 +10962,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834988",
     "created_at": "2026-04-13 16:40:21",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10626,7 +11004,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834987",
     "created_at": "2026-04-13 16:34:53",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10668,7 +11046,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834986",
     "created_at": "2026-04-13 16:34:33",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10710,7 +11088,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834985",
     "created_at": "2026-04-13 16:33:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10752,7 +11130,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834984",
     "created_at": "2026-04-13 16:32:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10794,7 +11172,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834983",
     "created_at": "2026-04-13 16:32:03",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10836,7 +11214,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834982",
     "created_at": "2026-04-13 16:31:54",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10878,7 +11256,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834981",
     "created_at": "2026-04-13 16:31:30",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10920,7 +11298,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834980",
     "created_at": "2026-04-13 16:31:02",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -10962,7 +11340,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834979",
     "created_at": "2026-04-13 16:31:02",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11004,7 +11382,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834978",
     "created_at": "2026-04-13 16:30:49",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11046,7 +11424,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834977",
     "created_at": "2026-04-13 16:30:49",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11088,7 +11466,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834976",
     "created_at": "2026-04-13 16:30:02",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11130,7 +11508,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834975",
     "created_at": "2026-04-13 16:24:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11172,7 +11550,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834974",
     "created_at": "2026-04-13 16:23:02",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11214,7 +11592,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834973",
     "created_at": "2026-04-13 16:22:56",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11256,7 +11634,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834972",
     "created_at": "2026-04-13 16:21:52",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11298,7 +11676,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834971",
     "created_at": "2026-04-13 16:21:42",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11340,7 +11718,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834970",
     "created_at": "2026-04-13 16:21:42",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11382,7 +11760,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834969",
     "created_at": "2026-04-13 16:21:30",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11424,7 +11802,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834968",
     "created_at": "2026-04-13 16:21:02",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11466,7 +11844,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834967",
     "created_at": "2026-04-13 16:20:41",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11508,7 +11886,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834966",
     "created_at": "2026-04-13 16:20:40",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11550,7 +11928,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834965",
     "created_at": "2026-04-13 16:20:40",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11592,7 +11970,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834964",
     "created_at": "2026-04-13 16:19:50",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11634,7 +12012,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834963",
     "created_at": "2026-04-13 16:12:45",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11676,7 +12054,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834962",
     "created_at": "2026-04-13 16:12:12",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11718,7 +12096,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834961",
     "created_at": "2026-04-13 16:11:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11760,7 +12138,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834960",
     "created_at": "2026-04-13 16:11:18",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11802,7 +12180,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834959",
     "created_at": "2026-04-13 16:11:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11844,7 +12222,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834958",
     "created_at": "2026-04-13 16:11:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11886,7 +12264,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834957",
     "created_at": "2026-04-13 16:10:48",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11928,7 +12306,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834956",
     "created_at": "2026-04-13 16:10:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -11970,7 +12348,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834955",
     "created_at": "2026-04-13 16:10:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12012,7 +12390,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834954",
     "created_at": "2026-04-13 16:10:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12054,7 +12432,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834953",
     "created_at": "2026-04-13 16:09:45",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12096,7 +12474,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834952",
     "created_at": "2026-04-13 16:05:50",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12138,7 +12516,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834951",
     "created_at": "2026-04-13 18:02:35",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12180,7 +12558,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834950",
     "created_at": "2026-04-13 17:59:44",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12222,7 +12600,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834949",
     "created_at": "2026-04-13 17:59:25",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12264,7 +12642,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834948",
     "created_at": "2026-04-13 17:57:57",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12306,7 +12684,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834947",
     "created_at": "2026-04-13 17:57:36",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12348,7 +12726,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834946",
     "created_at": "2026-04-13 17:56:35",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12390,7 +12768,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834945",
     "created_at": "2026-04-13 17:56:35",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12432,7 +12810,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834944",
     "created_at": "2026-04-13 17:56:35",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12474,7 +12852,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834943",
     "created_at": "2026-04-13 17:56:35",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12516,7 +12894,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834942",
     "created_at": "2026-04-13 17:56:09",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12558,7 +12936,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834941",
     "created_at": "2026-04-13 17:56:08",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12600,7 +12978,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834940",
     "created_at": "2026-04-13 17:54:44",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12642,7 +13020,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834939",
     "created_at": "2026-04-13 17:51:33",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12684,7 +13062,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834938",
     "created_at": "2026-04-13 17:49:25",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12726,7 +13104,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834937",
     "created_at": "2026-04-13 17:48:49",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12768,7 +13146,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834936",
     "created_at": "2026-04-13 17:47:15",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12810,7 +13188,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834935",
     "created_at": "2026-04-13 17:46:33",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12852,7 +13230,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834934",
     "created_at": "2026-04-13 17:46:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12894,7 +13272,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834933",
     "created_at": "2026-04-13 17:46:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12936,7 +13314,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834932",
     "created_at": "2026-04-13 17:45:57",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -12978,7 +13356,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834931",
     "created_at": "2026-04-13 17:45:57",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13020,7 +13398,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834930",
     "created_at": "2026-04-13 17:45:47",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13062,7 +13440,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834929",
     "created_at": "2026-04-13 17:45:46",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13188,7 +13566,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834928",
     "created_at": "2026-04-12 22:08:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13230,7 +13608,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834927",
     "created_at": "2026-04-12 22:08:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13272,7 +13650,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834926",
     "created_at": "2026-04-12 22:07:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13314,7 +13692,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834925",
     "created_at": "2026-04-12 22:07:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13356,7 +13734,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834924",
     "created_at": "2026-04-12 22:07:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13398,7 +13776,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834923",
     "created_at": "2026-04-12 22:07:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13440,7 +13818,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834922",
     "created_at": "2026-04-12 22:06:32",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13482,7 +13860,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834921",
     "created_at": "2026-04-12 22:06:32",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13524,7 +13902,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834920",
     "created_at": "2026-04-12 22:06:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13566,7 +13944,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834919",
     "created_at": "2026-04-12 22:06:10",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13608,7 +13986,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834918",
     "created_at": "2026-04-12 22:06:10",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13650,7 +14028,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834917",
     "created_at": "2026-04-12 21:57:55",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13692,7 +14070,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834916",
     "created_at": "2026-04-12 21:57:24",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13734,7 +14112,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834915",
     "created_at": "2026-04-12 21:57:24",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13776,7 +14154,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834914",
     "created_at": "2026-04-12 21:57:24",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13818,7 +14196,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834913",
     "created_at": "2026-04-12 21:57:24",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13860,7 +14238,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834912",
     "created_at": "2026-04-12 21:54:09",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13902,7 +14280,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834911",
     "created_at": "2026-04-12 21:53:43",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13944,7 +14322,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834910",
     "created_at": "2026-04-12 21:53:43",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -13986,7 +14364,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834909",
     "created_at": "2026-04-12 21:53:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14028,7 +14406,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834908",
     "created_at": "2026-04-12 21:53:16",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14070,7 +14448,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834907",
     "created_at": "2026-04-12 21:53:15",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14112,7 +14490,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834906",
     "created_at": "2026-04-11 21:52:51",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14154,7 +14532,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834905",
     "created_at": "2026-04-11 21:52:31",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14196,7 +14574,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834904",
     "created_at": "2026-04-11 21:52:22",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14238,7 +14616,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834903",
     "created_at": "2026-04-11 21:52:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14280,7 +14658,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834902",
     "created_at": "2026-04-11 21:52:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14322,7 +14700,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834901",
     "created_at": "2026-04-11 21:52:11",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14364,7 +14742,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834900",
     "created_at": "2026-04-11 21:52:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14406,7 +14784,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834899",
     "created_at": "2026-04-11 21:52:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14448,7 +14826,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834898",
     "created_at": "2026-04-11 21:52:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14490,7 +14868,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834897",
     "created_at": "2026-04-11 21:52:00",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14532,7 +14910,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834896",
     "created_at": "2026-04-11 21:52:00",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14574,7 +14952,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834895",
     "created_at": "2026-04-11 20:01:03",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14616,7 +14994,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834894",
     "created_at": "2026-04-11 20:01:03",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14658,7 +15036,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834893",
     "created_at": "2026-04-11 20:00:59",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14700,7 +15078,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834892",
     "created_at": "2026-04-11 19:59:26",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14742,7 +15120,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834891",
     "created_at": "2026-04-11 19:58:40",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14784,7 +15162,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834890",
     "created_at": "2026-04-11 19:58:40",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14826,7 +15204,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834889",
     "created_at": "2026-04-11 19:58:36",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14868,7 +15246,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834888",
     "created_at": "2026-04-11 19:58:36",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14910,7 +15288,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834887",
     "created_at": "2026-04-11 19:58:24",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14952,7 +15330,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834886",
     "created_at": "2026-04-11 19:58:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -14994,7 +15372,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834885",
     "created_at": "2026-04-11 19:58:20",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15036,7 +15414,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834884",
     "created_at": "2026-04-11 19:58:19",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15078,7 +15456,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834883",
     "created_at": "2026-04-11 19:42:44",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15120,7 +15498,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834882",
     "created_at": "2026-04-11 19:42:12",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15162,7 +15540,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834881",
     "created_at": "2026-04-11 19:42:02",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15204,7 +15582,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834880",
     "created_at": "2026-04-11 19:41:53",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15246,7 +15624,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834879",
     "created_at": "2026-04-11 19:41:23",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15288,7 +15666,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834878",
     "created_at": "2026-04-11 19:40:32",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15330,7 +15708,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834877",
     "created_at": "2026-04-11 19:37:01",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15372,7 +15750,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834876",
     "created_at": "2026-04-11 19:36:52",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15414,7 +15792,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834875",
     "created_at": "2026-04-11 19:36:52",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15456,7 +15834,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834874",
     "created_at": "2026-04-11 19:36:24",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15498,7 +15876,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834873",
     "created_at": "2026-04-11 19:36:12",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15540,7 +15918,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834872",
     "created_at": "2026-04-11 19:36:12",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15582,7 +15960,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834871",
     "created_at": "2026-04-11 18:49:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15624,7 +16002,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834870",
     "created_at": "2026-04-11 18:49:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15666,7 +16044,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834869",
     "created_at": "2026-04-11 18:49:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15708,7 +16086,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834868",
     "created_at": "2026-04-11 18:49:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15750,7 +16128,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834867",
     "created_at": "2026-04-11 18:49:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15792,7 +16170,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834866",
     "created_at": "2026-04-11 18:49:29",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15834,7 +16212,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834865",
     "created_at": "2026-04-11 18:32:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15876,7 +16254,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834864",
     "created_at": "2026-04-11 18:32:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15918,7 +16296,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834863",
     "created_at": "2026-04-11 18:32:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",
@@ -15960,7 +16338,7 @@
     "is_severe": false
   },
   {
-    "ticket_id": null,
+    "ticket_id": "IM0834862",
     "created_at": "2026-04-11 18:32:13",
     "requested_by": "Shell AI EOS Monitoring",
     "requested_for": "Predictive Maintenance Hub",

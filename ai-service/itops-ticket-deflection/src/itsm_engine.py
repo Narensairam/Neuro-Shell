@@ -181,7 +181,13 @@ class ITSMOrchestrator:
 
     def create_ticket(self, payload: dict[str, Any]) -> dict[str, Any]:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        ticket_id = payload["ticket_id"]
+        
+        ticket_id = payload.get("ticket_id")
+        if not ticket_id:
+            # Auto-generate if missing (fixes null ID issues for automated tickets)
+            existing = load_persisted_tickets()
+            ticket_id = next_ticket_id([t.get("ticket_id") for t in existing if t.get("ticket_id")])
+        
         title = (payload.get("short_description") or payload.get("title") or "").strip()
         description = (payload.get("description") or "").strip()
         severity = (payload.get("severity") or "Low").strip()
