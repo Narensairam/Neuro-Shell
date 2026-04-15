@@ -51,6 +51,52 @@ const EMPTY_FORM = () => ({
  short_description: '', description: '', channel: 'Portal',
 });
 
+// ─── Shared Form Primitives (defined at module scope to prevent remount on rerender) ──
+const TextInput = ({ label, name, placeholder, required, hint, form, set }) => (
+ <div className="space-y-1">
+  <label className="text-xs font-semibold text-gray-400 ">{label}{required && ' *'}</label>
+  <input
+   value={form[name]}
+   onChange={e => set(name, e.target.value)}
+   required={required}
+   placeholder={placeholder}
+   className="w-full bg-white border border-gray-200 rounded-lg py-2.5 px-4 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-400 transition-all font-medium placeholder:text-gray-300"
+  />
+  {hint && <p className="text-xs text-gray-400">{hint}</p>}
+ </div>
+);
+
+const ReadonlyField = ({ label, name, form }) => (
+ <div className="space-y-1">
+  <label className="text-xs font-semibold text-gray-400 ">{label}</label>
+  <div className="w-full bg-gray-50 border border-gray-100 rounded-lg py-2.5 px-4 text-sm text-gray-500 font-medium min-h-[42px]">
+   {form[name] || <span className="text-gray-300">Auto-populated from Employee ID</span>}
+  </div>
+ </div>
+);
+
+const SelectInput = ({ label, name, options, required, form, set }) => (
+ <div className="space-y-1">
+  <label className="text-xs font-semibold text-gray-400 ">{label}{required && ' *'}</label>
+  <select
+   value={form[name]}
+   onChange={e => set(name, e.target.value)}
+   required={required}
+   className="w-full bg-white border border-gray-200 rounded-lg py-2.5 px-4 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-400 transition-all font-medium cursor-pointer"
+  >
+   {options.map(o => <option key={o} value={o}>{o || 'Select...'}</option>)}
+  </select>
+ </div>
+);
+
+const Step = ({ n, title }) => (
+ <div className="flex items-center gap-3 mb-5">
+  <div className="w-7 h-7 rounded-lg bg-gray-900 text-white flex items-center justify-center text-xs font-semibold shadow-sm shrink-0">{String(n).padStart(2, '0')}</div>
+  <h3 className="text-sm font-semibold text-gray-900 ">{title}</h3>
+  <div className="flex-1 h-px bg-gray-100 ml-2" />
+ </div>
+);
+
 // ─── Create Ticket Form ────────────────────────────────────────────────────────
 function CreateTicketForm({ onBack }) {
  const [loading, setLoading] = useState(false);
@@ -156,51 +202,6 @@ function CreateTicketForm({ onBack }) {
  </div>
  );
 
- // Helpers for form inputs
- const TextInput = ({ label, name, placeholder, required, hint }) => (
- <div className="space-y-1">
- <label className="text-xs font-semibold text-gray-400 ">{label}{required && ' *'}</label>
- <input
- value={form[name]}
- onChange={e => set(name, e.target.value)}
- required={required}
- placeholder={placeholder}
- className="w-full bg-white border border-gray-200 rounded-lg py-2.5 px-4 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-400 transition-all font-medium placeholder:text-gray-300"
- />
- {hint && <p className="text-xs text-gray-400">{hint}</p>}
- </div>
- );
-
- const ReadonlyField = ({ label, name }) => (
- <div className="space-y-1">
- <label className="text-xs font-semibold text-gray-400 ">{label}</label>
- <div className="w-full bg-gray-50 border border-gray-100 rounded-lg py-2.5 px-4 text-sm text-gray-500 font-medium min-h-[42px]">
- {form[name] || <span className="text-gray-300">Auto-populated from Employee ID</span>}
- </div>
- </div>
- );
-
- const SelectInput = ({ label, name, options, required }) => (
- <div className="space-y-1">
- <label className="text-xs font-semibold text-gray-400 ">{label}{required && ' *'}</label>
- <select
- value={form[name]}
- onChange={e => set(name, e.target.value)}
- required={required}
- className="w-full bg-white border border-gray-200 rounded-lg py-2.5 px-4 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-400 transition-all font-medium cursor-pointer"
- >
- {options.map(o => <option key={o} value={o}>{o || 'Select...'}</option>)}
- </select>
- </div>
- );
-
- const Step = ({ n, title }) => (
- <div className="flex items-center gap-3 mb-5">
- <div className="w-7 h-7 rounded-lg bg-gray-900 text-white flex items-center justify-center text-xs font-semibold shadow-sm shrink-0">{String(n).padStart(2, '0')}</div>
- <h3 className="text-sm font-semibold text-gray-900 ">{title}</h3>
- <div className="flex-1 h-px bg-gray-100 ml-2" />
- </div>
- );
 
  return (
  <div className="h-full overflow-y-auto">
@@ -252,12 +253,12 @@ function CreateTicketForm({ onBack }) {
  <Zap className="w-2.5 h-2.5 text-yellow-500" /> Auto-populates contact & location
  </p>
  </div>
- <ReadonlyField label="Requester Name" name="requested_by" />
- <TextInput label="Corporate Email" name="email" placeholder="user@shell.com" required />
+ <ReadonlyField label="Requester Name" name="requested_by" form={form} />
+ <TextInput label="Corporate Email" name="email" placeholder="user@shell.com" required form={form} set={set} />
  </div>
  <div className="grid grid-cols-2 gap-4">
- <TextInput label="Department / Business Unit" name="dept" placeholder="e.g. Industrial Operations" required />
- <TextInput label="Ticket Raised For" name="requested_for" placeholder="Who is this service for?" />
+ <TextInput label="Department / Business Unit" name="dept" placeholder="e.g. Industrial Operations" required form={form} set={set} />
+ <TextInput label="Ticket Raised For" name="requested_for" placeholder="Who is this service for?" form={form} set={set} />
  </div>
  </div>
 
@@ -265,10 +266,10 @@ function CreateTicketForm({ onBack }) {
  <div>
  <Step n={2} title="Location & Operational Context" />
  <div className="grid grid-cols-4 gap-4">
- <SelectInput label="Operational Site" name="location" options={LOCATION_OPTS} required />
- <SelectInput label="Infra Type" name="location_type" options={LOC_TYPE_OPTS} />
- <SelectInput label="Floor / Level" name="floor" options={FLOOR_OPTS} />
- <SelectInput label="Work Shift" name="shift_timings" options={SHIFT_OPTS} required />
+ <SelectInput label="Operational Site" name="location" options={LOCATION_OPTS} required form={form} set={set} />
+ <SelectInput label="Infra Type" name="location_type" options={LOC_TYPE_OPTS} form={form} set={set} />
+ <SelectInput label="Floor / Level" name="floor" options={FLOOR_OPTS} form={form} set={set} />
+ <SelectInput label="Work Shift" name="shift_timings" options={SHIFT_OPTS} required form={form} set={set} />
  </div>
  </div>
 
@@ -276,13 +277,13 @@ function CreateTicketForm({ onBack }) {
  <div>
  <Step n={3} title="System & Priority Taxonomy" />
  <div className="grid grid-cols-3 gap-4 mb-4">
- <SelectInput label="System Category" name="category" options={CATEGORIES} required />
- <TextInput label="Configuration Item (CI Tag)" name="configuration_item" placeholder="e.g. s-grid-01, plc_003" />
- <SelectInput label="Assignment Group" name="assignment_group" options={ASSIGNMENT_GROUPS} />
+ <SelectInput label="System Category" name="category" options={CATEGORIES} required form={form} set={set} />
+ <TextInput label="Configuration Item (CI Tag)" name="configuration_item" placeholder="e.g. s-grid-01, plc_003" form={form} set={set} />
+ <SelectInput label="Assignment Group" name="assignment_group" options={ASSIGNMENT_GROUPS} form={form} set={set} />
  </div>
  <div className="grid grid-cols-3 gap-4 bg-gray-50 p-5 rounded-xl border border-gray-100 items-end">
- <SelectInput label="Operational Impact *" name="impact" options={IMPACT_OPTS} required />
- <SelectInput label="Work Urgency *" name="urgency" options={URGENCY_OPTS} required />
+ <SelectInput label="Operational Impact *" name="impact" options={IMPACT_OPTS} required form={form} set={set} />
+ <SelectInput label="Work Urgency *" name="urgency" options={URGENCY_OPTS} required form={form} set={set} />
  <div className="space-y-1">
  <label className="text-xs font-semibold text-gray-400 ">Calculated Priority</label>
  <div className={cn('w-full h-[42px] border rounded-lg px-4 flex items-center text-xs font-semibold shadow-sm',
@@ -299,7 +300,7 @@ function CreateTicketForm({ onBack }) {
  <div>
  <Step n={4} title="Forensic Audit Narrative" />
  <div className="space-y-4">
- <TextInput label="Incident Title (Short Description) *" name="short_description" placeholder="Summarize the core failure in one line..." required />
+ <TextInput label="Incident Title (Short Description) *" name="short_description" placeholder="Summarize the core failure in one line..." required form={form} set={set} />
  <div className="space-y-1">
  <label className="text-xs font-semibold text-gray-400 ">Full Technical Description *</label>
  <textarea
