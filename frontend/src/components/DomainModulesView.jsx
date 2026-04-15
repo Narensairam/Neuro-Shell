@@ -8,7 +8,7 @@ export function DomainModulesView() {
                     <div className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mt-1">6 functional transformation domains · Real-time AI inference</div>
                 </div>
                 <button className="px-4 py-1.5 bg-shell-yellow text-black font-bold border-none rounded-md font-mono text-[10px] tracking-widest uppercase hover:bg-amber-400 transition-colors shadow-sm">
-                    Ask APEX
+                    Ask EVA
                 </button>
             </div>
 

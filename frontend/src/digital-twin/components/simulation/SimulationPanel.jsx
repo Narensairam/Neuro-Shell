@@ -50,7 +50,7 @@ export function SimulationPanel() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-950 p-6 overflow-hidden">
+    <div className="w-full flex flex-col bg-slate-950 p-6">
       <div className="mb-6">
         <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
           <Settings2 size={24} className="text-cyan-500" />
@@ -215,11 +215,10 @@ export function SimulationPanel() {
             {scenarios.map((scenario) => (
               <div
                 key={scenario.id}
-                className={`p-3 rounded-md border text-sm transition-colors cursor-pointer ${
-                  activeScenarioId === scenario.id
+                className={`p-3 rounded-md border text-sm transition-colors cursor-pointer ${activeScenarioId === scenario.id
                     ? 'bg-cyan-900/20 border-cyan-800/50 text-cyan-100'
                     : 'bg-slate-800/50 border-slate-700/50 text-slate-300 hover:bg-slate-800'
-                }`}
+                  }`}
                 onClick={() => loadScenario(scenario.id)}
               >
                 <div className="flex justify-between items-center mb-1">

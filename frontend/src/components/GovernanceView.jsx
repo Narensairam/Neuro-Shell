@@ -471,7 +471,7 @@ export function GovernanceView() {
                              <div className="space-y-2 flex-1">
                                  {[
                                      { user: 'CE-Admin', action: 'Policy Update', site: 'Rotterdam Hub', status: 'Verified' },
-                                     { user: 'Agent-APEX', action: 'Key Refresh', site: 'Neural Core', status: 'System' },
+                                     { user: 'Agent-EVA', action: 'Key Refresh', site: 'Neural Core', status: 'System' },
                                      { user: 'OP-Dash', action: 'Access Grant', site: 'Singapore Site', status: 'Pending' },
                                      { user: 'DS-Root', action: 'Root Revoke', site: 'Trading Node', status: 'Critical' }
                                  ].map((log, i) => (

@@ -6,17 +6,17 @@ const NODE_RADIUS = 35;
 
 const FALLBACK_GRAPH = {
     nodes: [
-        { id: "APEX", type: "Orchestrator", name: "APEX Master Brain", domain: "Enterprise-Wide", port: 5000, capabilities: ["Navigation", "Reasoning"], status: "Online", glow: "#dd1d21" },
+        { id: "EVA", type: "Orchestrator", name: "EVA Master Brain", domain: "Enterprise-Wide", port: 5000, capabilities: ["Navigation", "Reasoning"], status: "Online", glow: "#dd1d21" },
         { id: "GUARDIAN_EYE", type: "Safety Agent", name: "Guardian Eye", domain: "Fire Safety", port: 5001, capabilities: ["CV Detection"], status: "Online", glow: "#ef4444" },
         { id: "WORKFORCE_ML", type: "HR Agent", name: "Workforce Predictor", domain: "HR Demand", port: 5003, capabilities: ["Forecasting"], status: "Online", glow: "#f59e0b" },
         { id: "ITSM_DISPATCH", type: "Ops Agent", name: "ITOps Dispatcher", domain: "IT Operations", port: 5004, capabilities: ["Ticketing"], status: "Online", glow: "#22c55e" },
         { id: "COMMERCIAL_SAGE", type: "Trading Agent", name: "Commercial Sage", domain: "Trading", port: 5005, capabilities: ["Pricing"], status: "Online", glow: "#3b82f6" }
     ],
     edges: [
-        { source: "APEX", target: "GUARDIAN_EYE", relation: "ORCHESTRATES" },
-        { source: "APEX", target: "WORKFORCE_ML", relation: "ORCHESTRATES" },
-        { source: "APEX", target: "ITSM_DISPATCH", relation: "ORCHESTRATES" },
-        { source: "APEX", target: "COMMERCIAL_SAGE", relation: "ORCHESTRATES" }
+        { source: "EVA", target: "GUARDIAN_EYE", relation: "ORCHESTRATES" },
+        { source: "EVA", target: "WORKFORCE_ML", relation: "ORCHESTRATES" },
+        { source: "EVA", target: "ITSM_DISPATCH", relation: "ORCHESTRATES" },
+        { source: "EVA", target: "COMMERCIAL_SAGE", relation: "ORCHESTRATES" }
     ]
 };
 
@@ -74,7 +74,7 @@ export function AgentTopologyView() {
         const radius = 220;
 
         return graph.nodes.map((node, i) => {
-            if (node.id === 'APEX') return { ...node, x: centerX, y: centerY };
+            if (node.id === 'EVA') return { ...node, x: centerX, y: centerY };
             
             const angle = ((i - 1) * (2 * Math.PI)) / (graph.nodes.length - 1);
             return {
@@ -178,7 +178,7 @@ export function AgentTopologyView() {
                                 {/* Icon/Content */}
                                 <foreignObject x={node.x - 20} y={node.y - 20} width="40" height="40">
                                     <div className="w-full h-full flex items-center justify-center">
-                                        {node.id === 'APEX' ? <Sparkles className="w-7 h-7" style={{ color: node.glow }} /> : <Cpu className="w-5 h-5 text-gray-400" />}
+                                        {node.id === 'EVA' ? <Sparkles className="w-7 h-7" style={{ color: node.glow }} /> : <Cpu className="w-5 h-5 text-gray-400" />}
                                     </div>
                                 </foreignObject>
 

@@ -22,10 +22,11 @@ const IMPACT_OPTS = ['', '1 - Global', '2 - Division', '3 - Local'];
 const URGENCY_OPTS = ['', '1 - High', '2 - Medium', '3 - Low'];
 const ASSIGNMENT_GROUPS = ['IT-OT-L2-CLUSTER', 'Cyber-SOC-L3', 'CLOUD-OPS', 'IT-AIOPS-L3', 'ERP-SUPPORT-L2'];
 
-const API = 'http://localhost:5004';
+const API = 'http://127.0.0.1:5004';
 
 const fetchWithTimeout = async (url, options = {}) => {
-  const timeout = options.timeout || 5000;
+  // ITSM backend runs ML deflection which takes 8-15s — use 35s timeout
+  const timeout = options.timeout || 35000;
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
   try {
@@ -34,6 +35,9 @@ const fetchWithTimeout = async (url, options = {}) => {
     return response;
   } catch (err) {
     clearTimeout(id);
+    if (err.name === 'AbortError') {
+      throw new Error('ITSM backend did not respond within 35 seconds. The AI deflection engine may be busy — please try again.');
+    }
     throw err;
   }
 };
@@ -100,6 +104,7 @@ const Step = ({ n, title }) => (
 // ─── Create Ticket Form ────────────────────────────────────────────────────────
 function CreateTicketForm({ onBack }) {
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState('');
   const [success, setSuccess] = useState(null);
   const [empFound, setEmpFound] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM());
@@ -143,23 +148,34 @@ function CreateTicketForm({ onBack }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setLoadingStep('Registering incident...');
+    const steps = [
+      [800,  'Running AI deflection analysis...'],
+      [3000, 'Matching against knowledge base...'],
+      [6000, 'Scoring confidence & routing...'],
+      [10000,'Finalizing audit record...'],
+    ];
+    const timers = steps.map(([delay, msg]) => setTimeout(() => setLoadingStep(msg), delay));
     try {
       const res = await fetchWithTimeout(`${API}/api/tickets`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
+      timers.forEach(clearTimeout);
       if (res.ok) {
         setSuccess(await res.json());
       } else {
         const err = await res.json().catch(() => ({}));
-        alert(`ITSM System Error: ${err.detail || 'Failed to ingest audit entry'}`);
+        alert(`ITSM Error: ${err.detail || JSON.stringify(err) || 'Unknown error from backend'}`);
       }
     } catch (err) {
+      timers.forEach(clearTimeout);
       console.error('ITSM API Error:', err);
-      alert('ITSM Backend Offline: Forensic audit entry could not be persisted. Please ensure the agentic orchestrator is running.');
+      alert(`ITSM Error: ${err.message || 'Backend unreachable on port 5004'}`);
     } finally {
       setLoading(false);
+      setLoadingStep('');
     }
   };
 
@@ -219,7 +235,7 @@ function CreateTicketForm({ onBack }) {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden relative">
           <div className="p-8 space-y-8">
 
             {/* ── STEP 1: Identity ── */}
@@ -325,9 +341,25 @@ function CreateTicketForm({ onBack }) {
               className="px-10 py-3 bg-gray-900 text-white rounded-xl text-sm font-semibold hover:bg-black hover:scale-105 transition-all shadow-lg flex items-center gap-3 disabled:opacity-60"
             >
               {loading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-              Ingest Audit Entry
+              {loading ? loadingStep || 'Processing...' : 'Ingest Audit Entry'}
             </button>
           </div>
+
+          {/* AI Processing Overlay */}
+          {loading && (
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center rounded-2xl z-10 gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gray-900 flex items-center justify-center shadow-xl">
+                <Bot className="w-6 h-6 text-yellow-400 animate-pulse" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm font-bold text-gray-900">AI Deflection Engine Running</p>
+                <p className="text-xs text-gray-400 mt-1 font-mono">{loadingStep || 'Connecting...'}</p>
+              </div>
+              <div className="w-48 h-1 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full bg-gray-900 rounded-full animate-[loading_3s_ease-in-out_infinite]" style={{width: '60%', animation: 'pulse 1.5s ease-in-out infinite'}} />
+              </div>
+            </div>
+          )}
         </form>
       </div>
     </div>

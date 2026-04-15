@@ -25,7 +25,7 @@ export function CommandCenterView({ setCurrentView }) {
         { id: "contracts", label: "AI Contracts", health: 90, load: 50 }
     ]);
     const [agents, setAgents] = useState([
-        { id: "APEX", name: "APEX Master Brain", status: "Online", type: "Orchestrator", port: 5000, capabilities: [1,2,3] },
+        { id: "EVA", name: "EVA Master Brain", status: "Online", type: "Orchestrator", port: 5000, capabilities: [1,2,3] },
         { id: "GUARDIAN_EYE", name: "Guardian Eye", status: "Online", type: "Safety Agent", port: 5001, capabilities: [1,2,3] },
         { id: "COMMERCIAL_SAGE", name: "Commercial Sage", status: "Online", type: "Trading Agent", port: 5005, capabilities: [1,2,3] },
         { id: "WORKFORCE_ML", name: "Workforce Predictor", status: "Online", type: "HR Agent", port: 5003, capabilities: [1,2] },
@@ -614,7 +614,7 @@ export function CommandCenterView({ setCurrentView }) {
                                         <div className="bg-slate-900 p-3 rounded mt-2">
                                             <div className="text-[8px] font-black text-white/50 uppercase tracking-widest mb-1.5">Total Aggregated Savings</div>
                                             <div className="text-[20px] font-black text-white font-mono tracking-tight">$84.51 <span className="text-[10px] text-yellow-400 font-normal">million USD</span></div>
-                                            <div className="mt-2 text-white/30 text-[7px] font-mono leading-tight uppercase font-bold">Synchronized via APEX Neural Mesh Proxy</div>
+                                            <div className="mt-2 text-white/30 text-[7px] font-mono leading-tight uppercase font-bold">Synchronized via EVA Neural Mesh Proxy</div>
                                         </div>
                                     </div>
                                 )}

@@ -46,24 +46,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ─── In-Memory Ticket Cache ──────────────────────────────────────────────────
+# Loaded once at startup; mutated in-place for fast reads. Disk writes are
+# deferred to background threads so API responses stay instant.
+TICKET_CACHE: list[dict] = []
+cache_lock = threading.Lock()   # guards TICKET_CACHE mutations
+
 # Global lock for thread-safe disk writes
 persistence_lock = threading.Lock()
+
+MAX_TICKETS_ON_DISK = 500  # keep file manageable
 
 def safe_persist(tickets_data):
     """Worker function for BackgroundTasks to ensure thread-safe persistence."""
     with persistence_lock:
-        persist_tickets(tickets_data)
+        persist_tickets(tickets_data[:MAX_TICKETS_ON_DISK])
 
 engine = ITSMOrchestrator()
-# Seed demo tickets if disk is empty
-merge_tickets_on_disk(engine)
+# Seed demo tickets if disk is empty, then warm the cache
+_disk_tickets = merge_tickets_on_disk(engine)
+with cache_lock:
+    TICKET_CACHE.extend(_disk_tickets)
 
 def auto_create_preventive_ticket(server_id: str, risk_score: int, metrics: dict):
     """
     Creates an automated ticket if risk is high and no recent ticket exists for this server.
     """
-    tickets = load_persisted_tickets()
-    
+    with cache_lock:
+        tickets = TICKET_CACHE.copy()
+
     # Deduplication: check if we created a preventive ticket for this server in the last 10 mins
     now = datetime.now()
     for t in tickets[:20]: # Only check recent ones for performance
@@ -103,16 +114,19 @@ def auto_create_preventive_ticket(server_id: str, risk_score: int, metrics: dict
         payload["ticket_id"] = next_ticket_id([t.get("ticket_id") for t in tickets])
 
     new_ticket = engine.create_ticket(payload)
-    tickets.insert(0, new_ticket)
+    with cache_lock:
+        TICKET_CACHE.insert(0, new_ticket)
+        tickets_snapshot = TICKET_CACHE.copy()
     # Background persistence with thread safety
-    threading.Thread(target=safe_persist, args=(tickets,), daemon=True).start()
+    threading.Thread(target=safe_persist, args=(tickets_snapshot,), daemon=True).start()
     return new_ticket
 
 def auto_create_ot_ticket(device_id: str, threat_type: str, severity: str):
     """
     Creates an automated ticket for OT threat detections.
     """
-    tickets = load_persisted_tickets()
+    with cache_lock:
+        tickets = TICKET_CACHE.copy()
     now = datetime.now()
     # Deduplication: 15 min cooldown for same device + threat
     for t in tickets[:30]:
@@ -141,8 +155,10 @@ def auto_create_ot_ticket(device_id: str, threat_type: str, severity: str):
         payload["ticket_id"] = next_ticket_id([t.get("ticket_id") for t in tickets])
         
     new_ticket = engine.create_ticket(payload)
-    tickets.insert(0, new_ticket)
-    threading.Thread(target=safe_persist, args=(tickets,), daemon=True).start()
+    with cache_lock:
+        TICKET_CACHE.insert(0, new_ticket)
+        tickets_snapshot = TICKET_CACHE.copy()
+    threading.Thread(target=safe_persist, args=(tickets_snapshot,), daemon=True).start()
     return new_ticket
 
 class TicketPayload(BaseModel):
@@ -150,7 +166,7 @@ class TicketPayload(BaseModel):
     # User Details
     emp_id: str = "EMP-00123"
     requested_by: str = "Agentic Copilot"
-    email: str = "apex@shell.com"
+    email: str = "eva@shell.com"
     dept: str = "Hydrocarbons Operations"
     requested_for: Optional[str] = None
     
@@ -186,36 +202,40 @@ class TicketPayload(BaseModel):
         extra = "allow"
 
 @app.get("/api/tickets")
-async def get_tickets():
-    return load_persisted_tickets()
+def get_tickets():
+    with cache_lock:
+        return list(TICKET_CACHE)
 
 @app.post("/api/tickets")
-async def create_ticket(payload: TicketPayload, background_tasks: BackgroundTasks):
+def create_ticket(payload: TicketPayload, background_tasks: BackgroundTasks):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] Incoming Ticket Request: {payload.short_description}")
-    tickets = load_persisted_tickets()
+    with cache_lock:
+        existing_ids = [t.get("ticket_id") for t in TICKET_CACHE]
     if not payload.ticket_id:
-        payload.ticket_id = next_ticket_id([t.get("ticket_id") for t in tickets])
-    
-    ticket = engine.create_ticket(payload.dict())
-    tickets.insert(0, ticket)
-    
-    # Use BackgroundTasks for thread-safe persistence
-    background_tasks.add_task(safe_persist, tickets)
-    
-    # Sync to Core
+        payload.ticket_id = next_ticket_id(existing_ids)
 
+    ticket = engine.create_ticket(payload.dict())
+
+    with cache_lock:
+        TICKET_CACHE.insert(0, ticket)
+        tickets_snapshot = TICKET_CACHE.copy()
+
+    # Async persist — does NOT block the response
+    background_tasks.add_task(safe_persist, tickets_snapshot)
+
+    # Fire-and-forget sync to core
     sync_to_core("itops", {
-        "tickets": tickets[:20],
-        "stats": { "total_tickets": len(tickets) }
+        "tickets": tickets_snapshot[:20],
+        "stats": { "total_tickets": len(tickets_snapshot) }
     })
     return ticket
 
 @app.get("/api/workers")
-async def get_workers():
+def get_workers():
     return [asdict(w) for w in engine.workers]
 
 @app.get("/api/metrics/summary")
-async def get_summary_metrics():
+def get_summary_metrics():
     try:
         print(f"[{datetime.now().strftime('%H:%M:%S')}] Generating Infra Metrics...")
         infra_df = generate_infra_metrics(GeneratorConfig(points_per_server=15))
@@ -232,7 +252,8 @@ async def get_summary_metrics():
         shadow_results = detect_shadow_it(shadow_data)
         
         print(f"[{datetime.now().strftime('%H:%M:%S')}] Finalizing Summary...")
-        tickets = load_persisted_tickets()
+        with cache_lock:
+            tickets = TICKET_CACHE.copy()
         deflected = [t for t in tickets if t.get("status") == "Deflected"]
         critical = [t for t in tickets if t.get("is_severe")]
         
@@ -260,7 +281,7 @@ async def get_summary_metrics():
         }
 
 @app.get("/api/operational/ot")
-async def get_ot_threats():
+def get_ot_threats():
     try:
         # Dynamic seed based on time for "ups and downs"
         seed = int(datetime.now().timestamp()) % 1000
@@ -287,7 +308,7 @@ async def get_ot_threats():
         return []
 
 @app.get("/api/operational/infra")
-async def get_infra_health():
+def get_infra_health():
     try:
         # Dynamic seed for infra metrics
         seed = (int(datetime.now().timestamp()) // 10) % 1000
@@ -344,7 +365,7 @@ async def get_infra_health():
         return []
 
 @app.get("/api/operational/shadow")
-async def get_shadow_it():
+def get_shadow_it():
     try:
         # Use dynamic seed for refreshed detection results
         seed = int(datetime.now().timestamp()) % 1000
@@ -371,7 +392,7 @@ async def get_shadow_it():
         return []
 
 @app.get("/health")
-async def health_check():
+def health_check():
     """Health check endpoint for platform monitoring"""
     return {
         "status": "healthy",

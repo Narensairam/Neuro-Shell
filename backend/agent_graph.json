@@ -52,13 +52,13 @@
     }
   ],
   "edges": [
-    { "source": "APEX", "target": "GUARDIAN_EYE", "relation": "ORCHESTRATES", "type": "Control" },
-    { "source": "APEX", "target": "WORKFORCE_ML", "relation": "ORCHESTRATES", "type": "Control" },
-    { "source": "APEX", "target": "ITSM_DISPATCH", "relation": "ORCHESTRATES", "type": "Control" },
-    { "source": "APEX", "target": "COMMERCIAL_SAGE", "relation": "ORCHESTRATES", "type": "Control" },
+    { "source": "EVA", "target": "GUARDIAN_EYE", "relation": "ORCHESTRATES", "type": "Control" },
+    { "source": "EVA", "target": "WORKFORCE_ML", "relation": "ORCHESTRATES", "type": "Control" },
+    { "source": "EVA", "target": "ITSM_DISPATCH", "relation": "ORCHESTRATES", "type": "Control" },
+    { "source": "EVA", "target": "COMMERCIAL_SAGE", "relation": "ORCHESTRATES", "type": "Control" },
     { "source": "GUARDIAN_EYE", "target": "WORKFORCE_ML", "relation": "TRIGGERS_SCENARIO", "type": "Data Flow" },
     { "source": "GUARDIAN_EYE", "target": "ITSM_DISPATCH", "relation": "LOGS_INCIDENT", "type": "Data Flow" },
-    { "source": "ITSM_DISPATCH", "target": "APEX", "relation": "REPORTS_METRICS", "type": "Telemetry" },
-    { "source": "COMMERCIAL_SAGE", "target": "APEX", "relation": "PRICING_FEEDS", "type": "Telemetry" }
+    { "source": "ITSM_DISPATCH", "target": "EVA", "relation": "REPORTS_METRICS", "type": "Telemetry" },
+    { "source": "COMMERCIAL_SAGE", "target": "EVA", "relation": "PRICING_FEEDS", "type": "Telemetry" }
   ]
 }

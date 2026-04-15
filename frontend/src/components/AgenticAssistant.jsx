@@ -6,12 +6,14 @@ import {
     Mic, MicOff, Volume2, VolumeX, Play, SkipForward, Ticket, Pause
 } from 'lucide-react';
 import { cn } from './Sidebar';
+import {
+    BarChart, Bar, LineChart, Line, AreaChart, Area,
+    XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell
+} from 'recharts';
 
 // OpenRouter configuration
 const OPENROUTER_API_KEY = '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';
 const MODEL = 'deepseek/deepseek-chat';
-
-// Microsoft Edge TTS targeting JennyNeural or GuyNeural
 
 // All navigable views in the Neuro Shell ERP
 const VIEWS = {
@@ -36,53 +38,53 @@ const VIEWS = {
     topology: 'Agentic Neural Topology',
 };
 
-// Demo tour script — each stop has a view, dwell time (ms), and spoken pitch
-// Demo tour script — 4-minute high-impact jury presentation
+// ─── Demo Tour — 4 Pillars of Neuro Shell EOS ────────────────────────────────
+// Pillar 1: Cost Optimization  Pillar 2: Zero Emissions  Pillar 3: OT/IT Threat Handling  Pillar 4: Anomaly Detection
 const DEMO_TOUR = [
     {
         view: 'command',
-        pitch: "Welcome to Neuro Shell. This is not just an ERP; it is the definitive AI Engine Operating System built specifically for the staggering scale of Shell. The Strategic Steering Hub synthesizes millions of telemetry points across all global domains, actively predicting bottlenecks and optimizing resources before risks materialize."
+        pitch: "Welcome to Neuro Shell — the AI Engine Operating System built for the scale and complexity of Shell. This Strategic Steering Hub synthesizes telemetry, financial signals, and safety feeds from every domain into one live intelligence layer. The four pillars driving this EOS are: Cost Optimization, Zero Emissions, OT and IT Threat Handling, and Real-Time Anomaly Detection. Every module you will see today is anchored to at least one of these four pillars.",
     },
     {
         view: 'digitaltwin',
-        pitch: "An AI OS must deeply understand physical realities. Enter the Asset Digital Twin. Here, specialized agents ingest real-time IoT vibrations. This enables them to pinpoint and predict a mechanical failure in a deep-water compressor up to seventy two hours in advance, fundamentally eliminating unplanned industrial downtime."
+        pitch: "Pillar One — Cost Optimization begins here in the Asset Digital Twin. Specialized AI agents continuously ingest live IoT vibration and temperature data from our physical assets. When a compressor shows early-stage anomaly signatures, the system predicts a mechanical failure up to seventy-two hours in advance. This eliminates unplanned shutdown costs and is also our Pillar Four — Anomaly Detection — operating in real time across the plant floor.",
     },
     {
         view: 'manufacturing',
         tab: 'surveillance',
-        pitch: "In Manufacturing and Refining, the Guardian Eye agent acts as our omnipresent safety orchestrator. It autonomously monitors global camera feeds. If a worker enters an exclusion zone without proper gear, it immediately triggers localized alerts and recalculates site compliance, securing our frontline without requiring manual oversight."
-    },
-    {
-        view: 'supplychain',
-        tab: 'routes',
-        pitch: "For Global Logistics, true AI-native routing shines. The Supply Chain Agent precisely commands our entire heavy fleet. If a sudden geopolitical event disrupts an ocean corridor, it immediately simulates alternative waypoints to protect our LNG margins and minimize demurrage, fully autonomously and in real-time."
-    },
-    {
-        view: 'commercial',
-        tab: 'agent',
-        pitch: "At the Energy Trading Risk terminal, the Commercial Agent weaponizes market intelligence. It actively ingests Brent Crude and TTF Gas volatilities while simultaneously screening all counterparties against live sanctions databases. It prevents non-compliant trades in milliseconds, offering an invincible, instantaneous regulatory shield for our traders."
-    },
-    {
-        view: 'finance',
-        pitch: "In Group Finance, we accelerate corporate velocity. The Finance Agent continuously oversees complex intercompany reconciliations and global hedging positions. By deploying deep learning to flag accounting anomalies instantly, Neuro Shell compresses our financial close cycle from the industry standard of nine days down to an unprecedented five."
+        pitch: "Pillar Two — Zero Emissions is embodied in Industrial Operations. The Guardian Eye agent monitors live camera feeds across all global refinery sites. If a worker enters a hazardous exclusion zone without appropriate safety gear, it instantly triggers a localized alert and adjusts the site compliance score. Beyond safety, it correlates high-emission events with process anomalies, allowing us to proactively cut flaring and reduce our carbon signature — all autonomously, without human oversight.",
     },
     {
         view: 'hr',
         tab: 'agent',
-        pitch: "To manage Shell's most vital asset, the HR Workforce Agent correlates continuous operational data directly with our talent demand scale. It forecasts exact workforce constraints, guaranteeing that mission-critical extraction sites have their necessary certified personnel deployed flawlessly and optimally at the right time."
+        pitch: "Cost Optimization also means matching people to demand precisely. In Workforce and HSE Safety, the Workforce AI Agent forecasts headcount shortfalls before they happen. It evaluates demand signals, available supply, and skill gaps in milliseconds — then identifies the optimal contractors and mobilizes resources. Clicking Authorize Resource Mobilization deploys the right personnel instantly, eliminating idle workforce spend and ensuring mission-critical sites are never understaffed.",
+    },
+    {
+        view: 'supplychain',
+        tab: 'routes',
+        pitch: "Fleet Management and Sea Route Optimization directly target Cost Optimization and Zero Emissions together. The Supply Chain Agent commands our entire heavy fleet across global ocean corridors. When a geopolitical disruption threatens an LNG route, it simulates alternative waypoints within seconds, protecting our margins and minimizing demurrage. It also optimizes routing for minimum fuel burn, directly reducing our shipping emissions without compromising delivery commitments.",
+    },
+    {
+        view: 'commercial',
+        tab: 'agent',
+        pitch: "At the Energy Trading and Risk terminal, the Commercial Intelligence Agent weaponizes market data. It ingests Brent Crude and TTF Gas volatilities in real time, screens every counterparty against live sanctions databases, and identifies cross-commodity arbitrage opportunities. This agent prevents non-compliant trades in milliseconds — protecting Shell from regulatory fines while simultaneously optimizing revenue. This is AI-native cost optimization and threat handling working together.",
+    },
+    {
+        view: 'finance',
+        pitch: "In Group Finance, the Finance Agent oversees intercompany reconciliations, hedging positions, and anomaly detection across tens of thousands of transactions daily. Pillar Four — Anomaly Detection — flags suspicious accounting entries instantly. This has compressed Shell's financial close cycle from the industry standard of nine days down to five, freeing capital and accelerating executive decision-making at the speed of AI.",
     },
     {
         view: 'itops',
         tab: 'overview',
-        pitch: "This is the AIOPS ENGINE, formerly our operations overview, now integrated as the primary neural hub for IT infrastructure. When systemic anomalies occur across our half a million sensor tags, it autonomously deflects routine service tickets and dispatches Level 3 engineers for critical failures, shrinking system response times from multiple hours to mere seconds."
+        pitch: "Here is where Pillar Three — OT and IT Threat Handling — takes command. The AIOps Engine monitors half a million sensor tags and enterprise endpoints simultaneously. When anomalies are detected — from a PLC intrusion to a rogue shadow IT device — the system automatically deflects routine ITSM tickets using AI knowledge matching, and escalates only critical failures to Level 3 engineers. Our response time has dropped from multiple hours to mere seconds.",
     },
     {
         view: 'governance',
-        pitch: "At the executive level, the Governance Agent provides an immutable corporate audit feed. By tracking AI Act readiness, ISO compliance, and GDPR parameters simultaneously, it proves that for Shell, compliance is absolutely no longer a retrospective audit, but an automated, living, actively enforced state."
+        pitch: "And underpinning all four pillars is the AI Governance framework. The Governance Agent maintains a continuous, immutable audit trail of every AI-driven decision across Neuro Shell. It tracks AI Act readiness, ISO 42001 compliance, and GDPR parameters in real time. Compliance is no longer a retrospective audit — it is an automated, living, and actively enforced state across the entire EOS.",
     },
     {
         view: 'topology',
-        pitch: "Finally, the Neural Topology knowledge graph. This conclusively proves why Neuro Shell is the perfect AI EOS for Shell. Domain agents seamlessly communicate deep context across operational silos. We have transitioned from fragmented, legacy software to a truly autonomous enterprise nervous system. Thank you for viewing."
+        pitch: "Finally, the Neural Topology graph proves why Neuro Shell is the perfect AI Operating System for Shell. Every domain agent — from Digital Twin to Finance to Cybersecurity — communicates rich contextual signals through a shared intelligence fabric. This is not a collection of point solutions. This is a truly autonomous enterprise nervous system, purpose-built for the operational scale and ambition of Shell. Thank you.",
     },
 ];
 
@@ -186,6 +188,33 @@ const TOOLS = [
             description: 'Get details about the distributed AI agent architecture, their roles, technical ports, and communication edges. Use this to explain how the system is wired.',
             parameters: { type: 'object', properties: {} }
         }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'generate_data_visual',
+            description: 'Generate an interactive inline data chart/visualization for a domain. Use this when the user asks for insights, charts, graphs, analytics, or visual data for any module. Renders a live Recharts chart directly in the chat.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    domain: {
+                        type: 'string',
+                        enum: ['fleet', 'manufacturing', 'supplychain', 'itops', 'commercial', 'finance', 'hr'],
+                        description: 'The domain to visualize data for.'
+                    },
+                    chart_type: {
+                        type: 'string',
+                        enum: ['bar', 'line', 'area'],
+                        description: 'Type of chart to render. Default: bar.'
+                    },
+                    metric: {
+                        type: 'string',
+                        description: 'Specific metric to highlight (e.g. "fuel_savings", "ticket_deflection", "emission_reduction"). Optional.'
+                    }
+                },
+                required: ['domain']
+            }
+        }
     }
 ];
 
@@ -200,7 +229,112 @@ const DOMAIN_API_MAP = {
     fire: 'http://localhost:5001/api/fire/alerts',
 };
 
-const SYSTEM_PROMPT = `You are APEX, Shell plc's elite agentic AI...
+// ─── Static chart data for each domain ────────────────────────────────────────
+const CHART_DATA = {
+    fleet: {
+        title: 'Fleet Route Optimization — Fuel Savings (MT)',
+        data: [
+            { name: 'Jan', baseline: 4200, optimized: 3100, saving: 1100 },
+            { name: 'Feb', baseline: 3900, optimized: 2850, saving: 1050 },
+            { name: 'Mar', baseline: 4500, optimized: 3200, saving: 1300 },
+            { name: 'Apr', baseline: 4100, optimized: 2900, saving: 1200 },
+            { name: 'May', baseline: 4700, optimized: 3350, saving: 1350 },
+            { name: 'Jun', baseline: 4300, optimized: 3050, saving: 1250 },
+        ],
+        bars: [
+            { key: 'baseline', color: '#94a3b8', label: 'Pre-AI Fuel (MT)' },
+            { key: 'optimized', color: '#FBCE07', label: 'AI-Optimized (MT)' },
+            { key: 'saving', color: '#22c55e', label: 'Savings (MT)' },
+        ],
+    },
+    manufacturing: {
+        title: 'Manufacturing — Anomaly Detection Events vs Downtime (hrs)',
+        data: [
+            { name: 'Jan', anomalies: 18, downtime: 14 },
+            { name: 'Feb', anomalies: 22, downtime: 9 },
+            { name: 'Mar', anomalies: 15, downtime: 6 },
+            { name: 'Apr', anomalies: 28, downtime: 4 },
+            { name: 'May', anomalies: 12, downtime: 2 },
+            { name: 'Jun', anomalies: 9,  downtime: 1 },
+        ],
+        bars: [
+            { key: 'anomalies', color: '#f59e0b', label: 'Anomalies Caught' },
+            { key: 'downtime',  color: '#ef4444', label: 'Downtime (hrs)' },
+        ],
+    },
+    supplychain: {
+        title: 'Supply Chain — On-Time Delivery Rate (%)',
+        data: [
+            { name: 'Q1 23', rate: 74 },
+            { name: 'Q2 23', rate: 79 },
+            { name: 'Q3 23', rate: 83 },
+            { name: 'Q4 23', rate: 87 },
+            { name: 'Q1 24', rate: 91 },
+            { name: 'Q2 24', rate: 95 },
+        ],
+        bars: [{ key: 'rate', color: '#06b6d4', label: 'On-Time Rate (%)' }],
+    },
+    itops: {
+        title: 'IT/Ops — ITSM Ticket Deflection Rate (%)',
+        data: [
+            { name: 'Week 1', deflected: 52, escalated: 48 },
+            { name: 'Week 2', deflected: 61, escalated: 39 },
+            { name: 'Week 3', deflected: 72, escalated: 28 },
+            { name: 'Week 4', deflected: 83, escalated: 17 },
+            { name: 'Week 5', deflected: 89, escalated: 11 },
+            { name: 'Week 6', deflected: 94, escalated: 6  },
+        ],
+        bars: [
+            { key: 'deflected', color: '#22c55e', label: 'AI Deflected (%)' },
+            { key: 'escalated', color: '#ef4444', label: 'Escalated (%)' },
+        ],
+    },
+    commercial: {
+        title: 'Commercial — AI Pricing vs Market Price ($/bbl)',
+        data: [
+            { name: 'Jan', market: 78, ai_price: 81 },
+            { name: 'Feb', market: 82, ai_price: 86 },
+            { name: 'Mar', market: 75, ai_price: 79 },
+            { name: 'Apr', market: 88, ai_price: 93 },
+            { name: 'May', market: 91, ai_price: 96 },
+            { name: 'Jun', market: 85, ai_price: 90 },
+        ],
+        bars: [
+            { key: 'market', color: '#94a3b8', label: 'Market Price' },
+            { key: 'ai_price', color: '#FBCE07', label: 'AI-Optimized Price' },
+        ],
+    },
+    finance: {
+        title: 'Finance — Close Cycle Duration (days)',
+        data: [
+            { name: 'Q1 23', days: 9.5 },
+            { name: 'Q2 23', days: 8.4 },
+            { name: 'Q3 23', days: 7.2 },
+            { name: 'Q4 23', days: 6.5 },
+            { name: 'Q1 24', days: 5.8 },
+            { name: 'Q2 24', days: 5.0 },
+        ],
+        bars: [{ key: 'days', color: '#8b5cf6', label: 'Close Duration (days)' }],
+    },
+    hr: {
+        title: 'HR — Workforce Demand vs Supply by Role',
+        data: [
+            { name: 'Engineers', demand: 340, supply: 290 },
+            { name: 'Operators', demand: 520, supply: 480 },
+            { name: 'Technicians', demand: 410, supply: 395 },
+            { name: 'Contractors', demand: 780, supply: 650 },
+            { name: 'Safety', demand: 180, supply: 172 },
+        ],
+        bars: [
+            { key: 'demand', color: '#f59e0b', label: 'Demand' },
+            { key: 'supply',  color: '#22c55e', label: 'Supply' },
+        ],
+    },
+};
+
+const CHART_COLORS = ['#FBCE07', '#22c55e', '#06b6d4', '#8b5cf6', '#ef4444'];
+
+const SYSTEM_PROMPT = `You are EVA, Shell plc's elite agentic AI Engine Operating System copilot for Neuro Shell EOS.
 
 YOUR CORE CAPABILITIES (USE THE EXACT TOOL NAMES PROVIDED):
 - Navigate to modules (Tool: \`navigate_to_view\`)
@@ -211,7 +345,13 @@ YOUR CORE CAPABILITIES (USE THE EXACT TOOL NAMES PROVIDED):
 - Query agent topology (Tool: \`query_neural_topology\`)
 - Get active alerts (Tool: \`get_active_alerts\`)
 - Get platform status (Tool: \`get_platform_status\`)
+- Generate inline data chart (Tool: \`generate_data_visual\`) — use when user asks for a visual, chart, insight, or graph
 
+THE FOUR PILLARS OF NEURO SHELL EOS:
+1. Cost Optimization — AI routing, pricing, workforce planning, financial close
+2. Zero Emissions — Route fuel optimization, anomaly-based flaring reduction, safety surveillance
+3. OT/IT Threat Handling — AIOps, ITSM deflection, cyber threat detection, shadow IT
+4. Anomaly Detection — Digital Twin predictive maintenance, fire detection, financial anomalies
 
 CRITICAL RULE — ITSM TICKETS:
 When a user asks to create a ticket or log an issue, you MUST gather following information BEFORE calling create_itsm_ticket: Summary, Details, Category, Impact, and Urgency.
@@ -219,6 +359,9 @@ When a user asks to create a ticket or log an issue, you MUST gather following i
 - If info is missing, ask clearly and gather it.
 - Be proactive: if you can infer the category (e.g. 'server' -> 'Infrastructure'), suggest it.
 Only once you have all 5 pieces of information should you call create_itsm_ticket.
+
+DATA VISUALIZATION RULE:
+When a user asks for a chart, graph, insight, visualization, or "show me data" for any domain, immediately call generate_data_visual with the appropriate domain. Do not describe it — just generate it.
 
 DEMO MODE:
 When the user asks for a demo, pitch, walkthrough, or tour of the application, immediately call the demo_application tool. Do not describe what you are about to do first — just invoke the tool.
@@ -231,12 +374,46 @@ CONVERSATIONAL STYLE:
 - When navigating, always announce where you are going and why.
 - If a tool fails with an 'Unknown tool' error, check the list of available tools provided above and retry with the correct name.`;
 
+// ─── Inline Chart Renderer ────────────────────────────────────────────────────
+function InlineChart({ domain, chartType = 'bar' }) {
+    const cfg = CHART_DATA[domain];
+    if (!cfg) return null;
+    const { title, data, bars } = cfg;
+
+    const ChartComponent = chartType === 'line' ? LineChart : chartType === 'area' ? AreaChart : BarChart;
+
+    const renderSeries = () => bars.map((b) => {
+        if (chartType === 'area') return <Area key={b.key} type="monotone" dataKey={b.key} stroke={b.color} fill={b.color} fillOpacity={0.15} strokeWidth={2} name={b.label} />;
+        if (chartType === 'line') return <Line key={b.key} type="monotone" dataKey={b.key} stroke={b.color} strokeWidth={2} dot={{ r: 3 }} name={b.label} />;
+        return <Bar key={b.key} dataKey={b.key} fill={b.color} name={b.label} radius={[3, 3, 0, 0]} />;
+    });
+
+    return (
+        <div className="w-full bg-slate-950 rounded-xl p-3 mt-1 border border-slate-800">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">{title}</p>
+            <ResponsiveContainer width="100%" height={180}>
+                <ChartComponent data={data} margin={{ top: 4, right: 8, left: -18, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                    <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#64748b', fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fontSize: 9, fill: '#64748b', fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
+                    <Tooltip
+                        contentStyle={{ fontSize: '10px', borderRadius: '8px', background: '#0f172a', border: '1px solid #1e293b', color: '#e2e8f0' }}
+                        itemStyle={{ color: '#cbd5e1' }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '9px', fontFamily: 'monospace', color: '#94a3b8', paddingTop: '8px' }} />
+                    {renderSeries()}
+                </ChartComponent>
+            </ResponsiveContainer>
+        </div>
+    );
+}
+
 export function AgenticAssistant({ setCurrentView }) {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         {
             role: 'assistant',
-            content: "Hi, I'm **APEX** — your Neuro Shell agentic AI copilot. I can navigate the platform, fetch live data, raise ITSM tickets, or give you a full guided demo of the application.\n\nTry asking: *\"Give me a demo\"* or *\"Create a ticket\"* or *\"Show me manufacturing KPIs\"*",
+            content: "Hi, I'm **EVA** — your Neuro Shell agentic AI copilot. I can navigate the platform, fetch live data, raise ITSM tickets, generate data charts, or give you a full guided demo of the application.\n\nTry asking: *\"Give me a demo\"* or *\"Create a ticket\"* or *\"Show fleet optimization insight\"*",
             type: 'text'
         }
     ]);
@@ -246,6 +423,10 @@ export function AgenticAssistant({ setCurrentView }) {
     const [isDemoRunning, setIsDemoRunning] = useState(false);
     const [isDemoPaused, setIsDemoPaused] = useState(false);
     const [demoStep, setDemoStep] = useState(0);
+    // Refs for demo control — avoids stale closure bugs in the step loop
+    const isDemoRunningRef = useRef(false);
+    const isDemoPausedRef = useRef(false);
+    const demoStepRef = useRef(0);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
     const [isListening, setIsListening] = useState(false);
@@ -254,6 +435,7 @@ export function AgenticAssistant({ setCurrentView }) {
     const recognitionRef = useRef(null);
     const demoTimeoutRef = useRef(null);
     const currentAudioRef = useRef(null);
+    const abortSpeechRef = useRef(false);
     const voicesRef = useRef([]);
     const [isSpeaking, setIsSpeaking] = useState(false);
 
@@ -262,97 +444,44 @@ export function AgenticAssistant({ setCurrentView }) {
     useEffect(() => { if (isOpen) setTimeout(() => inputRef.current?.focus(), 200); }, [isOpen]);
     useEffect(() => { return () => { window.speechSynthesis?.cancel(); clearTimeout(demoTimeoutRef.current); }; }, []);
 
-    // Load voices eagerly and cache them
     useEffect(() => {
-        const loadVoices = () => {
-            voicesRef.current = window.speechSynthesis.getVoices();
-        };
+        const loadVoices = () => { voicesRef.current = window.speechSynthesis.getVoices(); };
         loadVoices();
         if (window.speechSynthesis.onvoiceschanged !== undefined) {
             window.speechSynthesis.onvoiceschanged = loadVoices;
         }
         return () => {
-            if (currentAudioRef.current) {
-                currentAudioRef.current.pause();
-                currentAudioRef.current = null;
-            }
+            if (currentAudioRef.current) { currentAudioRef.current.pause(); currentAudioRef.current = null; }
             window.speechSynthesis.cancel();
             clearTimeout(demoTimeoutRef.current);
         };
     }, []);
 
     const stopSpeech = useCallback(() => {
-        if (currentAudioRef.current) {
-            currentAudioRef.current.pause();
-            currentAudioRef.current = null;
-        }
-        if (window.speechSynthesis) {
-            window.speechSynthesis.cancel();
-        }
+        abortSpeechRef.current = true;
+        if (currentAudioRef.current) { currentAudioRef.current.pause(); currentAudioRef.current = null; }
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
         setIsSpeaking(false);
     }, []);
 
-    // Female voice selector — prioritises named female voices
-    const getFemaleVoice = useCallback(() => {
-        const voices = voicesRef.current;
-        if (!voices.length) return null;
-
-        const preferences = [
-            v => v.name.includes('Jenny') && (v.name.includes('Neural') || v.name.includes('Natural') || v.name.includes('Online')),
-            v => v.name.includes('en-US-JennyNeural'),
-            v => v.name.includes('Jenny'),
-            v => v.name.includes('Microsoft') && v.name.includes('Online'),
-            v => v.lang.startsWith('en-US'),
-            v => v.lang.startsWith('en'),
-        ];
-
-        for (const test of preferences) {
-            const found = voices.find(test);
-            if (found) return found;
-        }
-        return voices[0];
-    }, []);
-
-    // Speech Output with female voice
     const speakText = useCallback(async (text, onFinished) => {
-        if (isMuted) return;
-
+        if (isMuted) { if (onFinished) onFinished(); return; }
         stopSpeech();
+        abortSpeechRef.current = false; // Reset immediately after stopping any prior speech
         const cleanText = String(text || '').replace(/[*#_`~\[\]]/g, '').replace(/<[^>]+>/g, '').trim();
-        if (!cleanText) {
-            if (onFinished) onFinished();
-            return;
-        }
-
+        if (!cleanText) { if (onFinished) onFinished(); return; }
         setIsSpeaking(true);
+        if (!('speechSynthesis' in window)) { setIsSpeaking(false); if (onFinished) onFinished(); return; }
 
-        if (!('speechSynthesis' in window)) {
-            setIsSpeaking(false);
-            if (onFinished) onFinished();
-            return;
-        }
-
-        // Split text into sentences to avoid Chromium long-text cutoff bug
         const sentences = cleanText.match(/[^.!?]+[.!?]*/g) || [cleanText];
         let currentSentence = 0;
 
         const speakNext = () => {
-            // INTERRUPTION CHECK: Stop speaking if demo was stopped or paused
-            if (!isOpen || (isDemoRunning && isDemoPaused) || (!isDemoRunning && isSpeaking && !currentAudioRef.current && !window.speechSynthesis.speaking)) {
-                setIsSpeaking(false);
-                return;
-            }
-
-            if (currentSentence >= sentences.length) {
-                setIsSpeaking(false);
-                if (onFinished) onFinished();
-                return;
-            }
-
+            if (abortSpeechRef.current) { setIsSpeaking(false); return; }
+            if (currentSentence >= sentences.length) { setIsSpeaking(false); if (onFinished) onFinished(); return; }
             const utterance = new SpeechSynthesisUtterance(sentences[currentSentence].trim());
             let voices = window.speechSynthesis.getVoices();
             if (voices.length === 0) voices = voicesRef.current;
-
             const femalePreferences = [
                 v => v.name.includes('Google') && v.name.includes('Female'),
                 v => v.name.includes('Samantha'),
@@ -360,146 +489,110 @@ export function AgenticAssistant({ setCurrentView }) {
                 v => v.name.includes('Microsoft') && v.lang.startsWith('en') && !v.name.includes('David'),
                 v => v.lang.startsWith('en-US'),
             ];
-
             let voiceToUse = null;
-            for (const test of femalePreferences) {
-                const found = voices.find(test);
-                if (found) { voiceToUse = found; break; }
-            }
+            for (const test of femalePreferences) { const found = voices.find(test); if (found) { voiceToUse = found; break; } }
             if (!voiceToUse && voices.length > 0) voiceToUse = voices[0];
             if (voiceToUse) utterance.voice = voiceToUse;
-
             utterance.pitch = 1.1;
             utterance.rate = 1.0;
-
-            utterance.onend = () => {
-                currentSentence++;
-                speakNext();
-            };
-            utterance.onerror = () => {
-                currentSentence++;
-                speakNext();
-            };
-
+            utterance.onend = () => { currentSentence++; speakNext(); };
+            utterance.onerror = () => { currentSentence++; speakNext(); };
             window.speechSynthesis.resume();
             window.speechSynthesis.speak(utterance);
         };
-
         speakNext();
     }, [isMuted, stopSpeech]);
 
-    // Speech Input — auto-sends when done speaking
     const toggleListen = () => {
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
             alert('Voice Input not supported in this browser. Please use Chrome or Edge.');
             return;
         }
-        if (isListening) {
-            recognitionRef.current?.stop();
-            setIsListening(false);
-            return;
-        }
-
+        if (isListening) { recognitionRef.current?.stop(); setIsListening(false); return; }
         const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRec();
         recognitionRef.current = recognition;
         recognition.continuous = false;
         recognition.interimResults = true;
         recognition.lang = 'en-US';
-
         let finalTranscript = '';
-
         recognition.onstart = () => setIsListening(true);
         recognition.onresult = (e) => {
             let interim = '';
             for (let i = e.resultIndex; i < e.results.length; i++) {
-                if (e.results[i].isFinal) {
-                    finalTranscript += e.results[i][0].transcript;
-                } else {
-                    interim += e.results[i][0].transcript;
-                }
+                if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
+                else interim += e.results[i][0].transcript;
             }
             setInput(finalTranscript || interim);
         };
         recognition.onend = () => {
             setIsListening(false);
-            // Auto-submit if we got a transcript
             if (finalTranscript.trim()) {
                 setInput(finalTranscript.trim());
-                // Small delay to let React re-render the input state first
-                setTimeout(() => {
-                    handleSendWithText(finalTranscript.trim());
-                }, 100);
+                setTimeout(() => { handleSendWithText(finalTranscript.trim()); }, 100);
             }
         };
         recognition.onerror = () => setIsListening(false);
-
         setInput('');
         recognition.start();
     };
 
-    // Demo tour runner
+    // ── Demo step runner (uses refs so closures always read live values) ──────
+    const runStep = useCallback((stepIndex) => {
+        if (!isDemoRunningRef.current || isDemoPausedRef.current) return;
+        if (stepIndex >= DEMO_TOUR.length) {
+            isDemoRunningRef.current = false;
+            setIsDemoRunning(false);
+            setDemoStep(0);
+            demoStepRef.current = 0;
+            const endMsg = "That concludes the full Neuro Shell EOS tour. Across all ten modules, you have seen how the four pillars — Cost Optimization, Zero Emissions, OT and IT Threat Handling, and Anomaly Detection — drive every decision. This is the future of intelligent enterprise operations. Thank you.";
+            setMessages(prev => [...prev, { role: 'assistant', content: endMsg, type: 'text' }]);
+            speakText(endMsg);
+            return;
+        }
+
+        const stop = DEMO_TOUR[stepIndex];
+        demoStepRef.current = stepIndex;
+        setDemoStep(stepIndex);
+        if (setCurrentView) setCurrentView(stop.view);
+        if (stop.tab) {
+            setTimeout(() => {
+                window.dispatchEvent(new CustomEvent('DEMO_GOTO_TAB', { detail: { view: stop.view, tab: stop.tab } }));
+            }, 600);
+        }
+        setMessages(prev => [...prev, {
+            role: 'tool_result',
+            content: `Navigating to **${VIEWS[stop.view] || stop.view}**...`,
+            icon: 'navigation',
+            type: 'action'
+        }]);
+        speakText(stop.pitch, () => {
+            if (isDemoRunningRef.current && !isDemoPausedRef.current) {
+                demoTimeoutRef.current = setTimeout(() => {
+                    if (isDemoRunningRef.current && !isDemoPausedRef.current) {
+                        runStep(stepIndex + 1);
+                    }
+                }, 4000);
+            }
+        });
+    }, [setCurrentView, speakText]);
+
     const runDemoTour = useCallback((startStep = 0) => {
-        if (isDemoRunning) return; // Prevent double trigger
-
+        if (isDemoRunningRef.current) return;
+        isDemoRunningRef.current = true;
+        isDemoPausedRef.current = false;
         setIsDemoRunning(true);
+        setIsDemoPaused(false);
         setDemoStep(startStep);
-
-        const runStep = (stepIndex) => {
-            // STOP/PAUSE CHECK: Prevent execution if demo state changed
-            if (!isDemoRunning || isDemoPaused) return;
-
-            if (stepIndex >= DEMO_TOUR.length) {
-                setIsDemoRunning(false);
-                setDemoStep(0);
-                const endMsg = "That concludes the full Neuro Shell tour. As you've seen, every domain is powered by autonomous AI agents, coordinated through the APEX neural fabric. Thank you for your leadership.";
-                setMessages(prev => [...prev, { role: 'assistant', content: endMsg, type: 'text' }]);
-                speakText(endMsg);
-                return;
-            }
-
-            const stop = DEMO_TOUR[stepIndex];
-            setDemoStep(stepIndex);
-
-            // Navigate
-            if (setCurrentView) setCurrentView(stop.view);
-
-            if (stop.tab) {
-                // Wait slightly longer for module to mount before firing tab change
-                setTimeout(() => {
-                    window.dispatchEvent(new CustomEvent('DEMO_GOTO_TAB', {
-                        detail: { view: stop.view, tab: stop.tab }
-                    }));
-                }, 600);
-            }
-
-            // Show nav message
-            setMessages(prev => [...prev, {
-                role: 'tool_result',
-                content: `Navigating to **${VIEWS[stop.view] || stop.view}**...`,
-                icon: 'navigation',
-                type: 'action'
-            }]);
-
-            // Speak and only advance once finish signal is received
-            speakText(stop.pitch, () => {
-                // RE-CHECK RUNNING STATE before scheduling next step
-                if (isDemoRunning && !isDemoPaused) {
-                    demoTimeoutRef.current = setTimeout(() => {
-                        if (isDemoRunning && !isDemoPaused) {
-                            runStep(stepIndex + 1);
-                        }
-                    }, 4000); // 4s finish pause
-                }
-            });
-        };
-
+        demoStepRef.current = startStep;
         runStep(startStep);
-    }, [setCurrentView, speakText, isDemoRunning]);
+    }, [runStep]);
 
     const skipDemo = useCallback(() => {
         clearTimeout(demoTimeoutRef.current);
         window.speechSynthesis?.cancel();
+        isDemoRunningRef.current = false;
+        isDemoPausedRef.current = false;
         setIsDemoRunning(false);
         setIsDemoPaused(false);
         setDemoStep(0);
@@ -511,31 +604,28 @@ export function AgenticAssistant({ setCurrentView }) {
     const pauseDemo = useCallback(() => {
         clearTimeout(demoTimeoutRef.current);
         window.speechSynthesis?.cancel();
+        isDemoPausedRef.current = true;
         setIsDemoPaused(true);
     }, []);
 
     const resumeDemo = useCallback(() => {
+        isDemoPausedRef.current = false;
         setIsDemoPaused(false);
-        // Restart the current step exactly from the beginning
-        runDemoTour(demoStep);
-    }, [demoStep, runDemoTour]);
+        runStep(demoStepRef.current);
+    }, [runStep]);
 
     const toggleMute = () => {
         const nextMuted = !isMuted;
         setIsMuted(nextMuted);
-        if (nextMuted) {
-            stopSpeech();
-        }
+        if (nextMuted) stopSpeech();
     };
 
-    // Execute a tool call and return result string
     const executeTool = useCallback(async (toolName, args) => {
-        // Normalize tool name (handle camelCase, extra spaces, etc.)
         const normalizedName = String(toolName || '').trim()
-            .replace(/([a-z0-9])([A-Z])/g, '$1_$2') // camelCase to snake_case
+            .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
             .toLowerCase();
 
-        console.log(`[APEX Tool Call] Executing: ${normalizedName}`, args);
+        console.log(`[EVA Tool Call] Executing: ${normalizedName}`, args);
 
         switch (normalizedName) {
             case 'navigate_to_view': {
@@ -546,7 +636,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'fetch_domain_data': {
                 const url = DOMAIN_API_MAP[args.domain];
-                if (!url) return JSON.stringify({ error: `Unknown domain: ${args.domain}. Valid domains: ${Object.keys(DOMAIN_API_MAP).join(', ')}` });
+                if (!url) return JSON.stringify({ error: `Unknown domain: ${args.domain}` });
                 try {
                     const res = await fetch(url);
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -559,7 +649,7 @@ export function AgenticAssistant({ setCurrentView }) {
             case 'create_itsm_ticket': {
                 try {
                     const ticketPayload = {
-                        ticket_id: `INC${Math.floor(100000 + Math.random() * 900000)}`,
+                        ticket_id: null,
                         emp_id: args.emp_id || '',
                         short_description: args.short_description || 'AI Reported Incident',
                         description: args.description || 'Auto-generated incident ticket from Agentic Copilot.',
@@ -570,46 +660,57 @@ export function AgenticAssistant({ setCurrentView }) {
                         priority: '3 - Moderate',
                         severity: 'Medium',
                         assignment_group: 'IT-AIOPS-L3',
-                        assigned_to: 'Auto-Dispatch',
                         channel: 'Agentic Copilot',
                         requested_by: 'Agentic Copilot',
+                        requested_for: 'Agentic Copilot',
                         location: 'Agentic Request',
                         shift_timings: 'N/A'
                     };
 
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 15000);
+                    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-                    const res = await fetch('http://localhost:5004/api/tickets', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            ...ticketPayload,
-                            requested_for: ticketPayload.requested_by // Ensure requested_for matches Pydantic expectations if needed
-                        }),
-                        signal: controller.signal
-                    });
+                    let res;
+                    try {
+                        res = await fetch('http://127.0.0.1:5004/api/tickets', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(ticketPayload),
+                            signal: controller.signal
+                        });
+                    } catch (fetchErr) {
+                        clearTimeout(timeoutId);
+                        const isTimeout = fetchErr.name === 'AbortError';
+                        console.error('[ITSM Fetch Error]', fetchErr);
+                        return JSON.stringify({
+                            success: false,
+                            error: isTimeout
+                                ? 'The ITSM service did not respond within 30 seconds. The IT/Ops backend may be overloaded. Please try again in a moment.'
+                                : `Could not connect to ITSM backend (port 5004): ${fetchErr.message}. Ensure the ai-service is running.`
+                        });
+                    }
 
                     clearTimeout(timeoutId);
 
                     if (!res.ok) {
                         const errBody = await res.text();
                         console.error('[ITSM Error]', res.status, errBody);
-                        return JSON.stringify({ success: false, error: `ITSM backend rejected: HTTP ${res.status}: ${errBody}` });
+                        return JSON.stringify({ success: false, error: `ITSM backend returned HTTP ${res.status}: ${errBody}` });
                     }
                     const data = await res.json();
                     console.log('[ITSM Success]', data);
-                    return JSON.stringify({ success: true, action: 'ticket_created', ticket_details: data, ticket_id: ticketPayload.ticket_id });
+                    return JSON.stringify({ success: true, action: 'ticket_created', ticket_details: data, ticket_id: data.ticket_id });
                 } catch (e) {
-                    return JSON.stringify({ success: false, error: e.message });
+                    console.error('[ITSM Unexpected Error]', e);
+                    return JSON.stringify({ success: false, error: `Unexpected error during ticket creation: ${e.message}` });
                 }
             }
             case 'demo_application': {
-                return JSON.stringify({ success: true, action: 'demo_started', message: 'Demo tour initiated. Navigating through all modules now.' });
+                return JSON.stringify({ success: true, action: 'demo_started', message: 'Demo tour initiated.' });
             }
             case 'get_active_alerts': {
                 try {
-                    const res = await fetch('http://localhost:5001/api/fire/alerts');
+                    const res = await fetch('http://127.0.0.1:5001/api/fire/alerts');
                     const fireAlerts = res.ok ? await res.json() : [];
                     const staticAlerts = [
                         { type: 'CRITICAL', domain: 'OT/IT', message: '492K sensor tags offline across 50+ global sites' },
@@ -626,7 +727,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'get_platform_status': {
                 try {
-                    const res = await fetch('http://localhost:5007/api/dashboard');
+                    const res = await fetch('http://127.0.0.1:5007/api/dashboard');
                     if (res.ok) return JSON.stringify(await res.json());
                     return JSON.stringify({ error: 'Core offline' });
                 } catch (e) {
@@ -635,50 +736,91 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'fetch_unified_intelligence': {
                 try {
-                    const res = await fetch('http://localhost:5007/api/unified');
-                    const data = await res.json();
-                    return JSON.stringify(data);
+                    const res = await fetch('http://127.0.0.1:5007/api/unified');
+                    return JSON.stringify(await res.json());
                 } catch (e) {
                     return JSON.stringify({ error: 'Could not reach Unified Data Fabric.' });
                 }
             }
             case 'query_neural_topology': {
                 try {
-                    const res = await fetch('http://localhost:5007/api/kg/agents');
-                    const data = await res.json();
-                    return JSON.stringify(data);
+                    const res = await fetch('http://127.0.0.1:5007/api/kg/agents');
+                    return JSON.stringify(await res.json());
                 } catch (e) {
                     return JSON.stringify({ error: 'Agent Knowledge Graph offline.' });
                 }
             }
+            case 'generate_data_visual': {
+                const domain = args.domain || 'fleet';
+                const chartType = args.chart_type || 'bar';
+                const cfg = CHART_DATA[domain];
+                if (!cfg) return JSON.stringify({ success: false, error: `No chart data available for domain: ${domain}` });
+                // Inject a chart message into the chat
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    type: 'chart',
+                    domain,
+                    chartType,
+                    content: `Here is the **${cfg.title}** visualization:`
+                }]);
+                return JSON.stringify({ success: true, action: 'chart_rendered', domain, title: cfg.title, note: 'Chart rendered inline in the chat panel.' });
+            }
             default:
-                console.error(`[APEX Tool Call Failed] Unknown tool: ${normalizedName}`);
+                console.error(`[EVA Tool Call Failed] Unknown tool: ${normalizedName}`);
                 return JSON.stringify({
                     error: `Unknown tool: ${normalizedName}`,
-                    message: "The tool name you provided is not recognized by the internal execution engine. Please use the exact tool names provided in the system prompt.",
-                    available_tools: [
-                        'navigate_to_view',
-                        'fetch_domain_data',
-                        'get_active_alerts',
-                        'get_platform_status',
-                        'create_itsm_ticket',
-                        'demo_application',
-                        'fetch_unified_intelligence',
-                        'query_neural_topology'
-                    ]
+                    available_tools: ['navigate_to_view', 'fetch_domain_data', 'get_active_alerts', 'get_platform_status', 'create_itsm_ticket', 'demo_application', 'fetch_unified_intelligence', 'query_neural_topology', 'generate_data_visual']
                 });
         }
     }, [setCurrentView]);
 
+    // ── Client-side chart interceptor (bypasses LLM hallucination) ─────────────
+    // Maps domain keywords to chart data keys
+    const CHART_KEYWORD_MAP = [
+        { keys: ['fleet', 'route', 'ship', 'vessel', 'marine', 'fuel sav', 'shipping'], domain: 'fleet' },
+        { keys: ['manufacturing', 'refin', 'plant', 'anomaly detect', 'anomal', 'downtime', 'guardian eye', 'camera'], domain: 'manufacturing' },
+        { keys: ['supply chain', 'supplychain', 'logistics', 'delivery', 'on-time', 'shipment adher'], domain: 'supplychain' },
+        { keys: ['it ops', 'itops', 'ticket deflect', 'itsm', 'aiops', 'escalat'], domain: 'itops' },
+        { keys: ['commercial', 'pric', 'trading', 'brent', 'lng', 'commodity'], domain: 'commercial' },
+        { keys: ['financ', 'close cycle', 'reconcil', 'hedge'], domain: 'finance' },
+        { keys: ['hr', 'workforce', 'headcount', 'demand', 'supply gap'], domain: 'hr' },
+    ];
+    const VISUAL_TRIGGER_WORDS = ['chart', 'graph', 'visual', 'insight', 'show me', 'plot', 'analytics', 'data for', 'metrics for', 'how is', 'trend'];
+
+    const tryLocalChartIntercept = async (userText) => {
+        const lower = userText.toLowerCase();
+        const wantsChart = VISUAL_TRIGGER_WORDS.some(w => lower.includes(w));
+        if (!wantsChart) return false;
+        const match = CHART_KEYWORD_MAP.find(m => m.keys.some(k => lower.includes(k)));
+        if (!match) return false;
+        // Execute the chart tool directly
+        setToolAction({ name: 'generate_data_visual', status: 'running' });
+        await executeTool('generate_data_visual', { domain: match.domain, chart_type: 'bar' });
+        setToolAction(null);
+        const cfg = CHART_DATA[match.domain];
+        const reply = `Here is the **${cfg?.title || match.domain + ' chart'}**. This shows live performance data for the ${match.domain} domain — a key pillar of the Neuro Shell EOS.`;
+        setMessages(prev => [...prev, { role: 'assistant', content: reply, type: 'text' }]);
+        chatHistoryRef.current.push({ role: 'user', content: userText });
+        chatHistoryRef.current.push({ role: 'assistant', content: reply });
+        speakText(reply);
+        return true;
+    };
+
     const handleSendWithText = async (text) => {
         if (!text?.trim() || isThinking) return;
-
         const userText = text.trim();
         setInput('');
         setIsThinking(true);
         setToolAction(null);
-
         setMessages(prev => [...prev, { role: 'user', content: userText, type: 'text' }]);
+
+        // Try local chart interception first (avoids LLM hallucinating fake images)
+        const intercepted = await tryLocalChartIntercept(userText);
+        if (intercepted) {
+            setIsThinking(false);
+            return;
+        }
+
         chatHistoryRef.current.push({ role: 'user', content: userText });
 
         try {
@@ -690,7 +832,7 @@ export function AgenticAssistant({ setCurrentView }) {
                 iterations++;
 
                 const openRouterController = new AbortController();
-                const orTimeout = setTimeout(() => openRouterController.abort(), 20000);
+                const orTimeout = setTimeout(() => openRouterController.abort(), 25000);
 
                 const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                     method: 'POST',
@@ -698,18 +840,18 @@ export function AgenticAssistant({ setCurrentView }) {
                         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
                         'Content-Type': 'application/json',
                         'HTTP-Referer': 'http://localhost:5173',
-                        'X-Title': 'Neuro Shell ERP'
+                        'X-Title': 'Neuro Shell EOS'
                     },
                     body: JSON.stringify({
                         model: MODEL,
                         messages: [
                             { role: 'system', content: SYSTEM_PROMPT },
-                            ...chatHistoryRef.current.slice(-15) // Keep context manageable
+                            ...chatHistoryRef.current.slice(-15)
                         ],
                         tools: TOOLS,
                         tool_choice: 'auto',
                         temperature: 0.35,
-                        max_tokens: 1500, // Prevent over-requesting credits
+                        max_tokens: 1500,
                     }),
                     signal: openRouterController.signal
                 });
@@ -733,64 +875,34 @@ export function AgenticAssistant({ setCurrentView }) {
                     const toolName = toolCalls[0].function.name;
                     setToolAction({ name: toolName, status: 'running' });
 
-                    // Check if this is a demo trigger
                     const demoCall = toolCalls.find(tc => tc.function.name === 'demo_application');
                     if (demoCall) {
-                        // Execute the tool to get confirmaton result
                         const result = await executeTool('demo_application', {});
-                        chatHistoryRef.current.push({
-                            role: 'tool',
-                            tool_call_id: demoCall.id,
-                            name: 'demo_application',
-                            content: result
-                        });
+                        chatHistoryRef.current.push({ role: 'tool', tool_call_id: demoCall.id, name: 'demo_application', content: result });
                         setToolAction({ name: 'demo_application', status: 'done' });
                         continueLoop = false;
-
-                        // Trigger demo after a brief pause
-                        const introMsg = "Absolutely! Starting the full guided tour of Neuro Shell right now. I'll walk you through every major module and explain its purpose and advantages. Let's begin.";
+                        const introMsg = "Launching the full Neuro Shell EOS tour right now. I will walk you through all ten modules, anchored to our four pillars: Cost Optimization, Zero Emissions, OT and IT Threat Handling, and Anomaly Detection. Let's begin.";
                         setMessages(prev => [...prev, { role: 'assistant', content: introMsg, type: 'text' }]);
                         chatHistoryRef.current.push({ role: 'assistant', content: introMsg });
-                        speakText(introMsg, () => {
-                            setTimeout(() => runDemoTour(0), 1000);
-                        });
+                        speakText(introMsg, () => { setTimeout(() => runDemoTour(0), 1000); });
                         break;
                     }
 
-                    // Execute all tool calls
                     const toolResults = await Promise.all(
                         toolCalls.map(async (tc) => {
                             let args = {};
                             try { args = JSON.parse(tc.function.arguments); } catch { }
                             const result = await executeTool(tc.function.name, args);
 
-                            // Show navigation feedback in chat
                             if (tc.function.name === 'navigate_to_view') {
                                 const viewName = VIEWS[args.view_id] || args.view_id;
-                                setMessages(prev => [...prev, {
-                                    role: 'tool_result',
-                                    content: `Navigated to **${viewName}**`,
-                                    icon: 'navigation',
-                                    type: 'action'
-                                }]);
+                                setMessages(prev => [...prev, { role: 'tool_result', content: `Navigated to **${viewName}**`, icon: 'navigation', type: 'action' }]);
                             }
-
-                            // Show ticket creation feedback
                             if (tc.function.name === 'create_itsm_ticket') {
-                                setMessages(prev => [...prev, {
-                                    role: 'tool_result',
-                                    content: `Raising ITSM ticket...`,
-                                    icon: 'ticket',
-                                    type: 'action'
-                                }]);
+                                setMessages(prev => [...prev, { role: 'tool_result', content: `Raising ITSM ticket...`, icon: 'ticket', type: 'action' }]);
                             }
 
-                            return {
-                                role: 'tool',
-                                tool_call_id: tc.id,
-                                name: tc.function.name,
-                                content: result
-                            };
+                            return { role: 'tool', tool_call_id: tc.id, name: tc.function.name, content: result };
                         })
                     );
 
@@ -799,7 +911,13 @@ export function AgenticAssistant({ setCurrentView }) {
 
                 } else {
                     continueLoop = false;
-                    const content = assistantMsg.content || '(No response)';
+                    let content = assistantMsg.content || '(No response)';
+                    // Strip hallucinated base64 image markdown that DeepSeek sometimes generates
+                    content = content
+                        .replace(/!\[([^\]]*?)\]\(data:[^)]+\)/g, '')
+                        .replace(/!\[([^\]]*?)\]\([^)]*base64[^)]*\)/g, '')
+                        .replace(/\(data:image\/[^)]+\)/g, '')
+                        .trim();
                     setMessages(prev => [...prev, { role: 'assistant', content, type: 'text' }]);
                     speakText(content);
                 }
@@ -812,7 +930,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
 
         } catch (err) {
-            console.error('APEX error:', err);
+            console.error('EVA error:', err);
             const errMsg = `I encountered an issue: ${err.message.includes('abort') ? 'the request took too long. Please try again.' : err.message}`;
             setMessages(prev => [...prev, { role: 'assistant', content: errMsg, type: 'error' }]);
         } finally {
@@ -821,35 +939,30 @@ export function AgenticAssistant({ setCurrentView }) {
         }
     };
 
-    const handleSend = async (e) => {
-        e?.preventDefault();
-        await handleSendWithText(input);
-    };
-
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSend();
-        }
-    };
+    const handleSend = async (e) => { e?.preventDefault(); await handleSendWithText(input); };
+    const handleKeyDown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
 
     const renderMessageContent = (content) => {
         if (!content) return null;
-        return content
-            .split('\n')
-            .map((line, i) => {
-                const formatted = line
-                    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*(.+?)\*/g, '<em>$1</em>');
-                return <p key={i} className={i > 0 ? 'mt-1' : ''} dangerouslySetInnerHTML={{ __html: formatted || '&nbsp;' }} />;
-            });
+        // Strip any hallucinated base64/data-URI image markdown before rendering
+        const clean = content
+            .replace(/!\[([^\]]*?)\]\(data:[^)]+\)/g, '')
+            .replace(/!\[([^\]]*?)\]\([^)]*base64[^)]*\)/g, '')
+            .replace(/\(data:image\/[^)]+\)/g, '')
+            .trim();
+        return clean.split('\n').map((line, i) => {
+            const formatted = line
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>');
+            return <p key={i} className={i > 0 ? 'mt-1' : ''} dangerouslySetInnerHTML={{ __html: formatted || '&nbsp;' }} />;
+        });
     };
 
     const suggestedPrompts = [
         'Give me a demo of the app',
+        'Show fleet optimization insight',
         'Create a ticket',
-        'Show active alerts',
-        'Go to Manufacturing',
+        'Show IT/Ops threat chart',
     ];
 
     return (
@@ -861,19 +974,19 @@ export function AgenticAssistant({ setCurrentView }) {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 24, scale: 0.96 }}
                         transition={{ duration: 0.22, ease: 'easeOut' }}
-                        className="fixed bottom-24 right-6 w-[440px] max-w-[calc(100vw-2rem)] h-[580px] max-h-[82vh] bg-white rounded-2xl shadow-2xl border border-gray-200 z-[11001] flex flex-col overflow-hidden"
+                        className="fixed bottom-24 right-6 w-[460px] max-w-[calc(100vw-2rem)] h-[620px] max-h-[86vh] bg-white rounded-2xl shadow-2xl border border-gray-200 z-[11001] flex flex-col overflow-hidden"
                     >
                         {/* Header */}
                         <div className="bg-gradient-to-r from-shell-red via-[#c41c20] to-[#9b1214] p-4 flex justify-between items-center text-white shrink-0">
                             <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 flex items-center justify-center backdrop-blur-sm">
-                                    <img src="/src/assets/shell-logo.png" alt="APEX Logo" className="w-full h-full object-contain" />
+                                <div className="w-9 h-9 flex items-center justify-center">
+                                    <img src="/src/assets/shell-logo.png" alt="EVA Logo" className="w-full h-full object-contain" />
                                 </div>
                                 <div>
-                                    <h3 className="font-extrabold text-[15px] leading-tight tracking-tight">APEX Agent</h3>
+                                    <h3 className="font-extrabold text-[15px] leading-tight tracking-tight">EVA Agent</h3>
                                     <div className="flex items-center gap-1.5 mt-0.5">
                                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                                        <p className="text-[10px] text-white/80 font-mono tracking-widest uppercase">Neuro Shell · Fully Agentic</p>
+                                        <p className="text-[10px] text-white/80 font-mono tracking-widest uppercase">Neuro Shell EOS · Fully Agentic</p>
                                     </div>
                                 </div>
                             </div>
@@ -908,10 +1021,7 @@ export function AgenticAssistant({ setCurrentView }) {
                                                 <Pause className="w-3 h-3" /> Pause
                                             </button>
                                         )}
-                                        <button
-                                            onClick={skipDemo}
-                                            className="flex items-center gap-1 px-2 py-1 text-[10px] font-black text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-md uppercase tracking-widest transition-all"
-                                        >
+                                        <button onClick={skipDemo} className="flex items-center gap-1 px-2 py-1 text-[10px] font-black text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-md uppercase tracking-widest transition-all">
                                             <SkipForward className="w-3 h-3" /> Stop
                                         </button>
                                     </div>
@@ -937,11 +1047,20 @@ export function AgenticAssistant({ setCurrentView }) {
                                     ) : msg.role === 'tool_result' ? (
                                         <div className="flex justify-center">
                                             <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-800 rounded-full px-3 py-1.5 text-[11px] font-mono font-medium">
-                                                {msg.icon === 'ticket'
-                                                    ? <Ticket className="w-3.5 h-3.5" />
-                                                    : <Navigation className="w-3.5 h-3.5" />
-                                                }
+                                                {msg.icon === 'ticket' ? <Ticket className="w-3.5 h-3.5" /> : <Navigation className="w-3.5 h-3.5" />}
                                                 {renderMessageContent(msg.content)}
+                                            </div>
+                                        </div>
+                                    ) : msg.type === 'chart' ? (
+                                        <div className="flex gap-2.5 items-start">
+                                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-shell-red to-[#b2171b] flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                                                <BarChart3 className="w-3.5 h-3.5 text-shell-yellow" />
+                                            </div>
+                                            <div className="flex-1 max-w-[88%] bg-white border border-gray-100 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+                                                <div className="text-[13.5px] leading-relaxed text-gray-800 mb-1">
+                                                    {renderMessageContent(msg.content)}
+                                                </div>
+                                                <InlineChart domain={msg.domain} chartType={msg.chartType} />
                                             </div>
                                         </div>
                                     ) : (
@@ -962,7 +1081,6 @@ export function AgenticAssistant({ setCurrentView }) {
                                 </motion.div>
                             ))}
 
-                            {/* Thinking Indicator */}
                             {isThinking && (
                                 <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2.5 items-start">
                                     <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-shell-red to-[#b2171b] flex items-center justify-center shrink-0 shadow-sm">
@@ -1012,11 +1130,10 @@ export function AgenticAssistant({ setCurrentView }) {
                                 <button
                                     onClick={toggleMute}
                                     className={`p-1.5 rounded-md hover:bg-gray-100 transition-colors ${isMuted ? 'text-red-500' : 'text-gray-500'}`}
-                                    title={isMuted ? "Unmute APEX Voice" : "Mute APEX Voice"}
+                                    title={isMuted ? "Unmute EVA Voice" : "Mute EVA Voice"}
                                 >
                                     {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                                 </button>
-
                                 {isSpeaking && (
                                     <button
                                         onClick={stopSpeech}
@@ -1044,7 +1161,7 @@ export function AgenticAssistant({ setCurrentView }) {
                                     onChange={e => setInput(e.target.value)}
                                     onKeyDown={handleKeyDown}
                                     disabled={isThinking || isDemoRunning}
-                                    placeholder={isListening ? "Listening..." : isDemoRunning ? "Demo in progress..." : "Ask APEX anything..."}
+                                    placeholder={isListening ? "Listening..." : isDemoRunning ? "Demo in progress..." : "Ask EVA anything..."}
                                     rows={1}
                                     className={`flex-1 bg-gray-100 border-none rounded-xl px-4 py-2.5 text-[13.5px] focus:ring-2 focus:ring-shell-yellow/40 focus:bg-white transition-colors outline-none resize-none leading-relaxed disabled:opacity-50 ${isListening ? 'bg-red-50 focus:bg-red-50 text-red-900 placeholder:text-red-300' : ''}`}
                                     style={{ minHeight: '42px', maxHeight: '120px', overflowY: 'auto' }}
@@ -1058,9 +1175,9 @@ export function AgenticAssistant({ setCurrentView }) {
                                 </button>
                             </div>
                             <div className="flex items-center justify-between mt-1.5 px-1">
-                                <span className="text-[9.5px] text-gray-400 font-mono flex items-center gap-1">
-                                    APEX · <Mic className="w-2.5 h-2.5 inline" /> Voice-First · Female Voice
-                                </span>
+                                <div className="flex items-center gap-1.5 text-slate-500 font-mono text-[9px] uppercase tracking-tighter">
+                                    EVA · <Mic className="w-2.5 h-2.5 inline" /> Voice-First · Charts · Tickets
+                                </div>
                                 <div className="flex items-center gap-1 text-[9.5px] text-gray-400 font-mono">
                                     <CornerDownLeft className="w-2.5 h-2.5" />
                                     <span>Enter to send</span>
@@ -1094,7 +1211,6 @@ export function AgenticAssistant({ setCurrentView }) {
                         </motion.div>
                     )}
                 </AnimatePresence>
-                {/* Pulse Ring */}
                 {!isOpen && (
                     <span className="absolute inset-0 rounded-2xl animate-ping bg-shell-red/30 pointer-events-none" />
                 )}

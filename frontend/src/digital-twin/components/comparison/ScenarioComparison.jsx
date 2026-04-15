@@ -22,10 +22,10 @@ export function ScenarioComparison() {
   const renderDiff = (activeVal, compareVal, invertGood = false) => {
     const diff = activeVal - compareVal;
     if (diff === 0) return <Minus size={14} className="text-slate-500" />;
-    
+
     const isPositive = diff > 0;
     const isGood = invertGood ? !isPositive : isPositive;
-    
+
     return (
       <div className={`flex items-center gap-1 text-xs font-medium ${isGood ? 'text-emerald-400' : 'text-red-400'}`}>
         {isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
@@ -35,7 +35,7 @@ export function ScenarioComparison() {
   };
 
   return (
-    <div className="flex-1 flex flex-col w-full bg-slate-950 p-6 overflow-y-auto custom-scrollbar min-h-0">
+    <div className="w-full flex flex-col bg-slate-950 p-6">
       <div className="mb-6 flex justify-between items-center">
         <div>
           <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
@@ -44,7 +44,7 @@ export function ScenarioComparison() {
           </h2>
           <p className="text-sm text-slate-500 mt-1">Analyze KPI impacts between baseline operations and simulated scenarios.</p>
         </div>
-        
+
         {comparisonScenarioId && (
           <button
             onClick={() => setComparisonScenario(null)}
@@ -65,9 +65,9 @@ export function ScenarioComparison() {
             >
               {scenarios.map(s => <option key={s.id} value={s.id}>{s.name} {s.isBaseline ? '(Baseline)' : ''}</option>)}
             </select>
-            
+
             <div className="flex items-center justify-center -mx-2 z-10 w-8">
-               <span className="bg-slate-950 border border-slate-800 text-slate-400 text-xs px-2 py-1 rounded-full font-bold">VS</span>
+              <span className="bg-slate-950 border border-slate-800 text-slate-400 text-xs px-2 py-1 rounded-full font-bold">VS</span>
             </div>
 
             <select

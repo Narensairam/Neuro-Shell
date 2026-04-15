@@ -6,9 +6,9 @@ import { PlantTopology } from '../topology/PlantTopology';
 import { PlantView3D } from '../three/PlantView3D';
 import { NodeDetailPanel } from '../details/NodeDetailPanel';
 import { ScenarioComparison } from '../comparison/ScenarioComparison';
-import { 
-  Hexagon, 
-  Settings2, 
+import {
+  Hexagon,
+  Settings2,
   Menu,
   LayoutDashboard,
   Network,
@@ -28,7 +28,7 @@ const TABS = [
 
 export function AppLayout() {
   const { activeTab, setActiveTab, isLoading } = usePlantStore();
-  
+
   if (isLoading) {
     return (
       <div className="h-full w-full flex flex-col items-center justify-center bg-slate-950 text-cyan-500 rounded-lg">
@@ -75,33 +75,32 @@ export function AppLayout() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all text-left ${
-                  isActive 
-                  ? 'bg-slate-800/50 text-cyan-300 border-l-2 border-cyan-500' 
-                  : 'text-slate-400 border-l-2 border-transparent hover:text-slate-200 hover:bg-slate-800/30'
-                }`}
+                className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all text-left ${isActive
+                    ? 'bg-slate-800/50 text-cyan-300 border-l-2 border-cyan-500'
+                    : 'text-slate-400 border-l-2 border-transparent hover:text-slate-200 hover:bg-slate-800/30'
+                  }`}
               >
                 <tab.icon size={18} className={isActive ? 'text-cyan-400' : 'text-slate-500'} />
                 {tab.label}
               </button>
             )
           })}
-          
+
           <div className="mt-auto px-4 py-4">
             <div className="bg-slate-900/50 border border-slate-800 rounded flex flex-col p-3 gap-2">
-               <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
-                  <Activity size={14} className="text-emerald-500"/> System Online
-               </div>
-               <div className="text-[10px] text-slate-500 uppercase tracking-widest">
-                 Latency: 24ms
-               </div>
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
+                <Activity size={14} className="text-emerald-500" /> System Online
+              </div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-widest">
+                Latency: 24ms
+              </div>
             </div>
           </div>
         </aside>
 
         {/* Dynamic Content Area */}
         <main className="flex-1 relative bg-slate-950 overflow-hidden flex flex-col min-h-0">
-          <div className="flex-1 relative flex flex-col">
+          <div className="flex-1 relative flex flex-col min-h-0 overflow-y-auto custom-scrollbar">
             {renderContent()}
           </div>
           {/* Node Details Overlay only for Topology view */}
