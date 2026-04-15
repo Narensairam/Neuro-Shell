@@ -9,7 +9,7 @@
       "production_boe_day": 3400000
     },
     "health_index": 98.4,
-    "last_sync": "2026-04-15T04:53:37.974Z",
+    "last_sync": "2026-04-15T06:40:58.773Z",
     "process_heatmap": [
       {
         "id": "refining",
@@ -1130,9 +1130,9 @@
     }
   },
   "itops_stats": {
-    "total_tickets": 400,
-    "deflection_rate": 98.5,
-    "critical_alerts": 6,
+    "total_tickets": 418,
+    "deflection_rate": 95.2,
+    "critical_alerts": 20,
     "ot_threats": 40,
     "shadow_devices": 2,
     "avg_resolution_time_hrs": 4.2
