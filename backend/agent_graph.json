@@ -1,9 +1,9 @@
 {
   "nodes": [
     {
-      "id": "APEX",
+      "id": "EVA",
       "type": "Orchestrator",
-      "name": "APEX Master Brain",
+      "name": "EVA Master Brain",
       "domain": "Enterprise-Wide",
       "port": 5000,
       "capabilities": ["Navigation", "Cross-Domain Reasoning", "Service Orchestration"],

@@ -47,6 +47,7 @@ const DEMO_TOUR = [
     },
     {
         view: 'digitaltwin',
+        tab: '3d',
         pitch: "Pillar One — Cost Optimization begins here in the Asset Digital Twin. Specialized AI agents continuously ingest live IoT vibration and temperature data from our physical assets. When a compressor shows early-stage anomaly signatures, the system predicts a mechanical failure up to seventy-two hours in advance. This eliminates unplanned shutdown costs and is also our Pillar Four — Anomaly Detection — operating in real time across the plant floor.",
     },
     {

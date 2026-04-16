@@ -73,10 +73,17 @@ export function AgentTopologyView() {
         const centerY = 280;
         const radius = 220;
 
-        return graph.nodes.map((node, i) => {
-            if (node.id === 'EVA') return { ...node, x: centerX, y: centerY };
+        const orchestrator = graph.nodes.find(n => n.type === 'Orchestrator' || n.id === 'EVA' || n.id === 'APEX');
+        const otherNodes = graph.nodes.filter(n => n.id !== orchestrator?.id);
+        
+        return graph.nodes.map((node) => {
+            if (node.id === orchestrator?.id) {
+                return { ...node, x: centerX, y: centerY };
+            }
             
-            const angle = ((i - 1) * (2 * Math.PI)) / (graph.nodes.length - 1);
+            const nodeIndex = otherNodes.findIndex(n => n.id === node.id);
+            const angle = (nodeIndex * (2 * Math.PI)) / otherNodes.length;
+            
             return {
                 ...node,
                 x: centerX + radius * Math.cos(angle - Math.PI / 2),
