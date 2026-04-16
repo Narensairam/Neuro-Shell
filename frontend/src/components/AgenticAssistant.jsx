@@ -242,108 +242,426 @@ const DOMAIN_API_MAP = {
     fire: 'http://localhost:5001/api/fire/alerts',
 };
 
-// ─── Static chart data for each domain ────────────────────────────────────────
+// ─── Static chart data — multi-metric per domain ──────────────────────────────
+// Each domain has multiple named charts. Keys are the "metric" slugs the LLM
+// or client intercept passes in. A special key "_default" is used as fallback.
 const CHART_DATA = {
+    // ── Fleet / Supply Chain routes ──────────────────────────────────────────
     fleet: {
-        title: 'Fleet Route Optimization — Fuel Savings (MT)',
-        data: [
-            { name: 'Jan', baseline: 4200, optimized: 3100, saving: 1100 },
-            { name: 'Feb', baseline: 3900, optimized: 2850, saving: 1050 },
-            { name: 'Mar', baseline: 4500, optimized: 3200, saving: 1300 },
-            { name: 'Apr', baseline: 4100, optimized: 2900, saving: 1200 },
-            { name: 'May', baseline: 4700, optimized: 3350, saving: 1350 },
-            { name: 'Jun', baseline: 4300, optimized: 3050, saving: 1250 },
-        ],
-        bars: [
-            { key: 'baseline', color: '#94a3b8', label: 'Pre-AI Fuel (MT)' },
-            { key: 'optimized', color: '#FBCE07', label: 'AI-Optimized (MT)' },
-            { key: 'saving', color: '#22c55e', label: 'Savings (MT)' },
-        ],
+        _default: 'fuel_savings',
+        fuel_savings: {
+            title: 'Fleet Route Optimization — Fuel Savings (MT)',
+            data: [
+                { name: 'Jan', baseline: 4200, optimized: 3100, saving: 1100 },
+                { name: 'Feb', baseline: 3900, optimized: 2850, saving: 1050 },
+                { name: 'Mar', baseline: 4500, optimized: 3200, saving: 1300 },
+                { name: 'Apr', baseline: 4100, optimized: 2900, saving: 1200 },
+                { name: 'May', baseline: 4700, optimized: 3350, saving: 1350 },
+                { name: 'Jun', baseline: 4300, optimized: 3050, saving: 1250 },
+            ],
+            bars: [
+                { key: 'baseline', color: '#94a3b8', label: 'Pre-AI Fuel (MT)' },
+                { key: 'optimized', color: '#FBCE07', label: 'AI-Optimized (MT)' },
+                { key: 'saving', color: '#22c55e', label: 'Savings (MT)' },
+            ],
+        },
+        carbon_emission: {
+            title: 'Fleet — Carbon Emission Reduction (tCO₂)',
+            data: [
+                { name: 'Jan', before: 5200, after: 4600, saved: 600 },
+                { name: 'Feb', before: 5000, after: 4350, saved: 650 },
+                { name: 'Mar', before: 5400, after: 4700, saved: 700 },
+                { name: 'Apr', before: 5100, after: 4400, saved: 700 },
+                { name: 'May', before: 5600, after: 4800, saved: 800 },
+                { name: 'Jun', before: 5300, after: 4550, saved: 750 },
+            ],
+            bars: [
+                { key: 'before', color: '#ef4444', label: 'Pre-AI Emissions (tCO₂)' },
+                { key: 'after', color: '#22c55e', label: 'AI-Optimized (tCO₂)' },
+                { key: 'saved', color: '#06b6d4', label: 'CO₂ Saved (tCO₂)' },
+            ],
+        },
+        demurrage: {
+            title: 'Fleet — Demurrage Cost Savings ($k)',
+            data: [
+                { name: 'Jan', cost: 420, ai_avoided: 310 },
+                { name: 'Feb', cost: 390, ai_avoided: 280 },
+                { name: 'Mar', cost: 450, ai_avoided: 330 },
+                { name: 'Apr', cost: 410, ai_avoided: 300 },
+                { name: 'May', cost: 470, ai_avoided: 350 },
+                { name: 'Jun', cost: 430, ai_avoided: 310 },
+            ],
+            bars: [
+                { key: 'cost', color: '#ef4444', label: 'Baseline Cost ($k)' },
+                { key: 'ai_avoided', color: '#FBCE07', label: 'AI-Avoided ($k)' },
+            ],
+        },
     },
+    // ── Manufacturing ────────────────────────────────────────────────────────
     manufacturing: {
-        title: 'Manufacturing — Anomaly Detection Events vs Downtime (hrs)',
-        data: [
-            { name: 'Jan', anomalies: 18, downtime: 14 },
-            { name: 'Feb', anomalies: 22, downtime: 9 },
-            { name: 'Mar', anomalies: 15, downtime: 6 },
-            { name: 'Apr', anomalies: 28, downtime: 4 },
-            { name: 'May', anomalies: 12, downtime: 2 },
-            { name: 'Jun', anomalies: 9,  downtime: 1 },
-        ],
-        bars: [
-            { key: 'anomalies', color: '#f59e0b', label: 'Anomalies Caught' },
-            { key: 'downtime',  color: '#ef4444', label: 'Downtime (hrs)' },
-        ],
+        _default: 'anomaly_detection',
+        anomaly_detection: {
+            title: 'Manufacturing — Anomaly Detection Events vs Downtime (hrs)',
+            data: [
+                { name: 'Jan', anomalies: 18, downtime: 14 },
+                { name: 'Feb', anomalies: 22, downtime: 9 },
+                { name: 'Mar', anomalies: 15, downtime: 6 },
+                { name: 'Apr', anomalies: 28, downtime: 4 },
+                { name: 'May', anomalies: 12, downtime: 2 },
+                { name: 'Jun', anomalies: 9,  downtime: 1 },
+            ],
+            bars: [
+                { key: 'anomalies', color: '#f59e0b', label: 'Anomalies Caught' },
+                { key: 'downtime',  color: '#ef4444', label: 'Downtime (hrs)' },
+            ],
+        },
+        yield_optimization: {
+            title: 'Manufacturing — Yield Optimization (%)',
+            data: [
+                { name: 'Jan', baseline: 81, optimized: 84 },
+                { name: 'Feb', baseline: 82, optimized: 85 },
+                { name: 'Mar', baseline: 80, optimized: 84.5 },
+                { name: 'Apr', baseline: 83, optimized: 86 },
+                { name: 'May', baseline: 84, optimized: 87 },
+                { name: 'Jun', baseline: 85, optimized: 88 },
+            ],
+            bars: [
+                { key: 'baseline', color: '#94a3b8', label: 'Pre-AI Yield (%)' },
+                { key: 'optimized', color: '#22c55e', label: 'AI-Optimized Yield (%)' },
+            ],
+        },
+        predictive_maintenance: {
+            title: 'Manufacturing — Predictive Maintenance: Failures Prevented',
+            data: [
+                { name: 'Jan', predicted: 8, avoided: 7 },
+                { name: 'Feb', predicted: 11, avoided: 10 },
+                { name: 'Mar', predicted: 9, avoided: 9 },
+                { name: 'Apr', predicted: 14, avoided: 13 },
+                { name: 'May', predicted: 12, avoided: 12 },
+                { name: 'Jun', predicted: 10, avoided: 10 },
+            ],
+            bars: [
+                { key: 'predicted', color: '#f59e0b', label: 'Predicted Failures' },
+                { key: 'avoided', color: '#22c55e', label: 'Failures Avoided' },
+            ],
+        },
+        emission_reduction: {
+            title: 'Manufacturing — Flaring & Emission Events Reduced',
+            data: [
+                { name: 'Jan', events: 24, reduced: 9 },
+                { name: 'Feb', events: 20, reduced: 11 },
+                { name: 'Mar', events: 18, reduced: 14 },
+                { name: 'Apr', events: 15, reduced: 13 },
+                { name: 'May', events: 11, reduced: 10 },
+                { name: 'Jun', events: 8, reduced: 8 },
+            ],
+            bars: [
+                { key: 'events', color: '#ef4444', label: 'Total Emission Events' },
+                { key: 'reduced', color: '#22c55e', label: 'AI-Reduced Events' },
+            ],
+        },
     },
+    // ── Supply Chain ─────────────────────────────────────────────────────────
     supplychain: {
-        title: 'Supply Chain — On-Time Delivery Rate (%)',
-        data: [
-            { name: 'Q1 23', rate: 74 },
-            { name: 'Q2 23', rate: 79 },
-            { name: 'Q3 23', rate: 83 },
-            { name: 'Q4 23', rate: 87 },
-            { name: 'Q1 24', rate: 91 },
-            { name: 'Q2 24', rate: 95 },
-        ],
-        bars: [{ key: 'rate', color: '#06b6d4', label: 'On-Time Rate (%)' }],
+        _default: 'on_time_delivery',
+        on_time_delivery: {
+            title: 'Supply Chain — On-Time Delivery Rate (%)',
+            data: [
+                { name: 'Q1 23', rate: 74 },
+                { name: 'Q2 23', rate: 79 },
+                { name: 'Q3 23', rate: 83 },
+                { name: 'Q4 23', rate: 87 },
+                { name: 'Q1 24', rate: 91 },
+                { name: 'Q2 24', rate: 95 },
+            ],
+            bars: [{ key: 'rate', color: '#06b6d4', label: 'On-Time Rate (%)' }],
+        },
+        fleet_cost: {
+            title: 'Supply Chain — Fleet Cost Reduction (%)',
+            data: [
+                { name: 'Q1 23', baseline: 100, ai: 97 },
+                { name: 'Q2 23', baseline: 100, ai: 95 },
+                { name: 'Q3 23', baseline: 100, ai: 93.5 },
+                { name: 'Q4 23', baseline: 100, ai: 92.2 },
+                { name: 'Q1 24', baseline: 100, ai: 91.8 },
+            ],
+            bars: [
+                { key: 'baseline', color: '#94a3b8', label: 'Baseline Index' },
+                { key: 'ai', color: '#22c55e', label: 'AI-Optimized Index' },
+            ],
+        },
+        contractor_adherence: {
+            title: 'Supply Chain — Contractor Adherence Rate (%)',
+            data: [
+                { name: 'Maersk', adherence: 96 },
+                { name: 'Shell Maritime', adherence: 98 },
+                { name: 'Independents', adherence: 74 },
+                { name: 'Charter Fleet', adherence: 82 },
+            ],
+            bars: [{ key: 'adherence', color: '#FBCE07', label: 'Adherence (%)' }],
+        },
+        carbon_footprint: {
+            title: 'Supply Chain — Carbon Footprint Saved (kT CO₂)',
+            data: [
+                { name: 'Jan', saved: 1.8 },
+                { name: 'Feb', saved: 2.1 },
+                { name: 'Mar', saved: 2.4 },
+                { name: 'Apr', saved: 2.0 },
+                { name: 'May', saved: 2.7 },
+                { name: 'Jun', saved: 2.9 },
+            ],
+            bars: [{ key: 'saved', color: '#06b6d4', label: 'CO₂ Saved (kT)' }],
+        },
     },
+    // ── IT Ops ───────────────────────────────────────────────────────────────
     itops: {
-        title: 'IT/Ops — ITSM Ticket Deflection Rate (%)',
-        data: [
-            { name: 'Week 1', deflected: 52, escalated: 48 },
-            { name: 'Week 2', deflected: 61, escalated: 39 },
-            { name: 'Week 3', deflected: 72, escalated: 28 },
-            { name: 'Week 4', deflected: 83, escalated: 17 },
-            { name: 'Week 5', deflected: 89, escalated: 11 },
-            { name: 'Week 6', deflected: 94, escalated: 6  },
-        ],
-        bars: [
-            { key: 'deflected', color: '#22c55e', label: 'AI Deflected (%)' },
-            { key: 'escalated', color: '#ef4444', label: 'Escalated (%)' },
-        ],
+        _default: 'ticket_deflection',
+        ticket_deflection: {
+            title: 'IT/Ops — ITSM Ticket Deflection Rate (%)',
+            data: [
+                { name: 'Week 1', deflected: 52, escalated: 48 },
+                { name: 'Week 2', deflected: 61, escalated: 39 },
+                { name: 'Week 3', deflected: 72, escalated: 28 },
+                { name: 'Week 4', deflected: 83, escalated: 17 },
+                { name: 'Week 5', deflected: 89, escalated: 11 },
+                { name: 'Week 6', deflected: 94, escalated: 6  },
+            ],
+            bars: [
+                { key: 'deflected', color: '#22c55e', label: 'AI Deflected (%)' },
+                { key: 'escalated', color: '#ef4444', label: 'Escalated (%)' },
+            ],
+        },
+        threat_response: {
+            title: 'IT/Ops — Cyber Threat Response Time (seconds)',
+            data: [
+                { name: 'Jan', manual: 1800, ai: 42 },
+                { name: 'Feb', manual: 1750, ai: 36 },
+                { name: 'Mar', manual: 1600, ai: 28 },
+                { name: 'Apr', manual: 1500, ai: 22 },
+                { name: 'May', manual: 1400, ai: 16 },
+                { name: 'Jun', manual: 1300, ai: 14 },
+            ],
+            bars: [
+                { key: 'manual', color: '#ef4444', label: 'Manual Response (s)' },
+                { key: 'ai', color: '#22c55e', label: 'AI Response (s)' },
+            ],
+        },
+        sensor_coverage: {
+            title: 'IT/Ops — OT Sensor Tag Coverage (thousands)',
+            data: [
+                { name: 'Q1 23', monitored: 280, total: 450 },
+                { name: 'Q2 23', monitored: 330, total: 460 },
+                { name: 'Q3 23', monitored: 390, total: 470 },
+                { name: 'Q4 23', monitored: 430, total: 480 },
+                { name: 'Q1 24', monitored: 470, total: 490 },
+                { name: 'Q2 24', monitored: 500, total: 500 },
+            ],
+            bars: [
+                { key: 'monitored', color: '#FBCE07', label: 'Monitored Tags (k)' },
+                { key: 'total', color: '#94a3b8', label: 'Total Tags (k)' },
+            ],
+        },
+        shadow_it: {
+            title: 'IT/Ops — Shadow IT Devices Detected & Remediated',
+            data: [
+                { name: 'Jan', detected: 42, remediated: 35 },
+                { name: 'Feb', detected: 38, remediated: 36 },
+                { name: 'Mar', detected: 31, remediated: 30 },
+                { name: 'Apr', detected: 27, remediated: 27 },
+                { name: 'May', detected: 19, remediated: 19 },
+                { name: 'Jun', detected: 12, remediated: 12 },
+            ],
+            bars: [
+                { key: 'detected', color: '#f59e0b', label: 'Shadow Devices Detected' },
+                { key: 'remediated', color: '#22c55e', label: 'Remediated' },
+            ],
+        },
     },
+    // ── Commercial ───────────────────────────────────────────────────────────
     commercial: {
-        title: 'Commercial — AI Pricing vs Market Price ($/bbl)',
-        data: [
-            { name: 'Jan', market: 78, ai_price: 81 },
-            { name: 'Feb', market: 82, ai_price: 86 },
-            { name: 'Mar', market: 75, ai_price: 79 },
-            { name: 'Apr', market: 88, ai_price: 93 },
-            { name: 'May', market: 91, ai_price: 96 },
-            { name: 'Jun', market: 85, ai_price: 90 },
-        ],
-        bars: [
-            { key: 'market', color: '#94a3b8', label: 'Market Price' },
-            { key: 'ai_price', color: '#FBCE07', label: 'AI-Optimized Price' },
-        ],
+        _default: 'pricing_alpha',
+        pricing_alpha: {
+            title: 'Commercial — AI Pricing vs Market Price ($/bbl)',
+            data: [
+                { name: 'Jan', market: 78, ai_price: 81 },
+                { name: 'Feb', market: 82, ai_price: 86 },
+                { name: 'Mar', market: 75, ai_price: 79 },
+                { name: 'Apr', market: 88, ai_price: 93 },
+                { name: 'May', market: 91, ai_price: 96 },
+                { name: 'Jun', market: 85, ai_price: 90 },
+            ],
+            bars: [
+                { key: 'market', color: '#94a3b8', label: 'Market Price' },
+                { key: 'ai_price', color: '#FBCE07', label: 'AI-Optimized Price' },
+            ],
+        },
+        arbitrage: {
+            title: 'Commercial — Arbitrage Opportunities Detected ($M)',
+            data: [
+                { name: 'Jan', detected: 8.2, captured: 6.1 },
+                { name: 'Feb', detected: 10.4, captured: 8.5 },
+                { name: 'Mar', detected: 9.1, captured: 7.8 },
+                { name: 'Apr', detected: 12.3, captured: 11.0 },
+                { name: 'May', detected: 14.2, captured: 13.1 },
+                { name: 'Jun', detected: 11.8, captured: 10.9 },
+            ],
+            bars: [
+                { key: 'detected', color: '#f59e0b', label: 'Detected ($M)' },
+                { key: 'captured', color: '#22c55e', label: 'Captured ($M)' },
+            ],
+        },
+        hedge_ratio: {
+            title: 'Commercial — Hedge Ratio Efficiency (%)',
+            data: [
+                { name: 'Q1 23', ratio: 71 },
+                { name: 'Q2 23', ratio: 75 },
+                { name: 'Q3 23', ratio: 79 },
+                { name: 'Q4 23', ratio: 82 },
+                { name: 'Q1 24', ratio: 84.2 },
+                { name: 'Q2 24', ratio: 85.1 },
+            ],
+            bars: [{ key: 'ratio', color: '#8b5cf6', label: 'Hedge Ratio (%)' }],
+        },
+        sanctions_screening: {
+            title: 'Commercial — Sanctions Screening: Blocked vs Cleared Trades',
+            data: [
+                { name: 'Jan', screened: 1820, blocked: 12 },
+                { name: 'Feb', screened: 2100, blocked: 9 },
+                { name: 'Mar', screened: 1950, blocked: 14 },
+                { name: 'Apr', screened: 2250, blocked: 8 },
+                { name: 'May', screened: 2400, blocked: 6 },
+                { name: 'Jun', screened: 2300, blocked: 5 },
+            ],
+            bars: [
+                { key: 'screened', color: '#06b6d4', label: 'Total Screened' },
+                { key: 'blocked', color: '#ef4444', label: 'Blocked (Sanctions)' },
+            ],
+        },
     },
+    // ── Finance ──────────────────────────────────────────────────────────────
     finance: {
-        title: 'Finance — Close Cycle Duration (days)',
-        data: [
-            { name: 'Q1 23', days: 9.5 },
-            { name: 'Q2 23', days: 8.4 },
-            { name: 'Q3 23', days: 7.2 },
-            { name: 'Q4 23', days: 6.5 },
-            { name: 'Q1 24', days: 5.8 },
-            { name: 'Q2 24', days: 5.0 },
-        ],
-        bars: [{ key: 'days', color: '#8b5cf6', label: 'Close Duration (days)' }],
+        _default: 'close_cycle',
+        close_cycle: {
+            title: 'Finance — Close Cycle Duration (days)',
+            data: [
+                { name: 'Q1 23', days: 9.5 },
+                { name: 'Q2 23', days: 8.4 },
+                { name: 'Q3 23', days: 7.2 },
+                { name: 'Q4 23', days: 6.5 },
+                { name: 'Q1 24', days: 5.8 },
+                { name: 'Q2 24', days: 5.0 },
+            ],
+            bars: [{ key: 'days', color: '#8b5cf6', label: 'Close Duration (days)' }],
+        },
+        reconciliation: {
+            title: 'Finance — Automated Intercompany Reconciliation Rate (%)',
+            data: [
+                { name: 'Jan', manual: 44, auto: 56 },
+                { name: 'Feb', manual: 38, auto: 62 },
+                { name: 'Mar', manual: 29, auto: 71 },
+                { name: 'Apr', manual: 21, auto: 79 },
+                { name: 'May', manual: 14, auto: 86 },
+                { name: 'Jun', manual: 8, auto: 92 },
+            ],
+            bars: [
+                { key: 'manual', color: '#ef4444', label: 'Manual (%)' },
+                { key: 'auto', color: '#22c55e', label: 'AI Automated (%)' },
+            ],
+        },
+        anomalies: {
+            title: 'Finance — AI Anomaly Detection in Transactions',
+            data: [
+                { name: 'Jan', flagged: 18, confirmed: 14 },
+                { name: 'Feb', flagged: 22, confirmed: 17 },
+                { name: 'Mar', flagged: 15, confirmed: 13 },
+                { name: 'Apr', flagged: 26, confirmed: 20 },
+                { name: 'May', flagged: 19, confirmed: 15 },
+                { name: 'Jun', flagged: 12, confirmed: 10 },
+            ],
+            bars: [
+                { key: 'flagged', color: '#f59e0b', label: 'Flagged by AI' },
+                { key: 'confirmed', color: '#ef4444', label: 'Confirmed Anomalies' },
+            ],
+        },
+        hedging: {
+            title: 'Finance — Hedging Position Coverage ($B notional)',
+            data: [
+                { name: 'Q1 23', crude: 4.2, gas: 2.1, power: 1.0 },
+                { name: 'Q2 23', crude: 4.8, gas: 2.4, power: 1.2 },
+                { name: 'Q3 23', crude: 5.1, gas: 2.7, power: 1.4 },
+                { name: 'Q4 23', crude: 5.5, gas: 3.0, power: 1.6 },
+                { name: 'Q1 24', crude: 5.9, gas: 3.3, power: 1.8 },
+            ],
+            bars: [
+                { key: 'crude', color: '#FBCE07', label: 'Crude ($B)' },
+                { key: 'gas', color: '#06b6d4', label: 'Gas ($B)' },
+                { key: 'power', color: '#8b5cf6', label: 'Power ($B)' },
+            ],
+        },
     },
+    // ── HR ───────────────────────────────────────────────────────────────────
     hr: {
-        title: 'HR — Workforce Demand vs Supply by Role',
-        data: [
-            { name: 'Engineers', demand: 340, supply: 290 },
-            { name: 'Operators', demand: 520, supply: 480 },
-            { name: 'Technicians', demand: 410, supply: 395 },
-            { name: 'Contractors', demand: 780, supply: 650 },
-            { name: 'Safety', demand: 180, supply: 172 },
-        ],
-        bars: [
-            { key: 'demand', color: '#f59e0b', label: 'Demand' },
-            { key: 'supply',  color: '#22c55e', label: 'Supply' },
-        ],
+        _default: 'workforce_demand',
+        workforce_demand: {
+            title: 'HR — Workforce Demand vs Supply by Role',
+            data: [
+                { name: 'Engineers', demand: 340, supply: 290 },
+                { name: 'Operators', demand: 520, supply: 480 },
+                { name: 'Technicians', demand: 410, supply: 395 },
+                { name: 'Contractors', demand: 780, supply: 650 },
+                { name: 'Safety', demand: 180, supply: 172 },
+            ],
+            bars: [
+                { key: 'demand', color: '#f59e0b', label: 'Demand' },
+                { key: 'supply', color: '#22c55e', label: 'Supply' },
+            ],
+        },
+        incident_reduction: {
+            title: 'HR — Safety Incident Rate Reduction (%)',
+            data: [
+                { name: 'Q1 23', rate: 18.2 },
+                { name: 'Q2 23', rate: 15.8 },
+                { name: 'Q3 23', rate: 13.1 },
+                { name: 'Q4 23', rate: 10.4 },
+                { name: 'Q1 24', rate: 7.9 },
+                { name: 'Q2 24', rate: 5.6 },
+            ],
+            bars: [{ key: 'rate', color: '#ef4444', label: 'Incident Rate (%)' }],
+        },
+        reskilling: {
+            title: 'HR — Employees Reskilled (cumulative)',
+            data: [
+                { name: 'Jan', reskilled: 420 },
+                { name: 'Feb', reskilled: 890 },
+                { name: 'Mar', reskilled: 1450 },
+                { name: 'Apr', reskilled: 2100 },
+                { name: 'May', reskilled: 2850 },
+                { name: 'Jun', reskilled: 3600 },
+            ],
+            bars: [{ key: 'reskilled', color: '#8b5cf6', label: 'Employees Reskilled' }],
+        },
+        training_completion: {
+            title: 'HR — Training Completion Rate by Programme (%)',
+            data: [
+                { name: 'Cyber Awareness', rate: 97 },
+                { name: 'D&I', rate: 82 },
+                { name: 'GDPR', rate: 91 },
+                { name: 'HSE Induction', rate: 88 },
+                { name: 'AI Literacy', rate: 74 },
+            ],
+            bars: [{ key: 'rate', color: '#06b6d4', label: 'Completion Rate (%)' }],
+        },
     },
 };
+
+// ─── Helper to resolve a CHART_DATA chart config ───────────────────────────
+// Returns { title, data, bars } or null
+function resolveChart(domain, metric) {
+    const domainCharts = CHART_DATA[domain];
+    if (!domainCharts) return null;
+    const key = metric && domainCharts[metric] ? metric : domainCharts._default;
+    return domainCharts[key] || null;
+}
 
 const CHART_COLORS = ['#FBCE07', '#22c55e', '#06b6d4', '#8b5cf6', '#ef4444'];
 
@@ -424,8 +742,8 @@ CONVERSATIONAL STYLE:
 - If a tool fails with an 'Unknown tool' error, check the list of available tools provided above and retry with the correct name.`;
 
 // ─── Inline Chart Renderer ────────────────────────────────────────────────────
-function InlineChart({ domain, chartType = 'bar' }) {
-    const cfg = CHART_DATA[domain];
+function InlineChart({ domain, metric, chartType = 'bar' }) {
+    const cfg = resolveChart(domain, metric);
     if (!cfg) return null;
     const { title, data, bars } = cfg;
 
@@ -808,18 +1126,20 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'generate_data_visual': {
                 const domain = args.domain || 'fleet';
+                const metric = args.metric || null;
                 const chartType = args.chart_type || 'bar';
-                const cfg = CHART_DATA[domain];
-                if (!cfg) return JSON.stringify({ success: false, error: `No chart data available for domain: ${domain}` });
-                // Inject a chart message into the chat
+                const cfg = resolveChart(domain, metric);
+                if (!cfg) return JSON.stringify({ success: false, error: `No chart data available for domain: ${domain}, metric: ${metric}` });
+                // Inject a chart message into the chat — pass metric so InlineChart picks the right chart
                 setMessages(prev => [...prev, {
                     role: 'assistant',
                     type: 'chart',
                     domain,
+                    metric,
                     chartType,
                     content: `Here is the **${cfg.title}** visualization:`
                 }]);
-                return JSON.stringify({ success: true, action: 'chart_rendered', domain, title: cfg.title, note: 'Chart rendered inline in the chat panel.' });
+                return JSON.stringify({ success: true, action: 'chart_rendered', domain, metric, title: cfg.title, note: 'Chart rendered inline in the chat panel.' });
             }
             default:
                 console.error(`[EVA Tool Call Failed] Unknown tool: ${normalizedName}`);
@@ -831,17 +1151,45 @@ export function AgenticAssistant({ setCurrentView }) {
     }, [setCurrentView]);
 
     // ── Client-side chart interceptor (bypasses LLM hallucination) ─────────────
-    // Maps domain keywords to chart data keys
+    // Each entry: domain, optional metric, and keyword list.
+    // More-specific entries (with metric) are listed first so they win on keyword overlap.
     const CHART_KEYWORD_MAP = [
-        { keys: ['fleet', 'route', 'ship', 'vessel', 'marine', 'fuel sav', 'shipping'], domain: 'fleet' },
-        { keys: ['manufacturing', 'refin', 'plant', 'anomaly detect', 'anomal', 'downtime', 'guardian eye', 'camera'], domain: 'manufacturing' },
-        { keys: ['supply chain', 'supplychain', 'logistics', 'delivery', 'on-time', 'shipment adher'], domain: 'supplychain' },
-        { keys: ['it ops', 'itops', 'ticket deflect', 'itsm', 'aiops', 'escalat'], domain: 'itops' },
-        { keys: ['commercial', 'pric', 'trading', 'brent', 'lng', 'commodity'], domain: 'commercial' },
-        { keys: ['financ', 'close cycle', 'reconcil', 'hedge'], domain: 'finance' },
-        { keys: ['hr', 'workforce', 'headcount', 'demand', 'supply gap'], domain: 'hr' },
+        // Fleet / marine
+        { keys: ['demurrage', 'port cost', 'port delay'], domain: 'fleet', metric: 'demurrage' },
+        { keys: ['carbon emission', 'co2', 'emission reduction', 'tco2'], domain: 'fleet', metric: 'carbon_emission' },
+        { keys: ['fuel sav', 'fuel optim', 'route optim', 'fleet', 'ship', 'vessel', 'marine', 'shipping'], domain: 'fleet', metric: 'fuel_savings' },
+        // Supply chain
+        { keys: ['carbon footprint', 'supply carbon', 'shipping emission'], domain: 'supplychain', metric: 'carbon_footprint' },
+        { keys: ['fleet cost', 'cost reduction', 'logistics cost'], domain: 'supplychain', metric: 'fleet_cost' },
+        { keys: ['contractor adher', 'contractor sync', 'adherence'], domain: 'supplychain', metric: 'contractor_adherence' },
+        { keys: ['supply chain', 'supplychain', 'logistics', 'delivery', 'on-time', 'shipment adher'], domain: 'supplychain', metric: 'on_time_delivery' },
+        // Manufacturing
+        { keys: ['yield optim', 'plant yield', 'refinery yield'], domain: 'manufacturing', metric: 'yield_optimization' },
+        { keys: ['predictive maint', 'failure prevent', 'pump', 'bearing', 'compressor'], domain: 'manufacturing', metric: 'predictive_maintenance' },
+        { keys: ['flaring', 'emission event', 'plant emission', 'zero emission mfg'], domain: 'manufacturing', metric: 'emission_reduction' },
+        { keys: ['manufacturing', 'refin', 'plant', 'anomaly detect', 'anomal', 'downtime', 'guardian eye', 'camera'], domain: 'manufacturing', metric: 'anomaly_detection' },
+        // IT Ops
+        { keys: ['threat response', 'cyber response', 'siem', 'zero-day', 'cyber threat'], domain: 'itops', metric: 'threat_response' },
+        { keys: ['sensor', 'ot sensor', 'sensor tag', 'sensor coverage'], domain: 'itops', metric: 'sensor_coverage' },
+        { keys: ['shadow it', 'shadow device', 'rogue device', 'unauthorized device'], domain: 'itops', metric: 'shadow_it' },
+        { keys: ['it ops', 'itops', 'ticket deflect', 'itsm', 'aiops', 'escalat'], domain: 'itops', metric: 'ticket_deflection' },
+        // Commercial
+        { keys: ['arbitrage', 'arb opportun'], domain: 'commercial', metric: 'arbitrage' },
+        { keys: ['hedge ratio', 'hedge effic'], domain: 'commercial', metric: 'hedge_ratio' },
+        { keys: ['sanction', 'trade screen', 'counterparty screen'], domain: 'commercial', metric: 'sanctions_screening' },
+        { keys: ['commercial', 'pric', 'trading', 'brent', 'lng', 'commodity'], domain: 'commercial', metric: 'pricing_alpha' },
+        // Finance
+        { keys: ['reconcil', 'intercompany', 'auto recon'], domain: 'finance', metric: 'reconciliation' },
+        { keys: ['anomal', 'fraud', 'audit anomal', 'suspicious transact'], domain: 'finance', metric: 'anomalies' },
+        { keys: ['hedg', 'hedging position', 'hedge cover'], domain: 'finance', metric: 'hedging' },
+        { keys: ['financ', 'close cycle', 'financial close'], domain: 'finance', metric: 'close_cycle' },
+        // HR
+        { keys: ['incident rate', 'safety incident', 'hse incident'], domain: 'hr', metric: 'incident_reduction' },
+        { keys: ['reskill', 'upskill', 'training complet'], domain: 'hr', metric: 'reskilling' },
+        { keys: ['training complet', 'training rate', 'learning complet'], domain: 'hr', metric: 'training_completion' },
+        { keys: ['hr', 'workforce', 'headcount', 'demand', 'supply gap', 'workforce demand'], domain: 'hr', metric: 'workforce_demand' },
     ];
-    const VISUAL_TRIGGER_WORDS = ['chart', 'graph', 'visual', 'insight', 'show me', 'plot', 'analytics', 'data for', 'metrics for', 'how is', 'trend'];
+    const VISUAL_TRIGGER_WORDS = ['chart', 'graph', 'visual', 'insight', 'show me', 'plot', 'analytics', 'data for', 'metrics for', 'how is', 'trend', 'performance', 'stats', 'numbers'];
 
     const tryLocalChartIntercept = async (userText) => {
         const lower = userText.toLowerCase();
@@ -849,12 +1197,12 @@ export function AgenticAssistant({ setCurrentView }) {
         if (!wantsChart) return false;
         const match = CHART_KEYWORD_MAP.find(m => m.keys.some(k => lower.includes(k)));
         if (!match) return false;
-        // Execute the chart tool directly
+        // Execute the chart tool with the resolved metric
         setToolAction({ name: 'generate_data_visual', status: 'running' });
-        await executeTool('generate_data_visual', { domain: match.domain, chart_type: 'bar' });
+        await executeTool('generate_data_visual', { domain: match.domain, metric: match.metric, chart_type: 'bar' });
         setToolAction(null);
-        const cfg = CHART_DATA[match.domain];
-        const reply = `Here is the **${cfg?.title || match.domain + ' chart'}**. This shows live performance data for the ${match.domain} domain — a key pillar of the Neuro Shell EOS.`;
+        const cfg = resolveChart(match.domain, match.metric);
+        const reply = `Here is the **${cfg?.title || match.domain + ' chart'}**. This shows the ${match.metric?.replace(/_/g, ' ') || match.domain} data — a key performance indicator within the Neuro Shell EOS.`;
         setMessages(prev => [...prev, { role: 'assistant', content: reply, type: 'text' }]);
         chatHistoryRef.current.push({ role: 'user', content: userText });
         chatHistoryRef.current.push({ role: 'assistant', content: reply });
@@ -1116,7 +1464,7 @@ export function AgenticAssistant({ setCurrentView }) {
                                                 <div className="text-[13.5px] leading-relaxed text-gray-800 mb-1">
                                                     {renderMessageContent(msg.content)}
                                                 </div>
-                                                <InlineChart domain={msg.domain} chartType={msg.chartType} />
+                                                <InlineChart domain={msg.domain} metric={msg.metric} chartType={msg.chartType} />
                                             </div>
                                         </div>
                                     ) : (
