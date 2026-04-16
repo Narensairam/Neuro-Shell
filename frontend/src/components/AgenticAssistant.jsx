@@ -90,19 +90,31 @@ const DEMO_TOUR = [
 ];
 
 // Tool definitions for OpenRouter function calling
+const TABS_MAP = {
+    itops:         { overview: 'AIOps Engine', itsm: 'ITSM Hub', ot: 'OT Threats', predictive: 'Predictive Monitoring', shadow: 'Shadow IT' },
+    hr:            { overview: 'Intelligence Overview', agent: 'Workforce AI Agent' },
+    manufacturing: { analytics: 'Operational Analytics', surveillance: 'AI Surveillance / Fire Detection' },
+    supplychain:   { overview: 'Overview', routes: 'Route Optimization' },
+    commercial:    { overview: 'Market Overview', agent: 'Trading AI Agents' },
+};
+
 const TOOLS = [
     {
         type: 'function',
         function: {
             name: 'navigate_to_view',
-            description: 'Navigate the user to a specific module/page in the Neuro Shell ERP application. Use this whenever the user asks to go to, open, show, or navigate to a section.',
+            description: 'Navigate the user to a specific module/page (and optionally a subsection/tab) in the Neuro Shell ERP application. Use this whenever the user asks to go to, open, show, or navigate to a section or subsection. Always specify tab_id when the user mentions a subsection.',
             parameters: {
                 type: 'object',
                 properties: {
                     view_id: {
                         type: 'string',
                         enum: Object.keys(VIEWS),
-                        description: 'The ID of the view to navigate to.'
+                        description: 'The ID of the top-level view to navigate to.'
+                    },
+                    tab_id: {
+                        type: 'string',
+                        description: 'Optional subsection tab to navigate to within the view. For itops: overview|itsm|ot|predictive|shadow. For hr: overview|agent. For manufacturing: analytics|surveillance. For supplychain: overview|routes. For commercial: overview|agent.'
                     },
                     reason: {
                         type: 'string',
@@ -338,7 +350,7 @@ const CHART_COLORS = ['#FBCE07', '#22c55e', '#06b6d4', '#8b5cf6', '#ef4444'];
 const SYSTEM_PROMPT = `You are EVA, Shell plc's elite agentic AI Engine Operating System copilot for Neuro Shell EOS.
 
 YOUR CORE CAPABILITIES (USE THE EXACT TOOL NAMES PROVIDED):
-- Navigate to modules (Tool: \`navigate_to_view\`)
+- Navigate to modules and subsections (Tool: \`navigate_to_view\`)
 - Fetch live data (Tool: \`fetch_domain_data\`)
 - Create ITSM tickets (Tool: \`create_itsm_ticket\`) — gather all 5 pieces of info first
 - Launch guided tour (Tool: \`demo_application\`)
@@ -353,6 +365,42 @@ THE FOUR PILLARS OF NEURO SHELL EOS:
 2. Zero Emissions — Route fuel optimization, anomaly-based flaring reduction, safety surveillance
 3. OT/IT Threat Handling — AIOps, ITSM deflection, cyber threat detection, shadow IT
 4. Anomaly Detection — Digital Twin predictive maintenance, fire detection, financial anomalies
+
+DEEP NAVIGATION — SUBSECTIONS (ALWAYS USE tab_id WHEN NAVIGATING TO A SUBSECTION):
+Each view has subsections reachable via the tab_id parameter of navigate_to_view:
+
+• System Ops & Cyber (view_id: itops)
+  - tab_id: overview       → AIOps Engine (default overview)
+  - tab_id: itsm           → ITSM Hub (ticket deflection, incident management)
+  - tab_id: ot             → OT Threats (operational technology threat map)
+  - tab_id: predictive     → Predictive Monitoring (predictive analytics)
+  - tab_id: shadow         → Shadow IT (shadow IT detection)
+
+• Workforce & HSE Safety (view_id: hr)
+  - tab_id: overview       → Intelligence Overview (default overview)
+  - tab_id: agent          → Workforce AI Agent (AI workforce planning agent)
+
+• Industrial Ops & Refining (view_id: manufacturing)
+  - tab_id: analytics      → Operational Analytics (default overview)
+  - tab_id: surveillance   → AI Surveillance / Fire Detection (Guardian Eye camera feeds)
+
+• Global Logistics & Marine (view_id: supplychain)
+  - tab_id: overview       → Overview (default overview)
+  - tab_id: routes         → Route Optimization (sea route optimizer map)
+
+• Energy Trading & Risk (view_id: commercial)
+  - tab_id: overview       → Market Overview (default overview)
+  - tab_id: agent          → Trading AI Agents (commercial AI agent)
+
+EXAMPLES:
+- "Go to ITSM Hub" → navigate_to_view(view_id: "itops", tab_id: "itsm")
+- "Show me OT Threats" → navigate_to_view(view_id: "itops", tab_id: "ot")
+- "Open Workforce AI Agent" → navigate_to_view(view_id: "hr", tab_id: "agent")
+- "Show Route Optimization" → navigate_to_view(view_id: "supplychain", tab_id: "routes")
+- "Go to Trading Agents" → navigate_to_view(view_id: "commercial", tab_id: "agent")
+- "Show AI Surveillance" → navigate_to_view(view_id: "manufacturing", tab_id: "surveillance")
+- "Show Shadow IT" → navigate_to_view(view_id: "itops", tab_id: "shadow")
+- "Go to Predictive Monitoring" → navigate_to_view(view_id: "itops", tab_id: "predictive")
 
 CRITICAL RULE — ITSM TICKETS:
 When a user asks to create a ticket or log an issue, you MUST gather following information BEFORE calling create_itsm_ticket: Summary, Details, Category, Impact, and Urgency.
@@ -631,9 +679,16 @@ export function AgenticAssistant({ setCurrentView }) {
         switch (normalizedName) {
             case 'navigate_to_view': {
                 const viewId = args.view_id;
+                const tabId = args.tab_id || null;
                 const viewName = VIEWS[viewId] || viewId;
+                const tabName = tabId && TABS_MAP[viewId]?.[tabId] ? TABS_MAP[viewId][tabId] : tabId;
                 if (setCurrentView) setCurrentView(viewId);
-                return JSON.stringify({ success: true, navigated_to: viewName, view_id: viewId });
+                if (tabId) {
+                    setTimeout(() => {
+                        window.dispatchEvent(new CustomEvent('DEMO_GOTO_TAB', { detail: { view: viewId, tab: tabId } }));
+                    }, 350);
+                }
+                return JSON.stringify({ success: true, navigated_to: viewName, view_id: viewId, tab: tabName || null });
             }
             case 'fetch_domain_data': {
                 const url = DOMAIN_API_MAP[args.domain];
