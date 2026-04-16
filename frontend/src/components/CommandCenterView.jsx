@@ -3,6 +3,7 @@ import { Factory, Ship, TrendingUp, TrendingDown, CircleDollarSign, HardHat, Shi
 import { motion, AnimatePresence } from 'framer-motion';
 import { RouteOptimizationView } from './RouteOptimizationView';
 import { HRWorkforceAgent } from './HRWorkforceAgent';
+import { crisisEventBus } from '../context/CrisisEventBus';
 
 export function CommandCenterView({ setCurrentView }) {
     const [fireAlert, setFireAlert] = useState(null);
@@ -139,15 +140,24 @@ export function CommandCenterView({ setCurrentView }) {
                     const fire = data.find(a => a.type === 'FIRE');
                     if (fire) {
                         setFireAlert(prev => {
-                            if (!prev) {
+                            // Only flash the red highlight if this is truly the first time
+                            // we're seeing the alert AND it hasn't already been acknowledged
+                            // (i.e., the 8-second window hasn't already played out on this fire)
+                            if (!prev && !crisisEventBus.getLast('CRISIS_FIRE_SEEN')) {
                                 setIsNewAlert(true);
-                                setTimeout(() => setIsNewAlert(false), 8000);
+                                setTimeout(() => {
+                                    setIsNewAlert(false);
+                                    // Mark alert as seen so remounts don't re-trigger the highlight
+                                    crisisEventBus.dispatch('CRISIS_FIRE_SEEN', { time: Date.now() });
+                                }, 8000);
                             }
                             return fire;
                         });
                     } else {
                         setFireAlert(null);
                         setIsNewAlert(false);
+                        // Fire cleared — reset so the NEXT fire event shows fresh highlight
+                        crisisEventBus.store['CRISIS_FIRE_SEEN'] = null;
                     }
                 }
             } catch { setFireAlert(null); }

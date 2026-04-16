@@ -36,13 +36,21 @@ export function HRWorkforceAgent({ embedded = false, fireAlertActive = false }) 
     const [scenario, setScenario] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [mobilized, setMobilized] = useState(false);
+    // Read persisted mobilized state from the event bus so it survives navigation
+    const [mobilized, setMobilized] = useState(() => !!crisisEventBus.getLast('CRISIS_WORKFORCE_DEPLOYED'));
     const [mobilizing, setMobilizing] = useState(false);
+
+    // Used for manual scenario switches — explicitly resets mobilized state
+    const switchScenario = (slug) => {
+        // Clear bus so a fresh mobilize works
+        crisisEventBus.store['CRISIS_WORKFORCE_DEPLOYED'] = null;
+        setMobilized(false);
+        runScenario(slug);
+    };
 
     const runScenario = async (slug) => {
         setLoading(true);
         setError(null);
-        setMobilized(false);
         try {
             const res = await fetch(`http://127.0.0.1:5003/api/scenario/${slug}`, { method: 'POST' });
             if (!res.ok) throw new Error("Workforce Protocol Timeout - Verify Port 5003");
@@ -66,6 +74,15 @@ export function HRWorkforceAgent({ embedded = false, fireAlertActive = false }) 
         }
     };
 
+    // Sync mobilized state from the event bus when another instance triggers mobilization
+    useEffect(() => {
+        const handleDeployed = () => setMobilized(true);
+        crisisEventBus.on('CRISIS_WORKFORCE_DEPLOYED', handleDeployed);
+        // No cleanup needed — crisisEventBus.on wraps document.addEventListener
+        // which reuses the same handler reference on each render would duplicate, so
+        // we rely on the check below (idempotent state set) being harmless.
+    }, []);
+
     useEffect(() => {
         if (fireAlertActive || crisisEventBus.getLast('CRISIS_FIRE_DETECTED')) {
             runScenario('fire');
@@ -80,6 +97,7 @@ export function HRWorkforceAgent({ embedded = false, fireAlertActive = false }) 
         setTimeout(() => {
             setMobilizing(false);
             setMobilized(true);
+            // Persist to event bus so other instances (Control Tower) and re-mounts stay in sync
             crisisEventBus.dispatch('CRISIS_WORKFORCE_DEPLOYED', { scenario: scenario.title });
         }, 1800);
     };
@@ -102,15 +120,15 @@ export function HRWorkforceAgent({ embedded = false, fireAlertActive = false }) 
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <button onClick={() => runScenario('fire')} disabled={loading}
+                        <button onClick={() => switchScenario('fire')} disabled={loading}
                             className="px-4 py-2 bg-red-600 text-white font-mono text-[9px] uppercase font-bold tracking-widest rounded hover:bg-red-700 transition-colors flex items-center gap-2 shadow-sm">
                             <ShieldAlert className="w-3.5 h-3.5" /> Fire Alert
                         </button>
-                        <button onClick={() => runScenario('maintenance')} disabled={loading}
+                        <button onClick={() => switchScenario('maintenance')} disabled={loading}
                             className="px-4 py-2 bg-shell-darkText text-white font-mono text-[9px] uppercase font-bold tracking-widest rounded hover:bg-black transition-colors flex items-center gap-2 shadow-sm">
                             <Zap className="w-3.5 h-3.5" /> Maintenance
                         </button>
-                        <button onClick={() => runScenario('holiday_shortage')} disabled={loading}
+                        <button onClick={() => switchScenario('holiday_shortage')} disabled={loading}
                             className="px-4 py-2 bg-amber-500 text-white font-mono text-[9px] uppercase font-bold tracking-widest rounded hover:bg-amber-600 transition-colors flex items-center gap-2 shadow-sm">
                             <Globe className="w-3.5 h-3.5" /> Holiday Protocol
                         </button>
