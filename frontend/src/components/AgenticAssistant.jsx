@@ -1043,7 +1043,7 @@ export function AgenticAssistant({ setCurrentView }) {
                     };
 
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 30000);
+                    const timeoutId = setTimeout(() => controller.abort(), 60000); // Increased to 60s
 
                     let res;
                     try {
@@ -1060,8 +1060,8 @@ export function AgenticAssistant({ setCurrentView }) {
                         return JSON.stringify({
                             success: false,
                             error: isTimeout
-                                ? 'The ITSM service did not respond within 30 seconds. The IT/Ops backend may be overloaded. Please try again in a moment.'
-                                : `Could not connect to ITSM backend (port 5004): ${fetchErr.message}. Ensure the ai-service is running.`
+                                ? 'The ITSM service did not respond within 60 seconds. The IT/Ops backend may be overloaded. Please try again in a moment.'
+                                : `Could not connect to ITSM service via Gateway: ${fetchErr.message}. Ensure the AI Service is running.`
                         });
                     }
 
@@ -1237,7 +1237,7 @@ export function AgenticAssistant({ setCurrentView }) {
                 iterations++;
 
                 const openRouterController = new AbortController();
-                const orTimeout = setTimeout(() => openRouterController.abort(), 25000);
+                const orTimeout = setTimeout(() => openRouterController.abort(), 90000); // Increased to 90s for deep reasoning
 
                 const response = await fetch(CONFIG.AI_CHAT, {
                     method: 'POST',

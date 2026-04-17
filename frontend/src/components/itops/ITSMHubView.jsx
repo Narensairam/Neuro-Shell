@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { CONFIG } from '../../config';
 import {
   Send, Search, CheckCircle2, Bot, Zap, Activity, ShieldCheck,
   RefreshCw, Paperclip, X, FileText, User, MapPin, Tag, Cpu,
@@ -22,11 +23,11 @@ const IMPACT_OPTS = ['', '1 - Global', '2 - Division', '3 - Local'];
 const URGENCY_OPTS = ['', '1 - High', '2 - Medium', '3 - Low'];
 const ASSIGNMENT_GROUPS = ['IT-OT-L2-CLUSTER', 'Cyber-SOC-L3', 'CLOUD-OPS', 'IT-AIOPS-L3', 'ERP-SUPPORT-L2'];
 
-const API = 'http://127.0.0.1:5004';
+const API = CONFIG.ITOPS_AGENT;
 
 const fetchWithTimeout = async (url, options = {}) => {
-  // ITSM backend runs ML deflection which takes 8-15s — use 35s timeout
-  const timeout = options.timeout || 35000;
+  // ITSM backend runs ML deflection which takes 8-15s — use 45s timeout
+  const timeout = options.timeout || 45000;
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
   try {
@@ -36,7 +37,7 @@ const fetchWithTimeout = async (url, options = {}) => {
   } catch (err) {
     clearTimeout(id);
     if (err.name === 'AbortError') {
-      throw new Error('ITSM backend did not respond within 35 seconds. The AI deflection engine may be busy — please try again.');
+      throw new Error('ITSM backend did not respond within 45 seconds. The AI deflection engine may be busy — please try again.');
     }
     throw err;
   }
@@ -172,7 +173,7 @@ function CreateTicketForm({ onBack }) {
     } catch (err) {
       timers.forEach(clearTimeout);
       console.error('ITSM API Error:', err);
-      alert(`ITSM Error: ${err.message || 'Backend unreachable on port 5004'}`);
+      alert(`ITSM Error: ${err.message || 'IT/Ops Engine unreachable via Gateway'}`);
     } finally {
       setLoading(false);
       setLoadingStep('');
@@ -574,7 +575,7 @@ function AuditLogView({ onBack }) {
             <AlertCircle className="w-5 h-5" />
             <div className="flex-1">
               <p className="text-sm font-semibold">ITSM Engine Offline</p>
-              <p className="text-xs opacity-80">The forensic audit stream is unreachable. Please verify the backend service is running on port 5004.</p>
+              <p className="text-xs opacity-80">The forensic audit stream is unreachable. Please verify the AI Service is running and the Gateway is accessible.</p>
             </div>
             <button onClick={fetchTickets} className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-semibold hover:bg-red-700 transition-colors">
               Retry Connection

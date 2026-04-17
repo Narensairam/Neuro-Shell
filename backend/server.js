@@ -46,17 +46,23 @@ const COMMERCIAL_URL = process.env.AI_AGENT_COMMERCIAL || 'http://localhost:5005
 const GOVERNANCE_URL = process.env.AI_AGENT_GOVERNANCE || 'http://localhost:5006';
 const FIRE_STREAM_URL = process.env.AI_AGENT_FIRE_STREAM || 'http://localhost:5002';
 
+// AI Gateway Proxy Configuration
+const proxyOptions = {
+    proxyTimeout: 120000, // 120s
+    timeout: 120000
+};
+
 // 1. AI Orchestrator Proxy (5001)
-app.use('/api/ai-orchestrator', proxy(AI_ORCHESTRATOR));
+app.use('/api/ai-orchestrator', proxy(AI_ORCHESTRATOR, proxyOptions));
 
 // 2. Individual Agent Proxies
-app.use('/api/ai-agents/workforce', proxy(WORKFORCE_URL));
-app.use('/api/ai-agents/itops', proxy(ITOPS_URL));
-app.use('/api/ai-agents/commercial', proxy(COMMERCIAL_URL));
-app.use('/api/ai-agents/governance', proxy(GOVERNANCE_URL));
+app.use('/api/ai-agents/workforce', proxy(WORKFORCE_URL, proxyOptions));
+app.use('/api/ai-agents/itops', proxy(ITOPS_URL, proxyOptions));
+app.use('/api/ai-agents/commercial', proxy(COMMERCIAL_URL, proxyOptions));
+app.use('/api/ai-agents/governance', proxy(GOVERNANCE_URL, proxyOptions));
 
 // 3. Fire Detection & Video Stream Proxy (5002)
-app.use('/api/fire-stream', proxy(FIRE_STREAM_URL));
+app.use('/api/fire-stream', proxy(FIRE_STREAM_URL, proxyOptions));
 
 // 4. OpenRouter/LLM Proxy (Unified Chat)
 app.post('/api/ai/chat', async (req, res) => {
