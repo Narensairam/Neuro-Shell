@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const proxy = require('express-http-proxy');
+const axios = require('axios');
+require('dotenv').config();
 
 const app = express();
 const port = 5007;
@@ -33,6 +36,44 @@ const writeDB = (data) => {
 
 app.get('/api/test', (req, res) => {
   res.json({ message: 'hello world' });
+});
+
+// --- AI GATEWAY PROXY ROUTES ---
+const AI_ORCHESTRATOR = process.env.AI_ORCHESTRATOR_URL || 'http://localhost:5001';
+const WORKFORCE_URL = process.env.AI_AGENT_WORKFORCE || 'http://localhost:5003';
+const ITOPS_URL = process.env.AI_AGENT_ITOPS || 'http://localhost:5004';
+const COMMERCIAL_URL = process.env.AI_AGENT_COMMERCIAL || 'http://localhost:5005';
+const GOVERNANCE_URL = process.env.AI_AGENT_GOVERNANCE || 'http://localhost:5006';
+const FIRE_STREAM_URL = process.env.AI_AGENT_FIRE_STREAM || 'http://localhost:5002';
+
+// 1. AI Orchestrator Proxy (5001)
+app.use('/api/ai-orchestrator', proxy(AI_ORCHESTRATOR));
+
+// 2. Individual Agent Proxies
+app.use('/api/ai-agents/workforce', proxy(WORKFORCE_URL));
+app.use('/api/ai-agents/itops', proxy(ITOPS_URL));
+app.use('/api/ai-agents/commercial', proxy(COMMERCIAL_URL));
+app.use('/api/ai-agents/governance', proxy(GOVERNANCE_URL));
+
+// 3. Fire Detection & Video Stream Proxy (5002)
+app.use('/api/fire-stream', proxy(FIRE_STREAM_URL));
+
+// 4. OpenRouter/LLM Proxy (Unified Chat)
+app.post('/api/ai/chat', async (req, res) => {
+    try {
+        const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', req.body, {
+            headers: {
+                'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                'Content-Type': 'application/json',
+                'HTTP-Referer': 'http://localhost:5007',
+                'X-Title': 'Neuro Shell EOS (Gateway)'
+            }
+        });
+        res.json(response.data);
+    } catch (err) {
+        console.error('[Gateway LLM Error]', err.response?.data || err.message);
+        res.status(err.response?.status || 500).json(err.response?.data || { error: 'LLM Gateway Error' });
+    }
 });
 
 // --- API ENDPOINTS ---

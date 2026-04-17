@@ -7,7 +7,10 @@ import {
     AlertTriangle, Clock, Package, DollarSign, TrendingDown, Activity
 } from 'lucide-react';
 
-const AI_SERVICE = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:5001';
+import { CONFIG } from '../config';
+
+const AI_SERVICE = CONFIG.AI_ORCHESTRATOR;
+const UNIFIED_API_URL = `${CONFIG.CORE_API}/unified`;
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -374,7 +377,7 @@ export function RouteOptimizationView({ embedded = false }) {
 
     const fetchVessels = useCallback(async () => {
         try {
-            const res = await fetch(`${AI_SERVICE}/api/routes/vessels`);
+            const res = await fetch(`${CONFIG.AI_ORCHESTRATOR}/api/routes/vessels`);
             if (res.ok) {
                 const data = await res.json();
                 setVessels(data);

@@ -2,6 +2,7 @@ import { useEffect, useState, lazy, Suspense } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ShieldCheck, Ticket, Monitor, TrendingUp, Activity, RefreshCw } from 'lucide-react';
 import { ITOpsAgent } from './ITOpsAgent';
+import { CONFIG } from '../config';
 import { ITSMHubView } from './itops/ITSMHubView';
 import { OTThreatView } from './itops/OTThreatView';
 import { PredictiveMonitoringView } from './itops/PredictiveMonitoringView';
@@ -28,7 +29,7 @@ export function ITOpsView({ setCurrentView }) {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5007/api/itops')
+        fetch(`${CONFIG.CORE_API}/itops`)
             .then(res => res.json())
             .then(d => { if (isMounted) setData(d); })
             .catch(() => { if (isMounted) setData(EMPTY_ITOPS); });

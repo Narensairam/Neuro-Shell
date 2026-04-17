@@ -3,6 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Ship, Clock, AlertTriangle, Package, Truck, ClipboardList, Globe, TrendingUp, Map, BarChart2, Cpu } from 'lucide-react';
 import { RouteOptimizationView } from './RouteOptimizationView';
 import { crisisEventBus } from '../context/CrisisEventBus';
+import { CONFIG } from '../config';
 
 const EMPTY_SC = {
     optimalRoutesAdopted: 0,
@@ -16,7 +17,7 @@ export function SupplyChainView() {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5007/api/supplychain')
+        fetch(`${CONFIG.CORE_API}/supplychain`)
             .then(res => res.json())
             .then(d => { 
                 if (isMounted) {

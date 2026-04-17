@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useState, useEffect } from 'react';
+import { CONFIG } from '../config';
 
 export function cn(...inputs) {
     return twMerge(clsx(inputs));
@@ -64,7 +65,7 @@ export function Sidebar({ currentView, setCurrentView, role }) {
 
     useEffect(() => {
         let t;
-        const NEURO_SHELL_ORIGIN = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:5001';
+        const NEURO_SHELL_ORIGIN = CONFIG.AI_ORCHESTRATOR;
         const fetchFire = async () => {
             try {
                 const res = await fetch(`${NEURO_SHELL_ORIGIN}/api/fire/alerts`);

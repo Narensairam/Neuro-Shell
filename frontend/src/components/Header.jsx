@@ -1,6 +1,7 @@
 import { Bell, Activity } from 'lucide-react';
 import { cn } from './Sidebar';
 import { useState, useEffect } from 'react';
+import { CONFIG } from '../config';
 
 const rolesList = [
     { id: 'executive', label: 'C-Suite' },
@@ -15,7 +16,7 @@ export function Header({ role, setRole, setCurrentView }) {
 
     useEffect(() => {
         let t;
-        const NEURO_SHELL_ORIGIN = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:5001';
+        const NEURO_SHELL_ORIGIN = CONFIG.AI_ORCHESTRATOR;
         const fetchFire = async () => {
             try {
                 const res = await fetch(`${NEURO_SHELL_ORIGIN}/api/fire/alerts`);

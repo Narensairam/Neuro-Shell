@@ -11,8 +11,9 @@ import {
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell
 } from 'recharts';
 
-// OpenRouter configuration
-const OPENROUTER_API_KEY = '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';
+import { CONFIG } from '../config';
+
+// OpenRouter model configuration (Key moved to backend for security)
 const MODEL = 'deepseek/deepseek-chat';
 
 // All navigable views in the Neuro Shell ERP
@@ -232,14 +233,14 @@ const TOOLS = [
 ];
 
 const DOMAIN_API_MAP = {
-    manufacturing: 'http://localhost:5007/api/manufacturing',
-    supplychain: 'http://localhost:5007/api/supplychain',
-    commercial: 'http://localhost:5007/api/commercial',
-    finance: 'http://localhost:5007/api/finance',
-    hr: 'http://localhost:5007/api/hr',
-    itops: 'http://localhost:5007/api/itops',
-    dashboard: 'http://localhost:5007/api/dashboard',
-    fire: 'http://localhost:5001/api/fire/alerts',
+    manufacturing: `${CONFIG.CORE_API}/manufacturing`,
+    supplychain:   `${CONFIG.CORE_API}/supplychain`,
+    commercial:    `${CONFIG.CORE_API}/commercial`,
+    finance:       `${CONFIG.CORE_API}/finance`,
+    hr:            `${CONFIG.CORE_API}/hr`,
+    itops:         `${CONFIG.CORE_API}/itops`,
+    dashboard:     `${CONFIG.CORE_API}/dashboard`,
+    fire:          `${CONFIG.AI_ORCHESTRATOR}/api/fire/alerts`,
 };
 
 // ─── Static chart data — multi-metric per domain ──────────────────────────────
@@ -1046,7 +1047,7 @@ export function AgenticAssistant({ setCurrentView }) {
 
                     let res;
                     try {
-                        res = await fetch('http://127.0.0.1:5004/api/tickets', {
+                        res = await fetch(`${CONFIG.ITOPS_AGENT}/api/tickets`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(ticketPayload),
@@ -1084,7 +1085,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'get_active_alerts': {
                 try {
-                    const res = await fetch('http://127.0.0.1:5001/api/fire/alerts');
+                    const res = await fetch(`${CONFIG.AI_ORCHESTRATOR}/api/fire/alerts`);
                     const fireAlerts = res.ok ? await res.json() : [];
                     const staticAlerts = [
                         { type: 'CRITICAL', domain: 'OT/IT', message: '492K sensor tags offline across 50+ global sites' },
@@ -1101,7 +1102,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'get_platform_status': {
                 try {
-                    const res = await fetch('http://127.0.0.1:5007/api/dashboard');
+                    const res = await fetch(`${CONFIG.CORE_API}/dashboard`);
                     if (res.ok) return JSON.stringify(await res.json());
                     return JSON.stringify({ error: 'Core offline' });
                 } catch (e) {
@@ -1110,7 +1111,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'fetch_unified_intelligence': {
                 try {
-                    const res = await fetch('http://127.0.0.1:5007/api/unified');
+                    const res = await fetch(`${CONFIG.CORE_API}/unified`);
                     return JSON.stringify(await res.json());
                 } catch (e) {
                     return JSON.stringify({ error: 'Could not reach Unified Data Fabric.' });
@@ -1118,7 +1119,7 @@ export function AgenticAssistant({ setCurrentView }) {
             }
             case 'query_neural_topology': {
                 try {
-                    const res = await fetch('http://127.0.0.1:5007/api/kg/agents');
+                    const res = await fetch(`${CONFIG.CORE_API}/kg/agents`);
                     return JSON.stringify(await res.json());
                 } catch (e) {
                     return JSON.stringify({ error: 'Agent Knowledge Graph offline.' });
@@ -1238,13 +1239,10 @@ export function AgenticAssistant({ setCurrentView }) {
                 const openRouterController = new AbortController();
                 const orTimeout = setTimeout(() => openRouterController.abort(), 25000);
 
-                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                const response = await fetch(CONFIG.AI_CHAT, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
                         'Content-Type': 'application/json',
-                        'HTTP-Referer': 'http://localhost:5173',
-                        'X-Title': 'Neuro Shell EOS'
                     },
                     body: JSON.stringify({
                         model: MODEL,

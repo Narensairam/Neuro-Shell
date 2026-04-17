@@ -8,14 +8,16 @@ import {
  PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend
 } from 'recharts';
 
-const API = 'http://localhost:5004';
+import { CONFIG } from '../../config';
+
+const API = CONFIG.ITOPS_AGENT;
 
 const fetchWithTimeout = async (url, options = {}) => {
   const timeout = options.timeout || 2000;
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
   try {
-    const response = await fetchWithTimeout(url, { ...options, signal: controller.signal });
+    const response = await fetch(url, { ...options, signal: controller.signal });
     clearTimeout(id);
     return response;
   } catch (err) {

@@ -16,9 +16,10 @@ import {
     ArrowRight
 } from 'lucide-react';
 import { crisisEventBus } from '../context/CrisisEventBus';
+import { CONFIG } from '../config';
 
-const FIRE_UI_ORIGIN = import.meta.env.VITE_FIRE_DETECTION_URL || 'http://localhost:5002';
-const NEURO_SHELL_ORIGIN = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:5001';
+const FIRE_UI_ORIGIN = CONFIG.FIRE_STREAM;
+const NEURO_SHELL_ORIGIN = CONFIG.AI_ORCHESTRATOR;
 
 export function FireDetectionView({ setCurrentView }) {
     const [stats, setStats] = useState({

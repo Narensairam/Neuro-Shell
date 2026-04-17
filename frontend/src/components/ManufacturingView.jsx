@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { AlertCircle, Factory, ShieldAlert, TrendingUp, Settings, Wrench, CheckCircle, HeartPulse } from 'lucide-react';
 import { FireDetectionView } from './FireDetectionView';
+import { CONFIG } from '../config';
 
 const EMPTY_DATA = {
     yieldOptimization: 0,
@@ -17,7 +18,7 @@ export function ManufacturingView({ setCurrentView }) {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5007/api/manufacturing')
+        fetch(`${CONFIG.CORE_API}/manufacturing`)
             .then(res => res.json())
             .then(resData => {
                 console.log('[DEBUG] ManufacturingView received data:', resData);

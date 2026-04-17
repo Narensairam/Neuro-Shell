@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Info, Handshake, Scale, AlertTriangle, Globe, Activity } from 'lucide-react';
 import { CommercialAgent } from './CommercialAgent';
+import { CONFIG } from '../config';
 
 const MOCK_COMMERCIAL = {
     pricingAlpha: 2.4,
@@ -18,7 +19,7 @@ export function CommercialView({ setCurrentView }) {
     const [activeTab, setActiveTab] = useState('overview');
 
     useEffect(() => {
-        fetch('http://localhost:5007/api/commercial')
+        fetch(`${CONFIG.CORE_API}/commercial`)
             .then(res => res.json())
             .then(setData)
             .catch(() => setData(MOCK_COMMERCIAL));

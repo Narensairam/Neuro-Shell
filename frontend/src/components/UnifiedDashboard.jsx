@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Activity, AlertTriangle, CheckCircle, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { TrendingUp, Activity, AlertTriangle, CheckCircle } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { cn } from './Sidebar';
+import { CONFIG } from '../config';
 
 export function UnifiedDashboard() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:5007/api/dashboard')
+        fetch(`${CONFIG.CORE_API}/dashboard`)
             .then(res => res.json())
             .then(setData)
             .catch(console.error);

@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Network, Activity, Cpu, Shield, Database, Zap, Sparkles } from 'lucide-react';
+import { CONFIG } from '../config';
 
 const NODE_RADIUS = 35;
 
@@ -30,7 +31,7 @@ export function AgentTopologyView() {
     useEffect(() => {
         const fetchUnified = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/unified');
+                const res = await fetch(`${CONFIG.CORE_API}/unified`);
                 if (res.ok) {
                     const data = await res.json();
                     setUnifiedData(data);
@@ -46,7 +47,7 @@ export function AgentTopologyView() {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5007/api/kg/agents')
+        fetch(`${CONFIG.CORE_API}/kg/agents`)
             .then(res => res.json())
             .then(data => {
                 if (isMounted && data && data.nodes && data.nodes.length > 0) {

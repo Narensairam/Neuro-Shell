@@ -9,6 +9,7 @@ import {
     TrendingDown, Globe, Briefcase, Scale, ShieldAlert
 } from 'lucide-react';
 import { crisisEventBus } from '../context/CrisisEventBus';
+import { CONFIG } from '../config';
 
 /* 
   DATA AUGMENTATION HELPERS
@@ -708,7 +709,7 @@ export function CommercialAgent() {
         }
 
         try {
-            const res = await fetch(`http://localhost:5005/api/${agentKey}`, {
+            const res = await fetch(`${CONFIG.COMMERCIAL_AGENT}/api/${agentKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)

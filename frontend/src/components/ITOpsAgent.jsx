@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Layers, Activity, ShieldAlert, Search, Globe, Cpu, Binary, ShieldCheck, ChevronRight, Zap } from 'lucide-react';
+import { CONFIG } from '../config';
 
 export function ITOpsAgent({ setCurrentView }) {
     const [summary, setSummary] = useState(null);
@@ -8,7 +9,7 @@ export function ITOpsAgent({ setCurrentView }) {
     useEffect(() => {
         const fetchSummary = async () => {
             try {
-                const res = await fetch('http://localhost:5004/api/metrics/summary');
+                const res = await fetch(`${CONFIG.ITOPS_AGENT}/api/metrics/summary`);
                 if (res.ok) {
                     const data = await res.json();
                     setSummary(data);

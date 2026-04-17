@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Bell, Flame, AlertCircle, AlertTriangle, CheckCircle2, TrendingUp, CircleDollarSign, Factory, Ship, HardHat, ShieldCheck, Scale } from 'lucide-react';
+import { CONFIG } from '../config';
 
 export function AlertCenterView() {
     const [fireAlert, setFireAlert] = useState(null);
@@ -7,7 +8,7 @@ export function AlertCenterView() {
 
     useEffect(() => {
         let t;
-        const NEURO_SHELL_ORIGIN = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:5001';
+        const NEURO_SHELL_ORIGIN = CONFIG.AI_ORCHESTRATOR;
         const fetchFire = async () => {
             try {
                 const res = await fetch(`${NEURO_SHELL_ORIGIN}/api/fire/alerts`);

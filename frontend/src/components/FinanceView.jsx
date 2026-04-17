@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { FileWarning, Banknote, ShieldCheck, RefreshCw, ShoppingCart, CreditCard, Plane, TrendingUp } from 'lucide-react';
+import { CONFIG } from '../config';
 
 const EMPTY_FINANCE = {
     closeCycleDays: 0,
@@ -15,7 +16,7 @@ export function FinanceView() {
 
     useEffect(() => {
         let isMounted = true;
-        fetch('http://localhost:5007/api/finance')
+        fetch(`${CONFIG.CORE_API}/finance`)
             .then(res => res.json())
             .then(d => { if (isMounted) setData(d); })
             .catch(() => { if (isMounted) setData(EMPTY_FINANCE); });

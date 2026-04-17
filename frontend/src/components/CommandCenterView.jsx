@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RouteOptimizationView } from './RouteOptimizationView';
 import { HRWorkforceAgent } from './HRWorkforceAgent';
 import { crisisEventBus } from '../context/CrisisEventBus';
+import { CONFIG } from '../config';
 
 export function CommandCenterView({ setCurrentView }) {
     const [fireAlert, setFireAlert] = useState(null);
@@ -56,7 +57,7 @@ export function CommandCenterView({ setCurrentView }) {
     useEffect(() => {
         const fetchUnified = async () => {
             try {
-                const res = await fetch('http://localhost:5007/api/dashboard');
+                const res = await fetch(`${CONFIG.CORE_API}/dashboard`);
                 if (res.ok) {
                     const data = await res.json();
                     console.log('[DEBUG] CommandCenter received unified data:', data);
@@ -71,7 +72,7 @@ export function CommandCenterView({ setCurrentView }) {
         
         const fetchAgents = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/kg/agents');
+                const res = await fetch(`${CONFIG.AI_ORCHESTRATOR}/api/kg/agents`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data?.nodes) setAgents(data.nodes);
@@ -83,9 +84,9 @@ export function CommandCenterView({ setCurrentView }) {
             console.log('[Control Tower] Refreshing agent telemetry...');
             try {
                 const [summaryRes, itOpsRes, infraRes] = await Promise.all([
-                    fetch('http://localhost:5004/api/metrics/summary').catch(e => ({ ok: false, error: e })),
-                    fetch('http://localhost:5004/api/operational/ot').catch(e => ({ ok: false, error: e })),
-                    fetch('http://localhost:5004/api/operational/infra').catch(e => ({ ok: false, error: e }))
+                    fetch(`${CONFIG.ITOPS_AGENT}/api/metrics/summary`).catch(e => ({ ok: false, error: e })),
+                    fetch(`${CONFIG.ITOPS_AGENT}/api/operational/ot`).catch(e => ({ ok: false, error: e })),
+                    fetch(`${CONFIG.ITOPS_AGENT}/api/operational/infra`).catch(e => ({ ok: false, error: e }))
                 ]);
 
                 if (summaryRes.ok) {
@@ -131,7 +132,7 @@ export function CommandCenterView({ setCurrentView }) {
         fetchAgentMetrics();
 
         let t;
-        const NEURO_SHELL_ORIGIN = import.meta.env.VITE_AI_SERVICE_URL || 'http://localhost:5001';
+        const NEURO_SHELL_ORIGIN = CONFIG.AI_ORCHESTRATOR;
         const fetchFire = async () => {
             try {
                 const res = await fetch(`${NEURO_SHELL_ORIGIN}/api/fire/alerts`);

@@ -1,25 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
-    ShieldCheck,
-    Scale,
-    AlertOctagon,
-    FileCheck,
-    Search,
-    Filter,
-    ArrowUpRight,
-    CheckCircle2,
-    Clock,
-    Database,
-    Factory,
-    CircleDollarSign,
-    ShieldAlert,
-    Zap,
-    Users,
-    Activity,
-    Globe
+    ShieldCheck, Scale, AlertOctagon, FileCheck, Search, Filter,
+    ArrowUpRight, CheckCircle2, Clock, Database, Factory,
+    CircleDollarSign, ShieldAlert, Zap, Users, Activity, Globe
 } from 'lucide-react';
+import { CONFIG } from '../config';
 
-const UNIFIED_API_URL = 'http://localhost:5007/api/unified';
+const UNIFIED_API_URL = `${CONFIG.CORE_API}/unified`;
 
 // Fallback data if backend is unreachable
 const ENTRPRISE_FALLBACK = {

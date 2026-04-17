@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { HRWorkforceAgent } from './HRWorkforceAgent';
 import { crisisEventBus } from '../context/CrisisEventBus';
+import { CONFIG } from '../config';
 
 const EMPTY_HR = {
     incidentReduction: 0,
@@ -25,7 +26,7 @@ export function HRView() {
         let isMounted = true;
         const fetchData = async () => {
             try {
-                const res = await fetch('http://localhost:5007/api/hr');
+                const res = await fetch(`${CONFIG.CORE_API}/hr`);
                 if (res.ok && isMounted) {
                     const json = await res.json();
                     setData(json);
