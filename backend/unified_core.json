@@ -9,7 +9,7 @@
       "production_boe_day": 3400000
     },
     "health_index": 98.4,
-    "last_sync": "2026-04-17T17:56:43.820Z",
+    "last_sync": "2026-04-18T01:12:53.283Z",
     "process_heatmap": [
       {
         "id": "refining",
@@ -189,73 +189,25 @@
     "history": [],
     "activeAlerts": [
       {
-        "id": "evt-177644223001",
-        "timestamp": "16:10:30",
+        "id": "evt-177644918703",
+        "timestamp": "18:06:27",
         "camera_id": "CAM_01",
-        "confidence": 0.763603687286377,
+        "confidence": 0.53985595703125,
         "type": "PPE_VIOLATION",
         "helmet": false,
         "vest": true,
         "status": "VIOLATION",
         "severity": "MEDIUM",
         "recommended_action": "Issue warning - Missing Helmet"
-      },
-      {
-        "id": "evt-177644221724",
-        "timestamp": "16:10:17",
-        "camera_id": "CAM_01",
-        "confidence": 0.7694203853607178,
-        "type": "PPE_VIOLATION",
-        "helmet": true,
-        "vest": false,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Vest"
-      },
-      {
-        "id": "evt-177644219235",
-        "timestamp": "16:09:52",
-        "camera_id": "CAM_01",
-        "confidence": 0.6286758780479431,
-        "type": "PPE_VIOLATION",
-        "helmet": false,
-        "vest": true,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Helmet"
-      },
-      {
-        "id": "evt-177644217587",
-        "timestamp": "16:09:35",
-        "camera_id": "CAM_01",
-        "confidence": 0.7064720392227173,
-        "type": "PPE_VIOLATION",
-        "helmet": false,
-        "vest": true,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Helmet"
-      },
-      {
-        "id": "evt-177644204035",
-        "timestamp": "16:07:20",
-        "camera_id": "CAM_01",
-        "confidence": 0.5575417876243591,
-        "type": "PPE_VIOLATION",
-        "helmet": true,
-        "vest": false,
-        "status": "VIOLATION",
-        "severity": "MEDIUM",
-        "recommended_action": "Issue warning - Missing Vest"
       }
     ],
     "stats": {
-      "total_incidents": 9,
-      "ppe_violations": 9,
+      "total_incidents": 1,
+      "ppe_violations": 1,
       "intrusions": 0,
       "fire_hazards": 0,
       "anomalies": 0,
-      "compliance_rate_pct": 10
+      "compliance_rate_pct": 50
     }
   },
   "governance_compliance": {
@@ -1166,9 +1118,9 @@
     }
   },
   "itops_stats": {
-    "total_tickets": 553,
-    "deflection_rate": 53.2,
-    "critical_alerts": 259,
+    "total_tickets": 527,
+    "deflection_rate": 53.1,
+    "critical_alerts": 247,
     "ot_threats": 40,
     "shadow_devices": 2,
     "avg_resolution_time_hrs": 4.2
